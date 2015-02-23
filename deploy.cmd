@@ -140,14 +140,6 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-IF EXIST "bower.json" (
-  call !NPM_CMD! install bower
-  IF !ERRORLEVEL! NEQ 0 goto error
-  call .\node_modules\.bin\bower install
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
-
-
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :: Post deployment stub
