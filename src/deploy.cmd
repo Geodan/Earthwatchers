@@ -23,7 +23,7 @@ setlocal enabledelayedexpansion
 SET ARTIFACTS=%~dp0%..\artifacts
 
 IF NOT DEFINED DEPLOYMENT_SOURCE (
-  SET DEPLOYMENT_SOURCE=%~dp0%\src
+  SET DEPLOYMENT_SOURCE=%~dp0%.
 )
 
 IF NOT DEFINED DEPLOYMENT_TARGET (
@@ -103,14 +103,6 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   call :ExecuteCmd !NPM_CMD! install --production
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
-)
-
-:: 4. Bower Install
-if EXIST "%DEPLOYMENT_TARGET%\bower.json" (
-    pushd "%DEPLOYMENT_TARGET%"
-    call :ExecuteCmd bower install
-    IF !ERRORLEVEL! NEQ 0 goto error
-    popd
 )
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
