@@ -109,8 +109,8 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 echo start bower install 
 IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
   pushd "%DEPLOYMENT_TARGET%"
-  call :ExecuteCmd !NPM_CMD! install bower
-  ./node_modules/.bin/bower install
+  call :ExecuteCmd !NPM_CMD! install bower -g
+  bower install
   popd
 )
 echo end bower install 
