@@ -106,7 +106,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 )
 
 # 4. Install bower packages  
-if [ -e "$DEPLOYMENT_SOURCE/bower.json" ]; then  
+IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
   eval $NPM_CMD install bower  
   exitWithMessageOnError "installing bower failed"  
   ./node_modules/.bin/bower install  
