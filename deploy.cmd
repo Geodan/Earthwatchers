@@ -7,7 +7,7 @@
 
 :: Prerequisites
 :: -------------
-
+echo testing123
 :: Verify node.js installed
 where node 2>nul >nul
 IF %ERRORLEVEL% NEQ 0 (
