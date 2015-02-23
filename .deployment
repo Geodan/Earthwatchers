@@ -1,3 +1,4 @@
 [config]
 
+command=deploy.cmd
 project = src
