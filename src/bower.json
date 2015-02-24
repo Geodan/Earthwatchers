@@ -7,7 +7,9 @@
     "d3-plugins": "*",
     "esri-leaflet": "~1.0.0-rc.5",
     "leaflet-d3": "~0.2.6",
-    "leaflet-plugins": "~1.2.1"
+    "leaflet-plugins": "~1.2.1",
+    "topojson": "~1.6.18",
+    "leaflet-omnivore": "~0.3.2"
   },
   "resolutions": {
     "d3": "~3.5.5"

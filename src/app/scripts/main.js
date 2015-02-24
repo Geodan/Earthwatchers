@@ -68,6 +68,7 @@ var generateData = function(){
     hexLayer.data(data);
 };
 generateData();
+omnivore.topojson('project.topojson').addTo(map);
 
 
     // http://geodan.blob.core.windows.net/satellite/USGS_LS8_False_North_24june'13/10/830/514.png
