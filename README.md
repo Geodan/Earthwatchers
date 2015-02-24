@@ -8,7 +8,7 @@ git clone https://github.com/Geodan/Earthwatchers.git
 
 cd earthwatchers\src
 
-cp .env.sample .env 
+ren .env.sample .env 
 
 npm install
 
