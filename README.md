@@ -1,17 +1,21 @@
 # Earthwatchers
 Earthwatchers
 
-# Getting started
+# Development
 
-1 Clone repository
+'''
+git clone https://github.com/Geodan/Earthwatchers.git
 
-2 cd earthwatchers
+cd earthwatchers\src
 
-3 npm install
+cp .env.example .env 
 
-4 bower install
+npm install
 
-5 nodemon
+bower install
+
+nodemon
+'''
 
 # Start testing:
 

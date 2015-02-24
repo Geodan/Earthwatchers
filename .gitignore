@@ -2,3 +2,4 @@ node_modules
 src/app/bower_components
 *.log
 dist
+.env

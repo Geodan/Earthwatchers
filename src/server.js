@@ -1,9 +1,12 @@
 // Get the packages we need
 var express = require('express');
 var path = require('path');
+var dotenv = require('dotenv');
 
 // Create our Express application
 var app = express();
+dotenv.load();
+console.log("enironemnt: " + process.env.SENDGRID_USERNAME);
 
 // Use environment defined port or 3000
 var port = process.env.PORT || 3000;

@@ -18,8 +18,9 @@
     "wiredep": "^1.4.4"
   },
   "dependencies": {
-  	"leaflet": "~0.7.2",
+    "dotenv": "^0.5.1",
     "express": "^4.12.0",
+    "leaflet": "~0.7.2",
     "path": "^0.11.14"
   },
   "main": "server.js",
@@ -27,5 +28,4 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   }
-
 }
