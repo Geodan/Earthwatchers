@@ -1,6 +1,8 @@
 # Earthwatchers
 Earthwatchers
 
+Development preview: http://earthwatchers.azurewebsites.net/
+
 # Technology stack
 
 Server side: Node.js with Express, Mocha, Gulp, Dotenv, Bower
