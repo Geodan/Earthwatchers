@@ -1,6 +1,12 @@
 # Earthwatchers
 Earthwatchers
 
+# Technology stack
+
+Server side: Node.js with Express, Mocha, Gulp, Dotenv, Bower
+
+Client side: Javascript client with Leaflet for mapping
+
 # Development
 
 ```
