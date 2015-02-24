@@ -5,7 +5,7 @@ Earthwatchers
 
 Server side: Node.js with Express, Mocha, Gulp, Dotenv, Bower
 
-Client side: Javascript client with Leaflet for mapping
+Client side: Javascript client with Leaflet for mapping, D3, Leaflet-omnivore, Topojson
 
 # Development
 
