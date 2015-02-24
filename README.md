@@ -3,19 +3,19 @@ Earthwatchers
 
 # Development
 
-'''
+```
 git clone https://github.com/Geodan/Earthwatchers.git
 
 cd earthwatchers\src
 
-cp .env.example .env 
+cp .env.sample .env 
 
 npm install
 
 bower install
 
 nodemon
-'''
+```
 
 # Start testing:
 
