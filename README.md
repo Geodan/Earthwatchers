@@ -6,7 +6,7 @@ Development preview: http://earthwatchers.azurewebsites.net/
 
 # Technology stack
 
-Server side: Node.js with Express and Dotenv
+Server side: Node.js with Express, Dotenv, Turf
 
 Client side: Javascript client with Leaflet for mapping, D3, Leaflet-omnivore, Topojson, Bower, Gulp
 
