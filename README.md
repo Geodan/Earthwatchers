@@ -1,13 +1,16 @@
 # Earthwatchers
-Earthwatchers
+
+Earthwatchers classic version: http://earthwatchers.cloudapp.net/
 
 Development preview: http://earthwatchers.azurewebsites.net/
 
 # Technology stack
 
-Server side: Node.js with Express, Mocha, Gulp, Dotenv, Bower
+Server side: Node.js with Express and Dotenv
 
-Client side: Javascript client with Leaflet for mapping, D3, Leaflet-omnivore, Topojson
+Client side: Javascript client with Leaflet for mapping, D3, Leaflet-omnivore, Topojson, Bower, Gulp
+
+Unit testing: Mocha
 
 # Development
 
