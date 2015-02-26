@@ -3,14 +3,8 @@
   "version": "0.0.0",
   "dependencies": {
     "leaflet": "~0.7.3",
-    "d3": "~3.5.5",
-    "d3-plugins": "*",
-    "leaflet-d3": "~0.2.6",
     "leaflet-plugins": "~1.2.1",
     "topojson": "~1.6.18",
     "leaflet-omnivore": "~0.3.2"
-  },
-  "resolutions": {
-    "d3": "~3.5.5"
   }
 }
