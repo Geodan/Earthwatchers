@@ -8,9 +8,13 @@ Development preview: http://earthwatchers.azurewebsites.net/
 
 Server side: Node.js with Express, Dotenv, Turf
 
-Client side: Javascript client with Leaflet for mapping, D3, Leaflet-omnivore, Topojson, Bower, Gulp
+Client side: Javascript client with Leaflet for mapping, Leaflet-omnivore, TopoJSON, Bower
 
-Unit testing: Mocha
+Unit testing: Mocha (http://unitjs.com/)
+
+Build system: Gulp.js (http://gulpjs.com/)
+
+Package management: npm (https://www.npmjs.com/)
 
 # Development
 
