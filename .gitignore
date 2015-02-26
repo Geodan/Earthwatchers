@@ -3,3 +3,8 @@ src/app/bower_components
 *.log
 dist
 .env
+*.sln
+*.njsproj
+*.suo
+*.dat
+*.tmp
