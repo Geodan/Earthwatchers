@@ -5,7 +5,18 @@ var center = [0.0, 113];
 var lat = 0.153115115481276;
 var lon = 111.687242798354;
 var geohexcode = "PO2670248";
+var currentImageType = "Aerial";
+var currentImageDate = null;
+var satelliteImages=null;
+var map = null;
 
+function getSatelliteImage(date){
+	for(var i=0;i<satelliteImages.features.length;i++){
+		if(satelliteImages.features[i].properties.Published === date){
+			return satelliteImages.features[i];
+		}
+	}
+}
 
 function getGeohexPolygon(geohexcode, style){
 	var zone = GEOHEX.getZoneByCode(geohexcode);
@@ -14,9 +25,10 @@ function getGeohexPolygon(geohexcode, style){
 }
 
 function satelliteTypeSelectionChanged(sel) {
+	currentImageType = sel.value;
 	var polygon = getGeohexPolygon(geohexcode);
     var bbox = polygon.getBounds().toBBoxString();
-    getSatelliteImageData(bbox, sel.value, satelliteImagescallback);
+    getSatelliteImageData(bbox, currentImageType, satelliteImagescallback);
 }
 
 function getSatelliteImageData(bbox,imagetype, callback) {
@@ -34,13 +46,38 @@ function getSatelliteImageData(bbox,imagetype, callback) {
     request.send();
 }
 
+function findEarthwatchersLayer(){
+	var result=null;
+	map.eachLayer(function (layer) {
+		if(layer.options.type!=null)
+		{
+	    	if(layer.options.type === "earthwatchers"){
+	    		result=layer;
+	    	}
+		}
+	});
+	return result;
+}
 
 function imageDateChanged(sel){
-	alert('selected date: ' + sel.value);
+	var earthwatchersLayer = findEarthwatchersLayer();
+	if(earthwatchersLayer!=null)
+	{
+		map.removeLayer(earthwatchersLayer);
+	}
+
+	var s=getSatelliteImage(sel.value);
+	var url = s.properties.UrlTileCache + "/{z}/{x}/{y}.png";
+	var minlevel = s.properties.MinLevel;
+	var maxlevel = s.properties.MaxLevel;
+	var newLayer = L.tileLayer(url, {tms:true, maxZoom:maxlevel, type:'earthwatchers'});
+	map.addLayer(newLayer);
+
 }
 
 function satelliteImagescallback(req) {
 	// first clear the date box
+	satelliteImages = req;
 	var sel = document.getElementById("selectImageDate");
 	sel.options.length = 0;
 
@@ -48,14 +85,7 @@ function satelliteImagescallback(req) {
 		var f = req.features[i];
 		sel.options[sel.options.length]= new Option(f.properties.Published, f.properties.Published);
 	}
-	//alert(sel.options.length);
-
-	// fill the date select box
-	//var selectImageDate = document.getElementById("selectImageDate");
-	//alert(selectImageDate.options.length);
-	//alert(selectImageDate.options.length);
-
-    //alert('response:' + req.features.length);
+	sel.onchange();
 }
 
 (function (window, document, L, undefined) {
@@ -72,7 +102,7 @@ function satelliteImagescallback(req) {
      // alert(selectImageType.selectedIndex);
     
 
-	var map = L.map('map', {
+	map = L.map('map', {
 		center: [lat, lon],
 		zoom: 7
 	});
@@ -88,27 +118,10 @@ function satelliteImagescallback(req) {
     //getSatelliteImageData(bbox, "Aerial", satelliteImagescallback);
  
 	// minlevel 0, maxlevel 13
-    L.tileLayer('http://geodan.blob.core.windows.net/satellite/LS8_26oktober2014/{z}/{x}/{y}.png', {tms:true, maxZoom:13}).addTo(map);
     var ggl2 = new L.Google('satellite');
 	map.addLayer(ggl2);
 	omnivore.topojson('project.topojson').addTo(map);
 	map.addLayer(polygon);
 	// map.addControl(new L.Control.Layers( {'Google':ggl2, 'Esri':esri}, {}, {collapsed:false}));
-    var options = {
-    radius : 12,
-    opacity: 0.5,
-    duration: 200,
-    lng: function(d){
-        return d[0];
-    },
-    lat: function(d){
-        return d[1];
-    },
-    value: function(d){
-        return d.length;
-    },
-    valueFloor: 0,
-    valueCeil: undefined
-};
 
 }(window, document, L));
