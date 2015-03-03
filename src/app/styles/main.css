@@ -42,7 +42,7 @@ header {
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 30px;
+	height: 200px;
 	padding: 15px;
 	z-index: 9;
 	border-bottom: 1px solid #eee;
@@ -51,6 +51,7 @@ header {
 }
 header .appName {
 	float: left;
+    font-size: 25px;
 }
 header .userName {
 	float: right;
@@ -58,3 +59,8 @@ header .userName {
 button[type=button] {
     width: 20em;  height: 2em;
 }
+
+.selectClass {
+   font-size: 25px;
+   font-family: 'Impact', cursive;
+}​
