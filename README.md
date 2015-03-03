@@ -16,6 +16,14 @@ Build system: Gulp.js (http://gulpjs.com/)
 
 Package management: npm (https://www.npmjs.com/)
 
+# Dependencies
+
+To get Earthwatchers running on your machine, install the following dependencies:
+
+* Node.js (http://nodejs.org/)
+* npm (https://www.npmjs.com/)
+* Bower (http://bower.io/)
+
 # Development
 
 ```
