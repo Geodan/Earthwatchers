@@ -22,7 +22,7 @@ html {
 }
 
 .map-application {
-	height: 95%;
+	height: 90%;
 }
 
 .hexbin-hexagon {
@@ -41,24 +41,8 @@ header {
 	height: 50px;
 	color:red;
 }
-header .appName {
-	float: left;
-    font-size: 25px;
-}
-header .userName {
-	float: right;
-}
-button[type=button] {
-    width: 20em;  height: 2em;
-}
-
 .selectClass {
    font-size: 25px;
-   font-family: 'Impact', cursive;
+   font-family:  sans-serif;
 }​
 
-.rangeClass {
-   height:20px;
-   font-size: 25px;
-   font-family: 'Impact', cursive;
-}​

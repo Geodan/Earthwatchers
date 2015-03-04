@@ -23,25 +23,20 @@
 </head>
 <body>
 	<header class="group">
-		<div class="appName">
 			<select id= "selectImageType" class="selectClass" onchange="satelliteTypeSelectionChanged(this)">
 			  <option value="Sentinel">Sentinel 1</option>
-			  <option value="Landsat">Landsat 8</option>
+			  <option value="Landsat" selected>Landsat 8</option>
 			</select>
-			<select class="selectClass" onchange="imageDateChanged(this)" id="selectImageDate">
-			  <option></option>
-			</select>
-			<input type ="range" max="3" min="0" class="rangeClass"
-			    onchange="document.getElementById('rangeValLabel').innerHTML = this.value;"
-			    step="1" name="rangeVal" id="rangeVal" value="0">
+			<input type ="range" max="2" min="0" id="timeslider" data-popup-enabled="false"
+		    onchange="timesliderChanged(this)"
+		    step="1" name="rangeVal" id="rangeVal" value="2">
 			</input>
 			<em id="rangeValLabel" style="font-style: normal;"></em>
-		</div>
 	</header>
 	
 	<div class="map-application">
-		<div id="map" class="map">
-	</div>
+		<div id="map" class="map"></div>
+
 	</div>
   <script src="scripts/hex_v3.2_core.js"></script>
   <!-- build:js scripts/vendor.js -->

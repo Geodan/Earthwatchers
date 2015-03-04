@@ -1,14 +1,32 @@
 /*jslint browser: true*/
 /*global L */
 
-var center = [0.0, 113];
-var lat = 0.153115115481276;
-var lon = 111.687242798354;
+//var center = [0.0, 113];
+// var lat = 0.153115115481276;
+//var lon = 111.687242798354;
 var geohexcode = "PO2670248";
-var currentImageType = "Aerial";
+var startZoomlevel=12;
 var currentImageDate = null;
 var satelliteImages=null;
 var map = null;
+
+function timesliderChanged(ctrl){
+	var day = satelliteImages.features[ctrl.value].properties.Published;
+	document.getElementById('rangeValLabel').innerHTML = day;
+	var earthwatchersLayer = findEarthwatchersLayer();
+	if(earthwatchersLayer!=null)
+	{
+		map.removeLayer(earthwatchersLayer);
+	}
+
+	var s=getSatelliteImageByDate(day);
+	var url = s.properties.UrlTileCache + "/{z}/{x}/{y}.png";
+	var minlevel = s.properties.MinLevel;
+	var maxlevel = s.properties.MaxLevel;
+	var newLayer = L.tileLayer(url, {tms:true, maxZoom:maxlevel, type:'earthwatchers'});
+	map.addLayer(newLayer);
+
+}
 
 function getSatelliteImageByDate(date){
 	for(var i=0;i<satelliteImages.features.length;i++){
@@ -59,45 +77,22 @@ function findEarthwatchersLayer(){
 	return result;
 }
 
-function imageDateChanged(sel){
-	var earthwatchersLayer = findEarthwatchersLayer();
-	if(earthwatchersLayer!=null)
-	{
-		map.removeLayer(earthwatchersLayer);
-	}
-
-	var s=getSatelliteImageByDate(sel.value);
-	var url = s.properties.UrlTileCache + "/{z}/{x}/{y}.png";
-	var minlevel = s.properties.MinLevel;
-	var maxlevel = s.properties.MaxLevel;
-	var newLayer = L.tileLayer(url, {tms:true, maxZoom:maxlevel, type:'earthwatchers'});
-	map.addLayer(newLayer);
-}
-
 /**
 Sort images based on published date
 */
 function compare(a,b) {
-  if (a.properties.Published > b.properties.Published)
-     return -1;
   if (a.properties.Published < b.properties.Published)
+     return -1;
+  if (a.properties.Published > b.properties.Published)
     return 1;
   return 0;
 }
 
 
 function satelliteImagescallback(req) {
-	// first clear the date box
 	satelliteImages = req;
-	var sel = document.getElementById("selectImageDate");
-	sel.options.length = 0;
-
-	req.features.sort(compare);
-
-	for(var i=0;i<req.features.length;i++){
-		var f = req.features[i];
-		sel.options[sel.options.length]= new Option(f.properties.Published, f.properties.Published);
-	}
+	var sel = document.getElementById("timeslider");
+	satelliteImages.features.sort(compare);
 	sel.onchange();
 }
 
@@ -110,8 +105,6 @@ function satelliteImagescallback(req) {
 	 selectImageType.onchange();
 
 	map = L.map('map', {
-		center: [lat, lon],
-		zoom: 7,
 		zoomControl: false 
 	});
 	new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
@@ -122,7 +115,14 @@ function satelliteImagescallback(req) {
     "opacity": 0.65
 	};
 
+	// map.setView(loc, z, {animation: true});
+	//	center: [lat, lon],
+	//	zoom: 7,
+
 	var polygon = getGeohexPolygon(geohexcode,myStyle);
+	var centerHex = polygon.getBounds().getCenter();
+	map.setView(centerHex, startZoomlevel, {animation: true});
+
     var ggl2 = new L.Google('satellite');
 	map.addLayer(ggl2);
 	//omnivore.topojson('project.topojson').addTo(map);
