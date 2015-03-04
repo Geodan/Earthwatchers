@@ -5,7 +5,7 @@ var fs = require('fs');
 var turf = require('turf');
 var morgan = require('morgan');
 
-var imageTypes = { 'EVI': 0, 'Infrared': 1, 'TrueColor': 2, 'Aerial': 3, 'SAR': 4 };
+var imageTypes = { 'Landsat': 2, 'Sentinel': 4 };
 
 var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {flags: 'a'});
 

@@ -10,7 +10,7 @@ var currentImageDate = null;
 var satelliteImages=null;
 var map = null;
 
-function getSatelliteImage(date){
+function getSatelliteImageByDate(date){
 	for(var i=0;i<satelliteImages.features.length;i++){
 		if(satelliteImages.features[i].properties.Published === date){
 			return satelliteImages.features[i];
@@ -66,7 +66,7 @@ function imageDateChanged(sel){
 		map.removeLayer(earthwatchersLayer);
 	}
 
-	var s=getSatelliteImage(sel.value);
+	var s=getSatelliteImageByDate(sel.value);
 	var url = s.properties.UrlTileCache + "/{z}/{x}/{y}.png";
 	var minlevel = s.properties.MinLevel;
 	var maxlevel = s.properties.MaxLevel;
