@@ -56,3 +56,9 @@ button[type=button] {
    font-size: 25px;
    font-family: 'Impact', cursive;
 }​
+
+.rangeClass {
+   height:20px;
+   font-size: 25px;
+   font-family: 'Impact', cursive;
+}​

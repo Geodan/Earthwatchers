@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -24,7 +24,6 @@
 <body>
 	<header class="group">
 		<div class="appName">
-			Earthwatchers
 			<select id= "selectImageType" class="selectClass" onchange="satelliteTypeSelectionChanged(this)">
 			  <option value="Sentinel">Sentinel 1</option>
 			  <option value="Landsat">Landsat 8</option>
@@ -32,6 +31,11 @@
 			<select class="selectClass" onchange="imageDateChanged(this)" id="selectImageDate">
 			  <option></option>
 			</select>
+			<input type ="range" max="3" min="0" class="rangeClass"
+			    onchange="document.getElementById('rangeValLabel').innerHTML = this.value;"
+			    step="1" name="rangeVal" id="rangeVal" value="0">
+			</input>
+			<em id="rangeValLabel" style="font-style: normal;"></em>
 			<br/>
 			Deforestation in this area?
 			<button type="button" disabled>Yes</button>&nbsp;
@@ -42,10 +46,12 @@
 		<div class="userName">
 			Eduardo Dias
 		</div>
+
 	</header>
 	
 	<div class="map-application">
-		<div id="map" class="map"></div>
+		<div id="map" class="map">
+	</div>
 	</div>
   <script src="scripts/hex_v3.2_core.js"></script>
   <!-- build:js scripts/vendor.js -->
@@ -54,6 +60,7 @@
   <script src="bower_components/leaflet-plugins/layer/tile/Google.js"></script>
   <script src="bower_components/topojson/topojson.js"></script>
   <script src="bower_components/leaflet-omnivore/leaflet-omnivore.js"></script>
+  <script src="bower_components/d3/d3.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
   <script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script>

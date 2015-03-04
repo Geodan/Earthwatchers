@@ -74,11 +74,22 @@ function imageDateChanged(sel){
 	map.addLayer(newLayer);
 }
 
+function compare(a,b) {
+  if (a.properties.Published > b.properties.Published)
+     return -1;
+  if (a.properties.Published < b.properties.Published)
+    return 1;
+  return 0;
+}
+
+
 function satelliteImagescallback(req) {
 	// first clear the date box
 	satelliteImages = req;
 	var sel = document.getElementById("selectImageDate");
 	sel.options.length = 0;
+
+	req.features.sort(compare);
 
 	for(var i=0;i<req.features.length;i++){
 		var f = req.features[i];
@@ -97,8 +108,10 @@ function satelliteImagescallback(req) {
 
 	map = L.map('map', {
 		center: [lat, lon],
-		zoom: 7
+		zoom: 7,
+		zoomControl: false 
 	});
+	new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
 
 	var myStyle = {
     "color": "#ff0000",

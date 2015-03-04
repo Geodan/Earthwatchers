@@ -5,6 +5,7 @@
     "leaflet": "~0.7.3",
     "leaflet-plugins": "~1.2.1",
     "topojson": "~1.6.18",
-    "leaflet-omnivore": "~0.3.2"
+    "leaflet-omnivore": "~0.3.2",
+    "d3": "~3.5.5"
   }
 }
