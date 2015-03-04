@@ -16,13 +16,13 @@ html {
 	height: 100%;
 }
 .map {
-	top:100px;
+	top:50px;
 	width: 100%;
 	height: 100%;
 }
 
 .map-application {
-	height: 85%;
+	height: 95%;
 }
 
 .hexbin-hexagon {
@@ -34,11 +34,11 @@ header {
 	position: absolute;
 	top: 0;
 	left: 0;
-	padding: 15px;
+	padding: 5px;
 	z-index: 9;
 	border-bottom: 1px solid #eee;
 	width:100%;
-	height: 100px;
+	height: 50px;
 	color:red;
 }
 header .appName {
