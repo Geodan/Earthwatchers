@@ -107,8 +107,10 @@ function satelliteImagescallback(req) {
 	map = L.map('map', {
 		zoomControl: false 
 	});
-	new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
-
+    map.addControl(new L.Control.ZoomMin({ position: 'bottomright' }));
+	//var zoomCntrl = new L.Control.Zoom({ position: 'bottomright' });
+	//addTo(map);
+	
 	var myStyle = {
     "color": "#ff0000",
     "weight": 5,
