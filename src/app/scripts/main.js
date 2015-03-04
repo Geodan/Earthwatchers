@@ -74,6 +74,9 @@ function imageDateChanged(sel){
 	map.addLayer(newLayer);
 }
 
+/**
+Sort images based on published date
+*/
 function compare(a,b) {
   if (a.properties.Published > b.properties.Published)
      return -1;
@@ -122,7 +125,7 @@ function satelliteImagescallback(req) {
 	var polygon = getGeohexPolygon(geohexcode,myStyle);
     var ggl2 = new L.Google('satellite');
 	map.addLayer(ggl2);
-	omnivore.topojson('project.topojson').addTo(map);
+	//omnivore.topojson('project.topojson').addTo(map);
 	map.addLayer(polygon);
 	// map.addControl(new L.Control.Layers( {'Google':ggl2, 'Esri':esri}, {}, {collapsed:false}));
 
