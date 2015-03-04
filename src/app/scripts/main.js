@@ -105,21 +105,15 @@ function satelliteImagescallback(req) {
 	 selectImageType.onchange();
 
 	map = L.map('map', {
-		zoomControl: false 
+		zoomControl: false, attributionControl:false
 	});
     map.addControl(new L.Control.ZoomMin({ position: 'bottomright' }));
-	//var zoomCntrl = new L.Control.Zoom({ position: 'bottomright' });
-	//addTo(map);
 	
 	var myStyle = {
     "color": "#ff0000",
     "weight": 5,
     "opacity": 0.65
 	};
-
-	// map.setView(loc, z, {animation: true});
-	//	center: [lat, lon],
-	//	zoom: 7,
 
 	var polygon = getGeohexPolygon(geohexcode,myStyle);
 	var centerHex = polygon.getBounds().getCenter();
