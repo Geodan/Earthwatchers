@@ -102,9 +102,6 @@ function satelliteTypeSelectionChanged(sel) {
 		zoomControl: false,
 		attributionControl: false
 	});
-	map.addControl(new L.Control.ZoomMin({
-		position: 'bottomright'
-	}));
 
 	var myStyle = {
 		'color': '#ff0000',
@@ -117,6 +114,10 @@ function satelliteTypeSelectionChanged(sel) {
 	map.setView(centerHex, startZoomlevel, {
 		animation: true
 	});
+
+	map.addControl(new L.Control.ZoomMin({
+		position: 'bottomright', startLevel:startZoomlevel, startCenter:centerHex
+	}));
 
 	var ggl2 = new L.Google('satellite');
 	map.addLayer(ggl2);

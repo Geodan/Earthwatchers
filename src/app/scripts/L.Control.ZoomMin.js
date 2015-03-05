@@ -1,5 +1,9 @@
 /*jslint browser: true*/
 /*global L */
+
+this._startCenter=null;
+this._startLevel=null;
+
 L.Control.ZoomMin = L.Control.Zoom.extend({
   options: {
     position: 'topleft',
@@ -8,7 +12,9 @@ L.Control.ZoomMin = L.Control.Zoom.extend({
     zoomOutText: '-',
     zoomOutTitle: 'Zoom out',
     zoomMinText: 'Zoom min',
-    zoomMinTitle: 'Zoom min'
+    zoomMinTitle: 'Zoom min',
+    startCenter: '',
+    startLevel: ''
   },
 
   onAdd: function (map) {
@@ -27,6 +33,9 @@ L.Control.ZoomMin = L.Control.Zoom.extend({
     this._zoomMinButton = this._createButton(options.zoomMinText, options.zoomMinTitle,
      zoomName + '-min', container, this._zoomMin, this);
 
+    this._startLevel = options.startLevel;
+    this._startCenter = options.startCenter;
+
     this._updateDisabled();
     map.on('zoomend zoomlevelschange', this._updateDisabled, this);
 
@@ -34,9 +43,7 @@ L.Control.ZoomMin = L.Control.Zoom.extend({
   },
 
   _zoomMin: function () {
-      var polygon = getGeohexPolygon(geohexcode);
-      var centerHex = polygon.getBounds().getCenter();
-      map.setView(centerHex, startZoomlevel, {animation: true});
+      this._map.setView(this._startCenter, this._startLevel, {animation: true});
   },
 
   _updateDisabled: function () {
