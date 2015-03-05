@@ -119,6 +119,10 @@ function satelliteTypeSelectionChanged(sel) {
 		position: 'bottomright', startLevel:startZoomlevel, startCenter:centerHex
 	}));
 
+	map.addControl(new L.Control.DisplaySatelliteLayer({
+	}));
+
+
 	var ggl2 = new L.Google('satellite');
 	map.addLayer(ggl2);
 	//omnivore.topojson('project.topojson').addTo(map);
