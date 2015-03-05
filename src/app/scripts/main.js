@@ -1,14 +1,10 @@
 /*jslint browser: true*/
 /*global L */
 /*global GEOHEX */
-//var center = [0.0, 113];
-// var lat = 0.153115115481276;
-//var lon = 111.687242798354;
 var geohexcode = 'PO2670248';
 var startZoomlevel = 12;
 var satelliteImages = null;
 var map = null;
-
 
 function getSatelliteImageByDate(date) {
 	for (var i = 0; i < satelliteImages.features.length; i++) {
@@ -30,7 +26,6 @@ function findEarthwatchersLayer() {
 	return result;
 }
 
-
 function timesliderChanged(ctrl) {
 	var day = satelliteImages.features[ctrl.value].properties.Published; document.getElementById('rangeValLabel').innerHTML = day;
 	var earthwatchersLayer = findEarthwatchersLayer();
@@ -47,7 +42,6 @@ function timesliderChanged(ctrl) {
 		type: 'earthwatchers'
 	});
 	map.addLayer(newLayer);
-
 }
 
 function getGeohexPolygon(geohexcode, style) {
