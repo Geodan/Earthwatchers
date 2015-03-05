@@ -10,7 +10,7 @@ var imageTypes = { 'Landsat': 2, 'Sentinel': 4 };
 var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {flags: 'a'});
 
 var app = express();
-app.use(morgan('combined', {stream: expressLogFile}))
+app.use(morgan('combined', {stream: expressLogFile}));
 dotenv.load();
 
 var port = process.env.PORT || 3000;
@@ -30,7 +30,7 @@ router.get('/version', function(req, res) {
 router.get('/satelliteimages', function (req, res) {
     var bboxPar = req.query.bbox;
     var imageType = req.query.imagetype;
-    if (bboxPar != null || imageType!=null) {
+    if (bboxPar !== null || imageType!==null) {
         var imageTypeNr =  imageTypes[imageType];
         
         var bbox = bboxPar.split(',');
@@ -46,7 +46,7 @@ router.get('/satelliteimages', function (req, res) {
         for (var f in jsonSatelliteImages.features) {
             var intersection = turf.intersect(jsonSatelliteImages.features[f], poly);
             if (intersection != null) {
-                if (jsonSatelliteImages.features[f].properties.ImageType == imageTypeNr) {
+                if (jsonSatelliteImages.features[f].properties.ImageType === imageTypeNr) {
                     selectedSatelliteImages.push(jsonSatelliteImages.features[f]);
                 }
             }
