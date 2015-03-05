@@ -1,7 +1,5 @@
 # Earthwatchers
 
-Earthwatchers classic version: http://earthwatchers.cloudapp.net/
-
 Development preview: http://earthwatchers.azurewebsites.net/
 
 # Technology stack
@@ -12,8 +10,6 @@ Client side: Javascript client with Leaflet for mapping, Leaflet-omnivore, TopoJ
 
 Unit testing: Mocha (http://unitjs.com/)
 
-Build system: Gulp.js (http://gulpjs.com/)
-
 Package management: npm (https://www.npmjs.com/)
 
 # Dependencies
@@ -21,7 +17,6 @@ Package management: npm (https://www.npmjs.com/)
 To get Earthwatchers running on your machine, install the following dependencies:
 
 * Node.js (http://nodejs.org/)
-* npm (https://www.npmjs.com/)
 * Bower (http://bower.io/)
 
 # Development
