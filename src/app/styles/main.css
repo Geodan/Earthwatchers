@@ -40,6 +40,12 @@
 	margin: 0;
 	padding: 0;
 }
+
+.group{
+	z-index: 10;
+	 position: absolute;
+     bottom: 5px;
+}
 .group:after {
 	content: "";
 	display: table;
@@ -51,13 +57,12 @@ html {
 	height: 100%;
 }
 .map {
-	top:50px;
 	width: 100%;
 	height: 100%;
 }
 
 .map-application {
-	height: 95%;
+	height: 100%;
 }
 
 .hexbin-hexagon {
@@ -65,17 +70,6 @@ html {
     stroke-width: 1px;
 }
 
-header {
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding: 5px;
-	z-index: 9;
-	border-bottom: 1px solid #eee;
-	width:100%;
-	height: 50px;
-	color:red;
-}
 .selectClass {
    font-size: 25px;
    font-family:  sans-serif;

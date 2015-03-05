@@ -22,21 +22,22 @@
 
 </head>
 <body>
-	<header class="group">
+	<div class="group">
 			<select id= "selectImageType" class="selectClass" onchange="satelliteTypeSelectionChanged(this)">
 			  <option value="Sentinel">Sentinel 1</option>
 			  <option value="Landsat" selected>Landsat 8</option>
 			</select>
 			<input type ="range" max="2" min="0" id="timeslider" data-popup-enabled="false"
 		    onchange="timesliderChanged(this)"
-		    step="1" name="rangeVal" id="rangeVal" value="2">
+		    step="1" name="rangeVal" id="rangeVal" value="2" width="80%">
 			</input>
 			<em id="rangeValLabel" style="font-style: normal;"></em>
-	</header>
+	</div>
+
 	
 	<div class="map-application">
-		<div id="map" class="map"></div>
-
+		<div id="map" class="map">			
+		</div>
 	</div>
   <script src="scripts/hex_v3.2_core.js"></script>
   <!-- build:js scripts/vendor.js -->
