@@ -37,9 +37,7 @@ nodemon
 
 # Start testing:
 
-1 Client side url: http://localhost:3000/
-
-2 Server side: http://localhost:3000/api
+http://localhost:3000/
 
 
 
