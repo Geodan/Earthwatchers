@@ -119,6 +119,8 @@ function satelliteTypeSelectionChanged(sel) {
 		position: 'bottomright', startLevel:startZoomlevel, startCenter:centerHex
 	}));
 
+	L.control.scale({imperial:false, position:'topleft'}).addTo(map);
+
 	//map.addControl(new L.Control.DisplaySatelliteLayer({
 	// }));
 
