@@ -60,24 +60,31 @@ router.get('/satelliteimages', function (req, res) {
         res.json(turf.featurecollection(selectedSatelliteImages));
 
     } else {
-        res.status(404).send('Error: Parameter bbox not specified');
+        res.status(HttpStatus.NOT_FOUND).send('Error: Parameter bbox not specified');
     }
   }
 );
 
 router.post('/observations', jsonParser, function (req, res) {
     req.checkBody('user', 'User is required').notEmpty();
-    //req.checkBody('lat', 'lat is required').notEmpty();
-    //req.checkBody('lon', 'lon is required').notEmpty(); 
-    //req.checkBody('geohex', 'geohex is required').notEmpty();
-    //req.checkBody('observation', 'observation is required').notEmpty();
-    // var nowIso = dateFormat(now, "isoDateTime");
+    req.checkBody('lat', 'lat is required').notEmpty();
+    req.checkBody('lon', 'lon is required').notEmpty(); 
+    req.checkBody('geohex', 'geohex is required').notEmpty();
+    req.checkBody('level', 'level is required').notEmpty();
+    req.checkBody('observation', 'observation is required').notEmpty();
 
     var errors = req.validationErrors();
 
     if (errors===null){
-        // todo: store in db (file for now)
         req.body.date= new Date().toISOString();
+
+        fs.appendFile("ew_observations.txt", JSON.stringify(req.body) + '\n', function(err) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log('The Earthwatchers ' + req.body.user + ' observation was saved at ' + req.body.date);
+            }
+        }); 
 
         // send back complete resource 
         res.status(HttpStatus.CREATED).send(req.body);
