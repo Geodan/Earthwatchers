@@ -16,7 +16,7 @@
   },
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "tests": "node server.tests.js",
     "start": "node server.js",
     "lint": "jshint server.js",
     "wiredep": "wiredep -d app/bower_components -s app/index.html"

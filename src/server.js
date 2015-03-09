@@ -26,7 +26,8 @@ router.get('/version', function(req, res) {
 });
 
 // spatial select the stalliteimages that intersect with client envelope
-// example request: /api/satelliteimages?bbox=111.68114616674286,0.14783529583901883,111.69333942996492,0.158394933823336&imagetype=Aerial
+// example request:
+// /satelliteimages?bbox=111.68,0.14,111.69,0.15&imagetype=Landsat
 router.get('/satelliteimages', function (req, res) {
     var bboxPar = req.query.bbox;
     var imageType = req.query.imagetype;
@@ -38,7 +39,6 @@ router.get('/satelliteimages', function (req, res) {
             bbox[i] = parseFloat(bbox[i]);
         }
         var poly = turf.bboxPolygon(bbox);
-        console.log('poly: ' + poly);
 
         var satelliteimages = fs.readFileSync('satelliteimages.geojson', 'utf8');
         var jsonSatelliteImages = JSON.parse(satelliteimages);
@@ -61,5 +61,6 @@ router.get('/satelliteimages', function (req, res) {
 
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));
-app.listen(port);
+var s = app.listen(port);
+module.exports = s;
 console.log('Earthwatchers server started on port ' + port);
