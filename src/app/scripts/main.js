@@ -29,9 +29,6 @@ function findEarthwatchersLayer() {
 function timesliderChanged(ctrl) {
 	var day = satelliteImages.features[ctrl.value].properties.Published; document.getElementById('rangeValLabel').innerHTML = day;
 	var earthwatchersLayer = findEarthwatchersLayer();
-	if (earthwatchersLayer !== null) {
-		map.removeLayer(earthwatchersLayer);
-	}
 
 	var s = getSatelliteImageByDate(day);
 	var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
@@ -42,6 +39,11 @@ function timesliderChanged(ctrl) {
 		type: 'earthwatchers'
 	});
 	map.addLayer(newLayer);
+
+	if (earthwatchersLayer !== null) {
+		map.removeLayer(earthwatchersLayer);
+	}
+
 }
 
 function getGeohexPolygon(geohexcode, style) {

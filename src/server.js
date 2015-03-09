@@ -4,6 +4,9 @@ var dotenv = require('dotenv');
 var fs = require('fs');
 var turf = require('turf');
 var morgan = require('morgan');
+var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
+var HttpStatus = require('http-status-codes');
 
 var imageTypes = { 'Landsat': 2, 'Sentinel': 4 };
 
@@ -11,6 +14,9 @@ var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {flags: 'a
 
 var app = express();
 app.use(morgan('combined', {stream: expressLogFile}));
+var jsonParser = bodyParser.json();
+app.use(expressValidator());
+app.disable('x-powered-by');
 dotenv.load();
 
 var port = process.env.PORT || 3000;
@@ -59,8 +65,31 @@ router.get('/satelliteimages', function (req, res) {
   }
 );
 
+router.post('/observations', jsonParser, function (req, res) {
+    req.checkBody('user', 'User is required').notEmpty();
+    //req.checkBody('lat', 'lat is required').notEmpty();
+    //req.checkBody('lon', 'lon is required').notEmpty(); 
+    //req.checkBody('geohex', 'geohex is required').notEmpty();
+    //req.checkBody('observation', 'observation is required').notEmpty();
+    // var nowIso = dateFormat(now, "isoDateTime");
+
+    var errors = req.validationErrors();
+
+    if (errors===null){
+        // todo: store in db (file for now)
+        req.body.date= new Date().toISOString();
+
+        // send back complete resource 
+        res.status(HttpStatus.CREATED).send(req.body);
+    }
+    else{
+        res.status(HttpStatus.NOT_FOUND).send("request validation error:");
+    } 
+});
+
+
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));
-var s = app.listen(port);
-module.exports = s;
+var server = app.listen(port);
+module.exports = server;
 console.log('Earthwatchers server started on port ' + port);
