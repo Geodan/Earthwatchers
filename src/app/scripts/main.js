@@ -46,7 +46,7 @@ function sendObservation(observation){
 	request.onload = function() {
 		if (request.status == 201) {
 			var data = JSON.parse(request.responseText);
-			alert("thanks observation is saved");			
+			getHexagon(geohexcode, hexagoncallback);
 		}
 	};
 }
@@ -127,9 +127,9 @@ function satelliteImagescallback(req) {
 
 function hexagoncallback(req) {
 	// alert("obs: " + req);
-	document.getElementById('btnYes').innerHTML += ' (' + req.yes + ')';
-	document.getElementById('btnNo').innerHTML += ' (' + req.no + ')';
-	document.getElementById('btnMaybe').innerHTML += ' (' + req.maybe + ')';
+	document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
+	document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
+	document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
 }
 
 
