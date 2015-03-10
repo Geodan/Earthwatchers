@@ -37,7 +37,6 @@ function sendObservation(observation){
      "observation": observation,
      "geohex": geohexcode
 	};
-	//{"user":"bert","lat":12.3,"lon":33,"level":5,"geohex":"434ghfd","observation":"forest away" }
 	var url = 'api/observations';
 	var request = new XMLHttpRequest();
 	request.open('POST', url, true);
@@ -92,6 +91,23 @@ function getSatelliteImageData(bbox, imagetype, callback) {
 	request.send();
 }
 
+
+function getHexagon(geohex, callback) {
+	var url = 'api/hexagons/' + geohex;
+	var request = new XMLHttpRequest();
+	request.open('GET', url, true);
+
+	request.onload = function() {
+		if (request.status >= 200 && request.status < 400) {
+			var data = JSON.parse(request.responseText);
+			callback(data);
+		}
+	};
+	request.send();
+}
+
+
+
 function compare(a, b) {
 	if (a.properties.Published < b.properties.Published){
 		return -1;
@@ -107,6 +123,13 @@ function satelliteImagescallback(req) {
 	var sel = document.getElementById('timeslider');
 	satelliteImages.features.sort(compare);
 	sel.onchange();
+}
+
+function hexagoncallback(req) {
+	// alert("obs: " + req);
+	document.getElementById('btnYes').innerHTML += ' (' + req.yes + ')';
+	document.getElementById('btnNo').innerHTML += ' (' + req.no + ')';
+	document.getElementById('btnMaybe').innerHTML += ' (' + req.maybe + ')';
 }
 
 
@@ -135,6 +158,7 @@ function satelliteTypeSelectionChanged(sel) {
 		'weight': 5,
 		'opacity': 0.65
 	};
+	getHexagon(geohexcode, hexagoncallback);
 
 	var polygon = getGeohexPolygon(geohexcode, myStyle);
 	var centerHex = polygon.getBounds().getCenter();

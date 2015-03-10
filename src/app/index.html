@@ -23,9 +23,9 @@
 </head>
 <body>
 	<div class="buttons">
-		<button type="button" onclick="sendObservation('yes');" class="button">Yes</button><br/>
-		<button type="button" class="button" onclick="sendObservation('no');">No</button><br/>
-		<button type="button" class="button" onclick="sendObservation('maybe');">Maybe</button><br/>
+		<button type="button" onclick="sendObservation('yes');" class="button" id="btnYes">Yes</button><br/>
+		<button type="button" class="button" onclick="sendObservation('no');" id="btnNo">No</button><br/>
+		<button type="button" class="button" onclick="sendObservation('maybe');" id="btnMaybe">Maybe</button><br/>
 	</div>
 	<div class="group">
 			<select id= "selectImageType" class="selectClass" onchange="satelliteTypeSelectionChanged(this)">
