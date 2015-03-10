@@ -90,7 +90,7 @@ router.post('/observations', jsonParser, function (req, res) {
         res.status(HttpStatus.CREATED).send(req.body);
     }
     else{
-        res.status(HttpStatus.NOT_FOUND).send("request validation error:");
+        res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     } 
 });
 

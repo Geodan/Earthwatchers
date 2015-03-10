@@ -3,6 +3,7 @@
 /*global GEOHEX */
 var geohexcode = 'PO2670248';
 var startZoomlevel = 12;
+var user="barack";
 var satelliteImages = null;
 var map = null;
 
@@ -24,6 +25,31 @@ function findEarthwatchersLayer() {
 		}
 	});
 	return result;
+}
+
+function sendObservation(observation){
+	var zone = GEOHEX.getZoneByCode(geohexcode);
+	var obs = { 
+     "user"    :   user, 
+     "lat"     :   zone.lat,
+     "lon"     :   zone.lon,
+     "level"    :  zone.getLevel(),
+     "observation": observation,
+     "geohex": geohexcode
+	};
+	//{"user":"bert","lat":12.3,"lon":33,"level":5,"geohex":"434ghfd","observation":"forest away" }
+	var url = 'api/observations';
+	var request = new XMLHttpRequest();
+	request.open('POST', url, true);
+	request.setRequestHeader("Content-type","application/json");
+	request.send(JSON.stringify(obs));
+
+	request.onload = function() {
+		if (request.status == 201) {
+			var data = JSON.parse(request.responseText);
+			alert("thanks observation is saved");			
+		}
+	};
 }
 
 function timesliderChanged(ctrl) {
@@ -54,7 +80,6 @@ function getGeohexPolygon(geohexcode, style) {
 
 function getSatelliteImageData(bbox, imagetype, callback) {
 	var url = 'api/satelliteimages?bbox=' + bbox + '&imagetype=' + imagetype;
-
 	var request = new XMLHttpRequest();
 	request.open('GET', url, true);
 
