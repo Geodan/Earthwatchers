@@ -45,7 +45,6 @@ router.get('/version', function(req, res) {
     });
 });
 
-
 router.get('/hexagons/:id', function(req, res) {
     // get stats for the given hexagon
     var hex = req.params.id;
@@ -129,7 +128,6 @@ router.post('/observations', jsonParser, function(req, res) {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }
 });
-
 
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));

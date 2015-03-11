@@ -6,6 +6,7 @@ var startZoomlevel = 12;
 var user="barack";
 var satelliteImages = null;
 var map = null;
+var default_geohex_level = 7;
 
 function getSatelliteImageByDate(date) {
 	for (var i = 0; i < satelliteImages.features.length; i++) {
@@ -115,11 +116,19 @@ function compare(a, b) {
 	return 0;
 }
 
+function random (low, high) {
+    return Math.random() * (high - low) + low;
+}
+
 function satelliteImagescallback(req) {
 	satelliteImages = req;
 	var sel = document.getElementById('timeslider');
 	satelliteImages.features.sort(compare);
 	sel.onchange();
+}
+
+function next(){
+	location.reload();
 }
 
 function hexagoncallback(req) {
@@ -128,7 +137,6 @@ function hexagoncallback(req) {
 	document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
 	document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
 }
-
 
 function satelliteTypeSelectionChanged(sel) {
 	var currentImageType = sel.value;
@@ -140,6 +148,14 @@ function satelliteTypeSelectionChanged(sel) {
 (function(window, document, L, undefined) {
 	'use strict';
 	L.Icon.Default.imagePath = 'images/';
+
+	var lon_min = 111.0;var lon_max = 112.0;
+    var lat_min = 1;var lat_max = 2;
+
+    var lon_rnd= random(lon_min,lon_max);
+    var lat_rnd= random(lat_min,lat_max);
+
+    geohexcode= GEOHEX.getZoneByLocation(lat_rnd,lon_rnd,default_geohex_level).code;
 
 	// fire onchange event of first combobox
 	var selectImageType = document.getElementById('selectImageType');
@@ -177,6 +193,4 @@ function satelliteTypeSelectionChanged(sel) {
 	map.addLayer(ggl2);
 	//omnivore.topojson('project.topojson').addTo(map);
 	map.addLayer(polygon);
-	// map.addControl(new L.Control.Layers( {'Google':ggl2, 'Esri':esri}, {}, {collapsed:false}));
-
 }(window, document, L));
