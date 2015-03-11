@@ -26,13 +26,11 @@ git clone https://github.com/Geodan/Earthwatchers.git
 
 cd earthwatchers\src
 
-mv .env.sample .env 
-
 npm install
 
 bower install
 
-nodemon
+node server.js
 ```
 
 # Start testing:
