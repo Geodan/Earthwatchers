@@ -68,7 +68,6 @@ function timesliderChanged(ctrl) {
 	if (earthwatchersLayer !== null) {
 		map.removeLayer(earthwatchersLayer);
 	}
-
 }
 
 function getGeohexPolygon(geohexcode, style) {
@@ -105,8 +104,6 @@ function getHexagon(geohex, callback) {
 	};
 	request.send();
 }
-
-
 
 function compare(a, b) {
 	if (a.properties.Published < b.properties.Published){
