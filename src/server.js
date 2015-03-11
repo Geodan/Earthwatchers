@@ -49,22 +49,30 @@ router.get('/hexagons/:id', function(req, res) {
     // get stats for the given hexagon
     var hex = req.params.id;
     var yes=0,no=0,maybe=0;
-    lineReader.eachLine(observationsFile, function(line, last) {
-        var json = JSON.parse(line);
-        if(json.geohex === hex)
-        {
-            if(json.observation === "yes") yes++;
-            if(json.observation === "no") no++;
-            if(json.observation === "maybe") maybe++;
-        }
-
-        if(last){
-            var stats = {
-                "geohex": hex,"yes": yes,"no": no,"maybe": maybe
+    if (fs.existsSync(observationsFile)) {
+        lineReader.eachLine(observationsFile, function(line, last) {
+            var json = JSON.parse(line);
+            if(json.geohex === hex)
+            {
+                if(json.observation === "yes") yes++;
+                if(json.observation === "no") no++;
+                if(json.observation === "maybe") maybe++;
             }
-            res.json(stats);
+
+            if(last){
+                var stats = {
+                    "geohex": hex,"yes": yes,"no": no,"maybe": maybe
+                }
+                res.json(stats);
+            }
+        });
+    }
+    else {
+        var stats = {
+            "geohex": hex,"yes": yes,"no": no,"maybe": maybe
         }
-    });
+        res.json(stats);
+    }
 
 });
 
