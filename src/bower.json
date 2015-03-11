@@ -6,6 +6,5 @@
     "leaflet-plugins": "~1.2.1",
     "topojson": "~1.6.18",
     "leaflet-omnivore": "~0.3.2",
-    "rangeslider-pure": "~0.3.1"
   }
 }

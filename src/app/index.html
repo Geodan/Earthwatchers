@@ -11,7 +11,6 @@
     
     <!-- build:css styles/vendor.css -->
     <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css">
-    <link rel="stylesheet" href="bower_components/rangeslider-pure/dist/rangeSlider.min.css">
     <!-- bower:css -->
     <!-- endbower -->
     <!-- endbuild -->
@@ -36,9 +35,8 @@
 			</select>
 			<input type ="range" max="2" min="0" id="timeslider" data-popup-enabled="false"
 		    onchange="timesliderChanged(this)"
-		    step="1" name="rangeVal" id="rangeVal" value="2" data-rangeSlider >
+		    step="1" name="rangeVal" id="rangeVal" value="2">
 			</input>
-			<output></output>
 			<em id="rangeValLabel" style="font-style: normal;"></em>
 	</div>
 	<div class="map-application">
@@ -52,7 +50,6 @@
   <script src="bower_components/leaflet-plugins/layer/tile/Google.js"></script>
   <script src="bower_components/topojson/topojson.js"></script>
   <script src="bower_components/leaflet-omnivore/leaflet-omnivore.js"></script>
-  <script src="bower_components/rangeslider-pure/dist/rangeSlider.min.js"></script> 
   <!-- endbower -->
   <!-- endbuild -->
   <script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script>
