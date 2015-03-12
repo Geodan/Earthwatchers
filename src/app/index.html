@@ -1,21 +1,25 @@
 <!doctype html>
-<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+<!--[if lt IE 7]>
+<html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html> <!--<![endif]-->
 <head>
-	<meta charset="UTF-8">
-	<title>Earthwatchers</title>
-	<meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    
+    <meta charset="UTF-8">
+    <title>Earthwatchers</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
     <!-- build:css styles/vendor.css -->
     <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css">
     <!-- bower:css -->
     <!-- endbower -->
     <!-- endbuild -->
-   
-   	<!-- build:css styles/main.css -->
+
+    <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
     <link rel="shortcut icon" href="/favicon.ico">
@@ -23,43 +27,47 @@
 
 </head>
 <body>
-	<div class="buttons">
-		<button type="button" class="button" onclick="sendObservation('yes');" id="btnYes">Yes</button><br/>
-		<button type="button" class="button" onclick="sendObservation('no');" id="btnNo">No</button><br/>
-		<button type="button" class="button" onclick="sendObservation('maybe');" id="btnMaybe">Maybe</button><br/><br/>
-		<button type="button" class="button" onclick="next();" id="btnNext">Next</button><br/>
-	</div>
-	<div class="group">
-			<select id= "selectImageType" class="selectClass" onchange="satelliteTypeSelectionChanged(this)">
-			  <option value="Sentinel">Sentinel 1</option>
-			  <option value="Landsat" selected>Landsat 8</option>
-			</select>
-			<input type ="range" max="2" min="0" id="timeslider" data-popup-enabled="false"
-                onchange="timesliderChanged(this)"
-                step="1" name="rangeVal" id="rangeVal" value="2">
-			</input>
-			<em id="rangeValLabel" style="font-style: normal;"></em>
-	</div>
-	<div class="map-application">
-		<div id="map" class="map">			
-		</div>
-	</div>
-  <script src="scripts/hex_v3.2_core.js"></script>
-  <!-- build:js scripts/vendor.js -->
-  <!-- bower:js -->
-  <script src="bower_components/leaflet/dist/leaflet.js"></script>
-  <script src="bower_components/leaflet-plugins/layer/tile/Google.js"></script>
-  <script src="bower_components/topojson/topojson.js"></script>
-  <script src="bower_components/leaflet-omnivore/leaflet-omnivore.js"></script>
-  <!-- endbower -->
-  <!-- endbuild -->
-  <script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script>
+<div class="buttons">
+    <button type="button" class="button" onclick="sendObservation('yes');" id="btnYes">Yes</button>
+    <br/>
+    <button type="button" class="button" onclick="sendObservation('no');" id="btnNo">No</button>
+    <br/>
+    <button type="button" class="button" onclick="sendObservation('maybe');" id="btnMaybe">Maybe</button>
+    <br/><br/>
+    <button type="button" class="button" onclick="next();" id="btnNext">Next</button>
+    <br/>
+</div>
+<div class="group">
+    <select id="selectImageType" class="selectClass" onchange="satelliteTypeSelectionChanged(this)">
+        <option value="Sentinel">Sentinel 1</option>
+        <option value="Landsat" selected>Landsat 8</option>
+    </select>
+    <input type="range" max="2" min="0" id="timeslider" data-popup-enabled="false"
+           onchange="timesliderChanged(this)"
+           step="1" name="rangeVal" id="rangeVal" value="2">
+    </input>
+    <em id="rangeValLabel" style="font-style: normal;"></em>
+</div>
+<div class="map-application">
+    <div id="map" class="map">
+    </div>
+</div>
+<script src="scripts/hex_v3.2_core.js"></script>
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/leaflet/dist/leaflet.js"></script>
+<script src="bower_components/leaflet-plugins/layer/tile/Google.js"></script>
+<script src="bower_components/topojson/topojson.js"></script>
+<script src="bower_components/leaflet-omnivore/leaflet-omnivore.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+<script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script>
 
-  <script src="scripts/L.Control.ZoomMin.js"></script>
-  <!--<script src="scripts/L.Control.DisplaySatelliteLayer.js"></script>-->
-	<!-- build:js scripts/main.js -->
-	<script src="scripts/main.js"></script>
-	<!-- endbuild -->
+<script src="scripts/L.Control.ZoomMin.js"></script>
+<!--<script src="scripts/L.Control.DisplaySatelliteLayer.js"></script>-->
+<!-- build:js scripts/main.js -->
+<script src="scripts/main.js"></script>
+<!-- endbuild -->
 
 </body>
 </html>

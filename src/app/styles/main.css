@@ -68,13 +68,16 @@
 #btnYes {
     background-color: limegreen;
 }
+
 #btnNo {
     background-color: #b23618;
     color: #ffffff;
 }
+
 #btnMaybe {
     background-color: #ffd900;
 }
+
 #btnNext {
     background-color: #20aeff;
 }
@@ -221,4 +224,5 @@ input[type=range]:focus::-ms-fill-upper {
 input[type=range]::-ms-tooltip {
     display: none;
 }
+
 /* end timeslider css */

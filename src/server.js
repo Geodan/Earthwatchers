@@ -32,36 +32,35 @@ dotenv.load();
 var port = process.env.PORT || 3000;
 var router = express.Router();
 
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
     // todo: return root document
     res.json({
         message: 'Earthwatchers serverside'
     });
 });
 
-router.get('/version', function(req, res) {
+router.get('/version', function (req, res) {
     res.json({
         message: 'Version 0.2'
     });
 });
 
-router.get('/hexagons/:id', function(req, res) {
+router.get('/hexagons/:id', function (req, res) {
     // get stats for the given hexagon
     var hex = req.params.id;
-    var yes=0,no=0,maybe=0;
+    var yes = 0, no = 0, maybe = 0;
     if (fs.existsSync(observationsFile)) {
-        lineReader.eachLine(observationsFile, function(line, last) {
+        lineReader.eachLine(observationsFile, function (line, last) {
             var json = JSON.parse(line);
-            if(json.geohex === hex)
-            {
-                if(json.observation === "yes") yes++;
-                if(json.observation === "no") no++;
-                if(json.observation === "maybe") maybe++;
+            if (json.geohex === hex) {
+                if (json.observation === "yes") yes++;
+                if (json.observation === "no") no++;
+                if (json.observation === "maybe") maybe++;
             }
 
-            if(last){
+            if (last) {
                 var stats = {
-                    "geohex": hex,"yes": yes,"no": no,"maybe": maybe
+                    "geohex": hex, "yes": yes, "no": no, "maybe": maybe
                 }
                 res.json(stats);
             }
@@ -69,7 +68,7 @@ router.get('/hexagons/:id', function(req, res) {
     }
     else {
         var stats = {
-            "geohex": hex,"yes": yes,"no": no,"maybe": maybe
+            "geohex": hex, "yes": yes, "no": no, "maybe": maybe
         }
         res.json(stats);
     }
@@ -79,7 +78,7 @@ router.get('/hexagons/:id', function(req, res) {
 // spatial select the stalliteimages that intersect with client envelope
 // example request:
 // /satelliteimages?bbox=111.68,0.14,111.69,0.15&imagetype=Landsat
-router.get('/satelliteimages', function(req, res) {
+router.get('/satelliteimages', function (req, res) {
     var bboxPar = req.query.bbox;
     var imageType = req.query.imagetype;
     if (bboxPar !== null || imageType !== null) {
@@ -109,7 +108,7 @@ router.get('/satelliteimages', function(req, res) {
     }
 });
 
-router.post('/observations', jsonParser, function(req, res) {
+router.post('/observations', jsonParser, function (req, res) {
     req.checkBody('user', 'User is required').notEmpty();
     req.checkBody('lat', 'lat is required').notEmpty();
     req.checkBody('lon', 'lon is required').notEmpty();
@@ -122,7 +121,7 @@ router.post('/observations', jsonParser, function(req, res) {
     if (errors === null) {
         req.body.date = new Date().toISOString();
 
-        fs.appendFile(observationsFile, JSON.stringify(req.body) + '\n', function(err) {
+        fs.appendFile(observationsFile, JSON.stringify(req.body) + '\n', function (err) {
             if (err) {
                 console.log(err);
             } else {
