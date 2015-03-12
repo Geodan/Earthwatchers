@@ -59,6 +59,24 @@
 .button {
     width: 75px;
     height: 60px;
+    border: none;
+    border-radius: 5px;
+    color: #000000;
+    font-weight: bold;
+}
+
+#btnYes {
+    background-color: limegreen;
+}
+#btnNo {
+    background-color: #b23618;
+    color: #ffffff;
+}
+#btnMaybe {
+    background-color: #ffd900;
+}
+#btnNext {
+    background-color: #20aeff;
 }
 
 .group {
