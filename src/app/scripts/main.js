@@ -151,8 +151,7 @@ function next() {
     location.reload();
 }
 
-function hexagoncallback(req) {
-    // alert("obs: " + req);
+function hexagonCallback(req) {
     document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
     document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
     document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
