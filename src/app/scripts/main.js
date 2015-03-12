@@ -180,10 +180,10 @@ function satelliteTypeSelectionChanged(sel) {
 	});
 
 	map.addControl(new L.Control.ZoomMin({
-		position: 'bottomright', startLevel:startZoomlevel, startCenter:centerHex
+		position: 'topleft', startLevel:startZoomlevel, startCenter:centerHex
 	}));
 
-	L.control.scale({imperial:false, position:'topleft'}).addTo(map);
+	L.control.scale({imperial:false, position:'bottomright'}).addTo(map);
 
 	//map.addControl(new L.Control.DisplaySatelliteLayer({
 	// }));
