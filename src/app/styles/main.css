@@ -217,4 +217,8 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
     background: #281aa9;
 }
+
+input[type=range]::-ms-tooltip {
+    display: none;
+}
 /* end timeslider css */

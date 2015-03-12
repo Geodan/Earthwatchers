@@ -53,7 +53,8 @@ function sendObservation(observation){
 }
 
 function timesliderChanged(ctrl) {
-	var day = satelliteImages.features[ctrl.value].properties.Published; document.getElementById('rangeValLabel').innerHTML = day;
+	var day = satelliteImages.features[ctrl.value].properties.Published;
+    document.getElementById('rangeValLabel').innerHTML = day;
 	var earthwatchersLayer = findEarthwatchersLayer();
 
 	var s = getSatelliteImageByDate(day);
