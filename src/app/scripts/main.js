@@ -6,6 +6,7 @@ var startZoomlevel = 12;
 var user = "barack";
 var satelliteImages = null;
 var map = null;
+var polygon = null;
 var default_geohex_level = 7;
 
 function getSatelliteImageByDate(date) {
@@ -14,13 +15,14 @@ function getSatelliteImageByDate(date) {
             return satelliteImages.features[i];
         }
     }
+    return null;
 }
 
-function findEarthwatchersLayer() {
+function findEarthWatchersLayer() {
     var result = null;
     map.eachLayer(function (layer) {
         if (layer.options.type !== null) {
-            if (layer.options.type === 'earthwatchers') {
+            if (layer.options.type === 'earthWatchers') {
                 result = layer;
             }
         }
@@ -29,6 +31,8 @@ function findEarthwatchersLayer() {
 }
 
 function sendObservation(observation) {
+    colorizePolygon(observation);
+
     var zone = GEOHEX.getZoneByCode(geohexcode);
     var obs = {
         "user": user,
@@ -46,16 +50,31 @@ function sendObservation(observation) {
 
     request.onload = function () {
         if (request.status == 201) {
-            var data = JSON.parse(request.responseText);
-            getHexagon(geohexcode, hexagoncallback);
+//            var data = JSON.parse(request.responseText);
+            getHexagon(geohexcode, hexagonCallback);
         }
     };
 }
 
-function timesliderChanged(ctrl) {
+function getColorByObservation(observation) {
+    var color = "#32cd32";
+    if (observation === "yes") {
+        color = "#b23618";
+    } else if (observation === "maybe") {
+        color = "#ffd900";
+    }
+    return color;
+}
+
+function colorizePolygon(observation) {
+    var color = getColorByObservation(observation);
+    polygon.setStyle({color: color});
+}
+
+function timeSliderChanged(ctrl) {
     var day = satelliteImages.features[ctrl.value].properties.Published;
     document.getElementById('rangeValLabel').innerHTML = day;
-    var earthwatchersLayer = findEarthwatchersLayer();
+    var earthWatchersLayer = findEarthWatchersLayer();
 
     var s = getSatelliteImageByDate(day);
     var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
@@ -63,19 +82,19 @@ function timesliderChanged(ctrl) {
     var newLayer = L.tileLayer(url, {
         tms: true,
         maxZoom: maxlevel,
-        type: 'earthwatchers'
+        type: 'earthWatchers'
     });
     map.addLayer(newLayer);
 
-    if (earthwatchersLayer !== null) {
-        map.removeLayer(earthwatchersLayer);
+    if (earthWatchersLayer !== null) {
+        map.removeLayer(earthWatchersLayer);
     }
 }
 
+
 function getGeohexPolygon(geohexcode, style) {
     var zone = GEOHEX.getZoneByCode(geohexcode);
-    var polygon = L.polygon(zone.getHexCoords(), style);
-    return polygon;
+    return L.polygon(zone.getHexCoords(), style);
 }
 
 function getSatelliteImageData(bbox, imagetype, callback) {
@@ -121,9 +140,9 @@ function random(low, high) {
     return Math.random() * (high - low) + low;
 }
 
-function satelliteImagescallback(req) {
+function satelliteImagesCallback(req) {
     satelliteImages = req;
-    var sel = document.getElementById('timeslider');
+    var sel = document.getElementById('timeSlider');
     satelliteImages.features.sort(compare);
     sel.onchange();
 }
@@ -143,10 +162,10 @@ function satelliteTypeSelectionChanged(sel) {
     var currentImageType = sel.value;
     var polygon = getGeohexPolygon(geohexcode);
     var bbox = polygon.getBounds().toBBoxString();
-    getSatelliteImageData(bbox, currentImageType, satelliteImagescallback);
+    getSatelliteImageData(bbox, currentImageType, satelliteImagesCallback);
 }
 
-(function (window, document, L, undefined) {
+(function (window, document, L) {
     'use strict';
     L.Icon.Default.imagePath = 'images/';
 
@@ -170,13 +189,14 @@ function satelliteTypeSelectionChanged(sel) {
     });
 
     var myStyle = {
-        'color': '#ff0000',
+        'color': '#000000',
         'weight': 5,
-        'opacity': 0.65
+        'opacity': 0.65,
+        fillOpacity: 0
     };
-    getHexagon(geohexcode, hexagoncallback);
+    getHexagon(geohexcode, hexagonCallback);
 
-    var polygon = getGeohexPolygon(geohexcode, myStyle);
+    polygon = getGeohexPolygon(geohexcode, myStyle);
     var centerHex = polygon.getBounds().getCenter();
     map.setView(centerHex, startZoomlevel, {
         animation: true
@@ -187,10 +207,6 @@ function satelliteTypeSelectionChanged(sel) {
     }));
 
     L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
-
-    //map.addControl(new L.Control.DisplaySatelliteLayer({
-    // }));
-
 
     var ggl2 = new L.Google('satellite');
     map.addLayer(ggl2);
