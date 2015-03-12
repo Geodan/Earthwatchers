@@ -24,7 +24,7 @@
 </head>
 <body>
 	<div class="buttons">
-		<button type="button" onclick="sendObservation('yes');" class="button" id="btnYes">Yes</button><br/>
+		<button type="button" class="button" onclick="sendObservation('yes');" id="btnYes">Yes</button><br/>
 		<button type="button" class="button" onclick="sendObservation('no');" id="btnNo">No</button><br/>
 		<button type="button" class="button" onclick="sendObservation('maybe');" id="btnMaybe">Maybe</button><br/><br/>
 		<button type="button" class="button" onclick="next();" id="btnNext">next</button><br/>
@@ -35,8 +35,8 @@
 			  <option value="Landsat" selected>Landsat 8</option>
 			</select>
 			<input type ="range" max="2" min="0" id="timeslider" data-popup-enabled="false"
-		    onchange="timesliderChanged(this)"
-		    step="1" name="rangeVal" id="rangeVal" value="2">
+                onchange="timesliderChanged(this)"
+                step="1" name="rangeVal" id="rangeVal" value="2">
 			</input>
 			<em id="rangeValLabel" style="font-style: normal;"></em>
 	</div>
