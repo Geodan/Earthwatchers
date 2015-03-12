@@ -65,11 +65,11 @@
     font-weight: bold;
 }
 
-#btnYes {
-    background-color: limegreen;
+#btnNo {
+    background-color: #32cd32;
 }
 
-#btnNo {
+#btnYes {
     background-color: #b23618;
     color: #ffffff;
 }

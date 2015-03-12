@@ -6,6 +6,7 @@ var startZoomlevel = 12;
 var user = "barack";
 var satelliteImages = null;
 var map = null;
+var polygon = null;
 var default_geohex_level = 7;
 
 function getSatelliteImageByDate(date) {
@@ -30,6 +31,8 @@ function findEarthWatchersLayer() {
 }
 
 function sendObservation(observation) {
+    colorizePolygon(observation);
+
     var zone = GEOHEX.getZoneByCode(geohexcode);
     var obs = {
         "user": user,
@@ -53,6 +56,21 @@ function sendObservation(observation) {
     };
 }
 
+function getColorByObservation(observation) {
+    var color = "#32cd32";
+    if (observation === "yes") {
+        color = "#b23618";
+    } else if (observation === "maybe") {
+        color = "#ffd900";
+    }
+    return color;
+}
+
+function colorizePolygon(observation) {
+    var color = getColorByObservation(observation);
+    polygon.setStyle({color: color});
+}
+
 function timeSliderChanged(ctrl) {
     var day = satelliteImages.features[ctrl.value].properties.Published;
     document.getElementById('rangeValLabel').innerHTML = day;
@@ -72,6 +90,7 @@ function timeSliderChanged(ctrl) {
         map.removeLayer(earthWatchersLayer);
     }
 }
+
 
 function getGeohexPolygon(geohexcode, style) {
     var zone = GEOHEX.getZoneByCode(geohexcode);
@@ -134,9 +153,10 @@ function next() {
 
 function hexagonCallback(req) {
     // alert("obs: " + req);
-    document.getElementById('btnYes').innerHTML = window.toStaticHTML('Yes (' + req.yes + ')');
-    document.getElementById('btnNo').innerHTML = window.toStaticHTML('No (' + req.no + ')');
-    document.getElementById('btnMaybe').innerHTML = window.toStaticHTML('Maybe (' + req.maybe + ')');
+    document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
+    document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
+    document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
+    console.log(req);
 }
 
 function satelliteTypeSelectionChanged(sel) {
@@ -170,13 +190,14 @@ function satelliteTypeSelectionChanged(sel) {
     });
 
     var myStyle = {
-        'color': '#ff0000',
+        'color': '#000000',
         'weight': 5,
-        'opacity': 0.65
+        'opacity': 0.65,
+        fillOpacity: 0
     };
     getHexagon(geohexcode, hexagonCallback);
 
-    var polygon = getGeohexPolygon(geohexcode, myStyle);
+    polygon = getGeohexPolygon(geohexcode, myStyle);
     var centerHex = polygon.getBounds().getCenter();
     map.setView(centerHex, startZoomlevel, {
         animation: true
