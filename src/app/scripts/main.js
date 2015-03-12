@@ -152,11 +152,9 @@ function next() {
 }
 
 function hexagonCallback(req) {
-    // alert("obs: " + req);
-    document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
-    document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
-    document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
-    console.log(req);
+    document.getElementById('btnYes').innerHTML = window.toStaticHTML('Yes (' + req.yes + ')');
+    document.getElementById('btnNo').innerHTML = window.toStaticHTML('No (' + req.no + ')');
+    document.getElementById('btnMaybe').innerHTML = window.toStaticHTML('Maybe (' + req.maybe + ')');
 }
 
 function satelliteTypeSelectionChanged(sel) {
