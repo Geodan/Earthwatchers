@@ -37,6 +37,11 @@ node server.js
 
 http://localhost:3000/
 
+# Team communication
+
+Slack room:  https://earthwatchers.slack.com
+
+
 
 
 
