@@ -14,13 +14,14 @@ function getSatelliteImageByDate(date) {
             return satelliteImages.features[i];
         }
     }
+    return null;
 }
 
-function findEarthwatchersLayer() {
+function findEarthWatchersLayer() {
     var result = null;
     map.eachLayer(function (layer) {
         if (layer.options.type !== null) {
-            if (layer.options.type === 'earthwatchers') {
+            if (layer.options.type === 'earthWatchers') {
                 result = layer;
             }
         }
@@ -46,16 +47,16 @@ function sendObservation(observation) {
 
     request.onload = function () {
         if (request.status == 201) {
-            var data = JSON.parse(request.responseText);
-            getHexagon(geohexcode, hexagoncallback);
+//            var data = JSON.parse(request.responseText);
+            getHexagon(geohexcode, hexagonCallback);
         }
     };
 }
 
-function timesliderChanged(ctrl) {
+function timeSliderChanged(ctrl) {
     var day = satelliteImages.features[ctrl.value].properties.Published;
     document.getElementById('rangeValLabel').innerHTML = day;
-    var earthwatchersLayer = findEarthwatchersLayer();
+    var earthWatchersLayer = findEarthWatchersLayer();
 
     var s = getSatelliteImageByDate(day);
     var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
@@ -63,19 +64,18 @@ function timesliderChanged(ctrl) {
     var newLayer = L.tileLayer(url, {
         tms: true,
         maxZoom: maxlevel,
-        type: 'earthwatchers'
+        type: 'earthWatchers'
     });
     map.addLayer(newLayer);
 
-    if (earthwatchersLayer !== null) {
-        map.removeLayer(earthwatchersLayer);
+    if (earthWatchersLayer !== null) {
+        map.removeLayer(earthWatchersLayer);
     }
 }
 
 function getGeohexPolygon(geohexcode, style) {
     var zone = GEOHEX.getZoneByCode(geohexcode);
-    var polygon = L.polygon(zone.getHexCoords(), style);
-    return polygon;
+    return L.polygon(zone.getHexCoords(), style);
 }
 
 function getSatelliteImageData(bbox, imagetype, callback) {
@@ -121,9 +121,9 @@ function random(low, high) {
     return Math.random() * (high - low) + low;
 }
 
-function satelliteImagescallback(req) {
+function satelliteImagesCallback(req) {
     satelliteImages = req;
-    var sel = document.getElementById('timeslider');
+    var sel = document.getElementById('timeSlider');
     satelliteImages.features.sort(compare);
     sel.onchange();
 }
@@ -132,7 +132,7 @@ function next() {
     location.reload();
 }
 
-function hexagoncallback(req) {
+function hexagonCallback(req) {
     // alert("obs: " + req);
     document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
     document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
@@ -143,10 +143,10 @@ function satelliteTypeSelectionChanged(sel) {
     var currentImageType = sel.value;
     var polygon = getGeohexPolygon(geohexcode);
     var bbox = polygon.getBounds().toBBoxString();
-    getSatelliteImageData(bbox, currentImageType, satelliteImagescallback);
+    getSatelliteImageData(bbox, currentImageType, satelliteImagesCallback);
 }
 
-(function (window, document, L, undefined) {
+(function (window, document, L) {
     'use strict';
     L.Icon.Default.imagePath = 'images/';
 
@@ -174,7 +174,7 @@ function satelliteTypeSelectionChanged(sel) {
         'weight': 5,
         'opacity': 0.65
     };
-    getHexagon(geohexcode, hexagoncallback);
+    getHexagon(geohexcode, hexagonCallback);
 
     var polygon = getGeohexPolygon(geohexcode, myStyle);
     var centerHex = polygon.getBounds().getCenter();
@@ -187,10 +187,6 @@ function satelliteTypeSelectionChanged(sel) {
     }));
 
     L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
-
-    //map.addControl(new L.Control.DisplaySatelliteLayer({
-    // }));
-
 
     var ggl2 = new L.Google('satellite');
     map.addLayer(ggl2);
