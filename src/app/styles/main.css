@@ -63,6 +63,14 @@
     border-radius: 5px;
     color: #000000;
     font-weight: bold;
+    display: block;
+    margin-top: 1px;
+}
+.button:first-child {
+    margin-top: 0;
+}
+.button:last-child {
+    margin-top: 10px;
 }
 
 #btnNo {
