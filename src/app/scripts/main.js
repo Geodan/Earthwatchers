@@ -97,6 +97,10 @@ function getGeohexPolygon(geohexcode, style) {
     return L.polygon(zone.getHexCoords(), style);
 }
 
+function toggleSatelliteType(bbox, imagetype, callback) {
+    getSatelliteImageData(bbox, imagetype, callback);
+}
+
 function getSatelliteImageData(bbox, imagetype, callback) {
     var url = 'api/satelliteimages?bbox=' + bbox + '&imagetype=' + imagetype;
     var request = new XMLHttpRequest();

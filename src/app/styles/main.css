@@ -86,6 +86,7 @@
     z-index: 10;
     position: absolute;
     bottom: 5px;
+    left: 5px;
 }
 
 .group:after {
@@ -226,3 +227,36 @@ input[type=range]::-ms-tooltip {
 }
 
 /* end timeslider css */
+/* toggle layers css */
+/* image credits
+ * santinel-1
+ * https://sentinel.esa.int/image/image_gallery?uuid=dfb83050-118e-4430-add8-40f680f10009&groupId=247904&t=1343825173914
+ * landsat 8
+ * http://landsat.usgs.gov/images/new_LDCM_still_Gulf_Coast_front_view%20banner.jpg 
+ */
+.minimap {
+    /*position: absolute;
+    left: 10px;
+    bottom: 10px;*/
+    display: inline-block;
+    width: 72px;
+    height: 72px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #fff;
+}
+.minimap.button {
+    border: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,0.01);
+}
+.minimap.landsat {
+    background: url(../images/landsat-8.jpeg) 0 0 no-repeat;
+}
+.minimap.sentinel {
+    background: url(../images/sentinel-1.jpg) 0 0 no-repeat;
+}
+/* end toggle layers css */

@@ -38,6 +38,11 @@
     <br/>
 </div>
 <div class="group">
+    <div class="minimap landsat">
+        <button type="button" class="toggleSatelliteType"
+            onclick="toggleSatelliteType(this);"></button>
+        <label class="satlliteTypeLabel">Landsat 8</label>
+    </div>
     <select id="selectImageType" class="selectClass" onchange="satelliteTypeSelectionChanged(this)">
         <option value="Sentinel">Sentinel 1</option>
         <option value="Landsat" selected>Landsat 8</option>
