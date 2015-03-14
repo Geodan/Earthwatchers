@@ -234,29 +234,52 @@ input[type=range]::-ms-tooltip {
  * landsat 8
  * http://landsat.usgs.gov/images/new_LDCM_still_Gulf_Coast_front_view%20banner.jpg 
  */
+.timerange {
+    position: absolute;
+    left: 80px;
+    bottom: 0px;
+    width: 400px;
+}
 .minimap {
-    /*position: absolute;
-    left: 10px;
+    position: absolute;
+    /*left: 10px;
     bottom: 10px;*/
     display: inline-block;
-    width: 72px;
-    height: 72px;
+    width: 74px;
+    height: 74px;
     background: rgba(0,0,0,0.5);
     border: 1px solid #fff;
+    position: absolute;
+    bottom: 0;
 }
-.minimap.button {
+.minimap .toggleSatelliteType {
     border: 0;
     position: absolute;
-    top: 0;
     left: 0;
     bottom: 0;
-    right: 0;
-    background: rgba(0,0,0,0.01);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(255,255,255,0.01);
+    cursor: pointer;
+}
+.minimap .satelliteTypeLabel {
+    cursor: pointer;
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    line-height: normal;
+    padding: 12px 0px 6px 0px;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    height: 15px;
+    text-shadow: rgba(0,0,0,0.7) 0px 1px 8px;
 }
 .minimap.landsat {
     background: url(../images/landsat-8.jpeg) 0 0 no-repeat;
 }
 .minimap.sentinel {
-    background: url(../images/sentinel-1.jpg) 0 0 no-repeat;
+    background: url(../images/sentinel-1.jpeg) 0 0 no-repeat;
 }
 /* end toggle layers css */

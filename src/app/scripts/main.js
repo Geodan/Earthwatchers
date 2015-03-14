@@ -97,10 +97,6 @@ function getGeohexPolygon(geohexcode, style) {
     return L.polygon(zone.getHexCoords(), style);
 }
 
-function toggleSatelliteType(bbox, imagetype, callback) {
-    getSatelliteImageData(bbox, imagetype, callback);
-}
-
 function getSatelliteImageData(bbox, imagetype, callback) {
     var url = 'api/satelliteimages?bbox=' + bbox + '&imagetype=' + imagetype;
     var request = new XMLHttpRequest();
@@ -159,6 +155,26 @@ function hexagonCallback(req) {
     document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
     document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
     document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
+}
+
+function toggleSatelliteType(sel) {
+    var labels = {
+            Landsat: 'Landsat 8',
+            Sentinel: 'Sentinel 1'
+        },
+        newtype = sel.value === 'Landsat' ? 'Sentinel' : 'Landsat';
+
+    // change map layer
+    satelliteTypeSelectionChanged({value: newtype});
+
+    // update satellite type value
+    sel.parentNode.classList.remove(sel.value.toLowerCase());
+    sel.setAttribute('value', newtype);
+    sel.parentNode.classList.add(sel.value.toLowerCase());
+
+    // update satellite type label
+    // :/
+    document.getElementsByClassName('satelliteTypeLabel')[0].children[0].textContent = labels[newtype];
 }
 
 function satelliteTypeSelectionChanged(sel) {
