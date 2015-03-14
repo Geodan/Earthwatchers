@@ -74,7 +74,11 @@ function colorizePolygon(observation) {
 
 function timeSliderChanged(ctrl) {
     var day = satelliteImages.features[ctrl.value].properties.Published;
-    document.getElementById('rangeValLabel').innerHTML = day;
+    var label = document.getElementById('rangeValLabel');
+    label.innerHTML = day;
+    // update label positioning
+    label.className = 'value' + ctrl.value;
+
     var earthWatchersLayer = findEarthWatchersLayer();
 
     var s = getSatelliteImageByDate(day);

@@ -121,10 +121,32 @@ html {
 }
 
 /* timeslider css */
+.timerange {
+    position: absolute;
+    left: 80px;
+    bottom: 0px;
+    width: 150px;
+    padding: 10px 5px;
+    background: rgba(0,0,0,0.5);
+}
+.timerange label {
+    color: #eee;
+    display: inline-block;
+    width: 100%;
+}
+.timerange label.value0 {
+    text-align: left;
+}
+.timerange label.value1 {
+    text-align: center;
+}
+.timerange label.value2 {
+    text-align: right;
+}
 input[type=range] {
     -webkit-appearance: none;
-    margin: 18px 0;
-    width: 150px;
+    margin: 13px 0;
+    width: 100%;
 }
 
 input[type=range]:focus {
@@ -148,7 +170,7 @@ input[type=range]::-webkit-slider-thumb {
     height: 36px;
     width: 20px;
     border-radius: 3px;
-    background: #ffffff;
+    background: #eee; /* same as .timerange label*/
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: -14px;
@@ -234,12 +256,7 @@ input[type=range]::-ms-tooltip {
  * landsat 8
  * http://landsat.usgs.gov/images/new_LDCM_still_Gulf_Coast_front_view%20banner.jpg 
  */
-.timerange {
-    position: absolute;
-    left: 80px;
-    bottom: 0px;
-    width: 400px;
-}
+
 .minimap {
     position: absolute;
     display: inline-block;
