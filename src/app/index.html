@@ -42,19 +42,16 @@
         <button type="button" class="toggleSatelliteType" value='Landsat'
             onclick="toggleSatelliteType(this);"></button>
         <div class="satelliteTypeLabel">
-            <label>Landsat 8</label>
+            <label id="satTypeLabel">Landsat 8</label>
         </div>
     </div>
     <div class="timerange">
-    <select id="selectImageType" class="selectClass" onchange="satelliteTypeSelectionChanged(this)">
-        <option value="Sentinel">Sentinel 1</option>
-        <option value="Landsat" selected>Landsat 8</option>
-    </select>
-    <input type="range" max="2" min="0" id="timeSlider" data-popup-enabled="false"
-           onchange="timeSliderChanged(this)"
-           step="1" name="rangeVal" id="rangeVal" value="2">
-    </input>
-    <em id="rangeValLabel" style="font-style: normal;"></em>
+        <input type="range" max="2" min="0" id="timeSlider"
+            data-popup-enabled="false"
+            onchange="timeSliderChanged(this)"
+            step="1" name="rangeVal" id="rangeVal" value="2">
+        </input>
+        <em id="rangeValLabel" style="font-style: normal;"></em>
     </div>
 </div>
 <div class="map-application">

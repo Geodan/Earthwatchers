@@ -242,8 +242,6 @@ input[type=range]::-ms-tooltip {
 }
 .minimap {
     position: absolute;
-    /*left: 10px;
-    bottom: 10px;*/
     display: inline-block;
     width: 74px;
     height: 74px;
@@ -262,6 +260,7 @@ input[type=range]::-ms-tooltip {
     z-index: 1;
     background-color: rgba(255,255,255,0.01);
     cursor: pointer;
+    outline: none;
 }
 .minimap .satelliteTypeLabel {
     cursor: pointer;

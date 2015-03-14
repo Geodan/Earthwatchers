@@ -8,6 +8,7 @@ var satelliteImages = null;
 var map = null;
 var polygon = null;
 var default_geohex_level = 7;
+var defaultSatelliteType = 'Landsat';
 
 function getSatelliteImageByDate(date) {
     for (var i = 0; i < satelliteImages.features.length; i++) {
@@ -173,8 +174,7 @@ function toggleSatelliteType(sel) {
     sel.parentNode.classList.add(sel.value.toLowerCase());
 
     // update satellite type label
-    // :/
-    document.getElementsByClassName('satelliteTypeLabel')[0].children[0].textContent = labels[newtype];
+    document.getElementById('satTypeLabel').innerText = labels[newtype];
 }
 
 function satelliteTypeSelectionChanged(sel) {
@@ -199,8 +199,7 @@ function satelliteTypeSelectionChanged(sel) {
     geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, default_geohex_level).code;
 
     // fire onchange event of first combobox
-    var selectImageType = document.getElementById('selectImageType');
-    selectImageType.onchange();
+    satelliteTypeSelectionChanged({value: defaultSatelliteType});
 
     map = L.map('map', {
         zoomControl: false,
