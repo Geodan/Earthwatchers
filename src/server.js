@@ -20,6 +20,7 @@ var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {
     flags: 'a'
 });
 
+
 var app = express();
 app.use(morgan('combined', {
     stream: expressLogFile
@@ -48,19 +49,31 @@ router.get('/version', function (req, res) {
 router.get('/hexagons/:id', function (req, res) {
     // get stats for the given hexagon
     var hex = req.params.id;
-    var yes = 0, no = 0, maybe = 0;
+    var username = req.query.user;
+    var yes = 0, no = 0, maybe = 0; uservote=null;
     if (fs.existsSync(observationsFile)) {
         lineReader.eachLine(observationsFile, function (line, last) {
             var json = JSON.parse(line);
-            if (json.geohex === hex) {
+            if (json.geohex === hex &&json.user!=username) {
                 if (json.observation === "yes") yes++;
                 if (json.observation === "no") no++;
                 if (json.observation === "maybe") maybe++;
             }
 
+            if(json.geohex === hex && json.user===username)
+            {
+                uservote=json.observation;
+            }
+
             if (last) {
                 var stats = {
                     "geohex": hex, "yes": yes, "no": no, "maybe": maybe
+                }
+                if(uservote!=null){
+                    stats.uservote=uservote;
+                    if (uservote === "yes") stats.yes++;
+                    if (uservote === "no") stats.no++;
+                    if (uservote === "maybe") stats.maybe++;
                 }
                 res.json(stats);
             }
