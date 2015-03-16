@@ -9,6 +9,7 @@ var map = null;
 var polygon = null;
 var default_geohex_level = 7;
 var defaultSatelliteType = 'Landsat';
+var uservote = null;
 
 function getSatelliteImageByDate(date) {
     for (var i = 0; i < satelliteImages.features.length; i++) {
@@ -32,29 +33,31 @@ function findEarthWatchersLayer() {
 }
 
 function sendObservation(observation) {
-    colorizePolygon(observation);
+    if(observation!=uservote){
+        colorizePolygon(observation);
 
-    var zone = GEOHEX.getZoneByCode(geohexcode);
-    var obs = {
-        "user": user,
-        "lat": zone.lat,
-        "lon": zone.lon,
-        "level": zone.getLevel(),
-        "observation": observation,
-        "geohex": geohexcode
-    };
-    var url = 'api/observations';
-    var request = new XMLHttpRequest();
-    request.open('POST', url, true);
-    request.setRequestHeader("Content-type", "application/json");
-    request.send(JSON.stringify(obs));
+        var zone = GEOHEX.getZoneByCode(geohexcode);
+        var obs = {
+            "user": user,
+            "lat": zone.lat,
+            "lon": zone.lon,
+            "level": zone.getLevel(),
+            "observation": observation,
+            "geohex": geohexcode
+        };
+        var url = 'api/observations';
+        var request = new XMLHttpRequest();
+        request.open('POST', url, true);
+        request.setRequestHeader("Content-type", "application/json");
+        request.send(JSON.stringify(obs));
 
-    request.onload = function () {
-        if (request.status == 201) {
-//            var data = JSON.parse(request.responseText);
-            getHexagon(geohexcode, hexagonCallback);
-        }
-    };
+        request.onload = function () {
+            if (request.status == 201) {
+    //            var data = JSON.parse(request.responseText);
+                getHexagon(geohexcode, user, hexagonCallback);
+            }
+        };
+    }
 }
 
 function getColorByObservation(observation) {
@@ -117,8 +120,8 @@ function getSatelliteImageData(bbox, imagetype, callback) {
 }
 
 
-function getHexagon(geohex, callback) {
-    var url = 'api/hexagons/' + geohex;
+function getHexagon(geohex, username, callback) {
+    var url = 'api/hexagons/' + geohex + '?user=' + username;
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
 
@@ -156,10 +159,26 @@ function next() {
     location.reload();
 }
 
+function styleButton(button,checked){
+    if(checked){
+        button.style.border='5px solid black'
+    }
+    else{
+        button.style.border='0px solid black'
+    }
+}
+
+
+
 function hexagonCallback(req) {
     document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
     document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
     document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
+
+    uservote = req.uservote;
+    styleButton (document.getElementById('btnYes'),uservote === 'yes');
+    styleButton (document.getElementById('btnNo'),uservote === 'no');
+    styleButton (document.getElementById('btnMaybe'),uservote === 'maybe');
 }
 
 function toggleSatelliteType(sel) {
@@ -216,7 +235,7 @@ function satelliteTypeSelectionChanged(sel) {
         'opacity': 0.65,
         fillOpacity: 0
     };
-    getHexagon(geohexcode, hexagonCallback);
+    getHexagon(geohexcode, user, hexagonCallback);
 
     polygon = getGeohexPolygon(geohexcode, myStyle);
     var centerHex = polygon.getBounds().getCenter();
