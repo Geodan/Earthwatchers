@@ -8,6 +8,7 @@ var satelliteImages = null;
 var map = null;
 var polygon = null;
 var default_geohex_level = 7;
+var defaultSatelliteType = 'Landsat';
 
 function getSatelliteImageByDate(date) {
     for (var i = 0; i < satelliteImages.features.length; i++) {
@@ -73,7 +74,11 @@ function colorizePolygon(observation) {
 
 function timeSliderChanged(ctrl) {
     var day = satelliteImages.features[ctrl.value].properties.Published;
-    document.getElementById('rangeValLabel').innerHTML = day;
+    var label = document.getElementById('rangeValLabel');
+    label.innerHTML = day;
+    // update label positioning
+    label.className = 'value' + ctrl.value;
+
     var earthWatchersLayer = findEarthWatchersLayer();
 
     var s = getSatelliteImageByDate(day);
@@ -157,6 +162,25 @@ function hexagonCallback(req) {
     document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
 }
 
+function toggleSatelliteType(sel) {
+    var labels = {
+            Landsat: 'Landsat 8',
+            Sentinel: 'Sentinel 1'
+        },
+        newtype = sel.value === 'Landsat' ? 'Sentinel' : 'Landsat';
+
+    // change map layer
+    satelliteTypeSelectionChanged({value: newtype});
+
+    // update satellite type value
+    sel.parentNode.classList.remove(sel.value.toLowerCase());
+    sel.setAttribute('value', newtype);
+    sel.parentNode.classList.add(sel.value.toLowerCase());
+
+    // update satellite type label
+    document.getElementById('satTypeLabel').innerText = labels[newtype];
+}
+
 function satelliteTypeSelectionChanged(sel) {
     var currentImageType = sel.value;
     var polygon = getGeohexPolygon(geohexcode);
@@ -179,8 +203,7 @@ function satelliteTypeSelectionChanged(sel) {
     geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, default_geohex_level).code;
 
     // fire onchange event of first combobox
-    var selectImageType = document.getElementById('selectImageType');
-    selectImageType.onchange();
+    satelliteTypeSelectionChanged({value: defaultSatelliteType});
 
     map = L.map('map', {
         zoomControl: false,

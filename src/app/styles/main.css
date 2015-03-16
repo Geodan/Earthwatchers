@@ -63,6 +63,14 @@
     border-radius: 5px;
     color: #000000;
     font-weight: bold;
+    display: block;
+    margin-top: 1px;
+}
+.button:first-child {
+    margin-top: 0;
+}
+.button:last-child {
+    margin-top: 10px;
 }
 
 #btnNo {
@@ -86,6 +94,7 @@
     z-index: 10;
     position: absolute;
     bottom: 5px;
+    left: 5px;
 }
 
 .group:after {
@@ -120,10 +129,32 @@ html {
 }
 
 /* timeslider css */
+.timerange {
+    position: absolute;
+    left: 80px;
+    bottom: 0px;
+    width: 150px;
+    padding: 10px 5px;
+    background: rgba(0,0,0,0.5);
+}
+.timerange label {
+    color: #eee;
+    display: inline-block;
+    width: 100%;
+}
+.timerange label.value0 {
+    text-align: left;
+}
+.timerange label.value1 {
+    text-align: center;
+}
+.timerange label.value2 {
+    text-align: right;
+}
 input[type=range] {
     -webkit-appearance: none;
-    margin: 18px 0;
-    width: 150px;
+    margin: 13px 0;
+    width: 100%;
 }
 
 input[type=range]:focus {
@@ -147,7 +178,7 @@ input[type=range]::-webkit-slider-thumb {
     height: 36px;
     width: 20px;
     border-radius: 3px;
-    background: #ffffff;
+    background: #eee; /* same as .timerange label*/
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: -14px;
@@ -226,3 +257,53 @@ input[type=range]::-ms-tooltip {
 }
 
 /* end timeslider css */
+/* toggle layers css */
+/* image credits
+ * santinel-1
+ * https://sentinel.esa.int/image/image_gallery?uuid=dfb83050-118e-4430-add8-40f680f10009&groupId=247904&t=1343825173914
+ * landsat 8
+ * http://landsat.usgs.gov/images/new_LDCM_still_Gulf_Coast_front_view%20banner.jpg 
+ */
+
+.minimap {
+    position: absolute;
+    display: inline-block;
+    width: 74px;
+    height: 74px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #fff;
+    position: absolute;
+    bottom: 0;
+}
+.minimap .toggleSatelliteType {
+    border: 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(255,255,255,0.01);
+    cursor: pointer;
+    outline: none;
+}
+.minimap .satelliteTypeLabel {
+    cursor: pointer;
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    line-height: normal;
+    padding: 12px 0px 6px 0px;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    height: 15px;
+    text-shadow: rgba(0,0,0,0.7) 0px 1px 8px;
+}
+.minimap.landsat {
+    background: url(../images/landsat-8.jpeg) 0 0 no-repeat;
+}
+.minimap.sentinel {
+    background: url(../images/sentinel-1.jpeg) 0 0 no-repeat;
+}
+/* end toggle layers css */
