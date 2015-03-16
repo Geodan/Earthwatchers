@@ -17,7 +17,6 @@ Package management: npm (https://www.npmjs.com/)
 To get Earthwatchers running on your machine, install the following dependencies:
 
 * Node.js (http://nodejs.org/)
-* Bower (http://bower.io/)
 
 # Development
 
@@ -27,8 +26,6 @@ git clone https://github.com/Geodan/Earthwatchers.git
 cd earthwatchers\src
 
 npm install
-
-bower install
 
 node server.js
 ```
