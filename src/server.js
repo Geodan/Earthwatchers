@@ -90,7 +90,7 @@ router.get('/satelliteimages', function (req, res) {
         }
         var poly = turf.bboxPolygon(bbox);
 
-        var satelliteimages = fs.readFileSync('satelliteimages.geojson', 'utf8');
+        var satelliteimages = fs.readFileSync(__dirname +'/satelliteimages.geojson', 'utf8');
         var jsonSatelliteImages = JSON.parse(satelliteimages);
         var selectedSatelliteImages = [];
         for (var f in jsonSatelliteImages.features) {
