@@ -65,6 +65,7 @@
     font-weight: bold;
     display: block;
     margin-top: 1px;
+     cursor: pointer;
 }
 .button:first-child {
     margin-top: 0;
