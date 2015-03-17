@@ -1,7 +1,7 @@
 /*jslint browser: true*/
 /*global L */
 /*global GEOHEX */
-var geohexcode = 'PO2670248';
+var geohexcode = null;
 var startZoomlevel = 12;
 var user = "barack";
 var satelliteImages = null;
@@ -156,6 +156,8 @@ function satelliteImagesCallback(req) {
 }
 
 function next() {
+    window.location.href = location.href.replace(location.hash,'');
+    geohexcode=null;
     location.reload();
 }
 
