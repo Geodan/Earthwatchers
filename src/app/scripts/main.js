@@ -211,15 +211,23 @@ function satelliteTypeSelectionChanged(sel) {
     'use strict';
     L.Icon.Default.imagePath = 'images/';
 
+    Path.map("#/hexagon/:hex").to(function(){
+        // sample: #/hexagon/PO2670248
+        geohexcode = this.params['hex'];
+    });
+    Path.listen();
+
+
     var lon_min = 111.0;
     var lon_max = 112.0;
     var lat_min = 1;
     var lat_max = 2;
 
-    var lon_rnd = random(lon_min, lon_max);
-    var lat_rnd = random(lat_min, lat_max);
-
-    geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, default_geohex_level).code;
+    if(geohexcode===null){
+        var lon_rnd = random(lon_min, lon_max);
+        var lat_rnd = random(lat_min, lat_max);
+        geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, default_geohex_level).code;
+    }
 
     // fire onchange event of first combobox
     satelliteTypeSelectionChanged({value: defaultSatelliteType});
