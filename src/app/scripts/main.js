@@ -156,9 +156,9 @@ function satelliteImagesCallback(req) {
 }
 
 function next() {
-    window.location.href = location.href.replace(location.hash,'');
+    var url = location.href.replace(location.hash,'');
     geohexcode=null;
-    location.reload();
+    window.navigate(url);
 }
 
 function styleButton(button,checked){
