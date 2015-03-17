@@ -158,7 +158,7 @@ function satelliteImagesCallback(req) {
 function next() {
     var url = location.href.replace(location.hash,'');
     geohexcode=null;
-    window.navigate(url);
+    location.href=url;
 }
 
 function styleButton(button,checked){
