@@ -157,7 +157,6 @@ function satelliteImagesCallback(req) {
 
 function next() {
     var url = location.href.replace(location.hash,'');
-    geohexcode=null;
     location.href=url;
 }
 
@@ -169,8 +168,6 @@ function styleButton(button,checked){
         button.style.border='0px solid black'
     }
 }
-
-
 
 function hexagonCallback(req) {
     document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
@@ -229,6 +226,7 @@ function satelliteTypeSelectionChanged(sel) {
         var lon_rnd = random(lon_min, lon_max);
         var lat_rnd = random(lat_min, lat_max);
         geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, default_geohex_level).code;
+        location.hash = '#/hexagon/' + geohexcode;
     }
 
     // fire onchange event of first combobox
