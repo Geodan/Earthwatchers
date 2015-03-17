@@ -171,9 +171,9 @@ function styleButton(button,checked){
 
 
 function hexagonCallback(req) {
-    document.getElementById("btnYes").innerHTML = 'Yes (' + req.yes + ')';
-    document.getElementById("btnNo").innerHTML = 'No (' + req.no + ')';
-    document.getElementById("btnMaybe").innerHTML = 'Maybe (' + req.maybe + ')';
+    document.getElementById('btnYes').innerHTML = 'Yes (' + req.yes + ')';
+    document.getElementById('btnNo').innerHTML = 'No (' + req.no + ')';
+    document.getElementById('btnMaybe').innerHTML = 'Maybe (' + req.maybe + ')';
 
     uservote = req.uservote;
     styleButton (document.getElementById('btnYes'),uservote === 'yes');
