@@ -153,4 +153,4 @@ app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));
 var server = app.listen(port);
 module.exports = server;
-console.log('Earthwatchers server started on port ' + port);
+console.log('Earthwatchers server started on port http://localhost:' + port);
