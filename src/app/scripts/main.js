@@ -219,6 +219,51 @@ function satelliteTypeSelectionChanged(sel) {
     getSatelliteImageData(bbox, currentImageType, satelliteImagesCallback);
 }
 
+function updateUsername(newName) {
+    // update global var and localstorage value
+    user = newName;
+    localStorage.setItem(localStoragePrefix + 'user', newName);
+}
+
+function changeName(event) {
+    var form = event.target,
+        newName = form.children[0].value;
+
+    // stop from saving empty name
+    if (!newName) return false;
+
+    updateUsername(newName);
+
+    // clean and hide form
+    form.parentElement.classList.add('hide');
+    form.children[0].value = '';
+
+    updateUserinfo();
+
+    return false;
+}
+
+function showUserForm() {
+    var userform = document.getElementById('userform');
+
+    userform.classList.remove('hide');
+}
+
+function initUserpanel() {
+    updateUserinfo();
+    var userform = document.getElementById('userform');
+    userform.children[0].onsubmit = changeName;
+}
+
+function updateUserinfo() {
+    var userinfo = document.getElementById('userinfo');
+
+    userinfo.innerHTML =
+        '<span class="username"> Hi, ' + user + '!</span> ' +
+        '<a class="userhint" onclick="showUserForm();">Change?</a>';
+}
+
+
 (function (window, document, L) {
     'use strict';
     L.Icon.Default.imagePath = 'images/';
@@ -229,6 +274,7 @@ function satelliteTypeSelectionChanged(sel) {
     });
     Path.listen();
 
+    initUserpanel();
 
     var lon_min = 111.0;
     var lon_max = 112.0;
