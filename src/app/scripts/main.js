@@ -3,7 +3,8 @@
 /*global GEOHEX */
 var geohexcode = null;
 var startZoomlevel = 12;
-var user = "barack";
+var localStoragePrefix = 'EW_'; // earthWatchers
+var user = localStorage.getItem(localStoragePrefix + 'user') || 'barack' ;
 var satelliteImages = null;
 var map = null;
 var polygon = null;
@@ -32,24 +33,36 @@ function findEarthWatchersLayer() {
     return result;
 }
 
+function saveCleanedObservation(observationString) {
+    // logging user actions
+    //
+    // create new line in localStorage like
+    // { ...,
+    //      'EW_1427635304381': '{"user":"barack","lat":1.0347919593425408,"lon":111.97073616826705,"level":7,"observation":"no","geohex":"PO5020737"}',
+    //      ...}
+    localStorage.setItem(
+            localStoragePrefix + (new Date()).getTime(), observationString);
+}
+
 function sendObservation(observation) {
     if(observation!=uservote){
         colorizePolygon(observation);
 
         var zone = GEOHEX.getZoneByCode(geohexcode);
-        var obs = {
+        var obs = JSON.stringify({
             "user": user,
             "lat": zone.lat,
             "lon": zone.lon,
             "level": zone.getLevel(),
             "observation": observation,
             "geohex": geohexcode
-        };
+        });
         var url = 'api/observations';
         var request = new XMLHttpRequest();
         request.open('POST', url, true);
         request.setRequestHeader("Content-type", "application/json");
-        request.send(JSON.stringify(obs));
+        request.send(obs);
+        saveCleanedObservation(obs);
 
         request.onload = function () {
             if (request.status == 201) {
