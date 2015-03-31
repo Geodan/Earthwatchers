@@ -207,7 +207,7 @@ function processHexagonResponse(resp){
 
     loadJSON('data/projects.geojson', function(response) {
         var projects = JSON.parse(response);
-        L.geoJson(projects).addTo(map);
+        L.geoJson(projects,{fill:false}).addTo(map);
         // todo: calculate hexagon based on project areas
     });
 
