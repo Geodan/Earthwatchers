@@ -239,8 +239,8 @@ function changeName(event) {
     form.children[0].value = '';
 
     updateUserinfo();
-
-    location.reload(); 
+    uservote=null;
+    getHexagon(geohexcode, user, hexagonCallback);
 
     return false;
 }
