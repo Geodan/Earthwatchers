@@ -31,6 +31,7 @@ app.disable('x-powered-by');
 dotenv.load();
 
 var port = process.env.PORT || 3000;
+var host = process.env.LOCALHOST || 'localhost';
 var router = express.Router();
 
 router.get('/', function (req, res) {
@@ -151,6 +152,6 @@ router.post('/observations', jsonParser, function (req, res) {
 
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));
-var server = app.listen(port);
+var server = app.listen(port, host);
 module.exports = server;
-console.log('Earthwatchers server started on port ' + port);
+console.log('Earthwatchers server started on port http://' + host + ':' + port);

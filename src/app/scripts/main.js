@@ -3,7 +3,8 @@
 /*global GEOHEX */
 var geohexcode = null;
 var startZoomlevel = 12;
-var user = "barack";
+var localStoragePrefix = 'EW_'; // earthWatchers
+var user = localStorage.getItem(localStoragePrefix + 'user') || 'barack' ;
 var satelliteImages = null;
 var map = null;
 var polygon = null;
@@ -32,24 +33,36 @@ function findEarthWatchersLayer() {
     return result;
 }
 
+function saveCleanedObservation(observationString) {
+    // logging user actions
+    //
+    // create new line in localStorage like
+    // { ...,
+    //      'EW_1427635304381': '{"user":"barack","lat":1.0347919593425408,"lon":111.97073616826705,"level":7,"observation":"no","geohex":"PO5020737"}',
+    //      ...}
+    localStorage.setItem(
+            localStoragePrefix + (new Date()).getTime(), observationString);
+}
+
 function sendObservation(observation) {
     if(observation!=uservote){
         colorizePolygon(observation);
 
         var zone = GEOHEX.getZoneByCode(geohexcode);
-        var obs = {
+        var obs = JSON.stringify({
             "user": user,
             "lat": zone.lat,
             "lon": zone.lon,
             "level": zone.getLevel(),
             "observation": observation,
             "geohex": geohexcode
-        };
+        });
         var url = 'api/observations';
         var request = new XMLHttpRequest();
         request.open('POST', url, true);
         request.setRequestHeader("Content-type", "application/json");
-        request.send(JSON.stringify(obs));
+        request.send(obs);
+        saveCleanedObservation(obs);
 
         request.onload = function () {
             if (request.status == 201) {
@@ -206,6 +219,51 @@ function satelliteTypeSelectionChanged(sel) {
     getSatelliteImageData(bbox, currentImageType, satelliteImagesCallback);
 }
 
+function updateUsername(newName) {
+    // update global var and localstorage value
+    user = newName;
+    localStorage.setItem(localStoragePrefix + 'user', newName);
+}
+
+function changeName(event) {
+    var form = event.target,
+        newName = form.children[0].value;
+
+    // stop from saving empty name
+    if (!newName) return false;
+
+    updateUsername(newName);
+
+    // clean and hide form
+    form.parentElement.classList.add('hide');
+    form.children[0].value = '';
+
+    updateUserinfo();
+
+    return false;
+}
+
+function showUserForm() {
+    var userform = document.getElementById('userform');
+
+    userform.classList.remove('hide');
+}
+
+function initUserpanel() {
+    updateUserinfo();
+    var userform = document.getElementById('userform');
+    userform.children[0].onsubmit = changeName;
+}
+
+function updateUserinfo() {
+    var userinfo = document.getElementById('userinfo');
+
+    userinfo.innerHTML =
+        '<span class="username"> Hi, ' + user + '!</span> ' +
+        '<a class="userhint" onclick="showUserForm();">Change?</a>';
+}
+
+
 (function (window, document, L) {
     'use strict';
     L.Icon.Default.imagePath = 'images/';
@@ -216,6 +274,7 @@ function satelliteTypeSelectionChanged(sel) {
     });
     Path.listen();
 
+    initUserpanel();
 
     var lon_min = 111.0;
     var lon_max = 112.0;

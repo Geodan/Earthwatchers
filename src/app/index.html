@@ -25,6 +25,16 @@
     <link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
+    <div class="userpanel" id="userpanel">
+        <div id="userinfo">
+        </div>
+        <div class="userform hide" id="userform">
+            <form>
+                <input type="text" name="username" placeholder="Type new name here"/>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
 <div class="buttons">
     <button type="button" class="button" onclick="sendObservation('yes');" id="btnYes">Yes</button>
     <button type="button" class="button" onclick="sendObservation('no');" id="btnNo">No</button>
@@ -43,7 +53,7 @@
         <label id="rangeValLabel">&nbsp;</label>
         <input type="range" max="2" min="0" id="timeSlider"
             data-popup-enabled="false"
-            onchange="timeSliderChanged(this)"
+            onchange="timeSliderChanged(this);"
             step="1" name="rangeVal" id="rangeVal" value="2">
         </input>
     </div>
