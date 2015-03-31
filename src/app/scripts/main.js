@@ -240,6 +240,8 @@ function changeName(event) {
 
     updateUserinfo();
 
+    location.reload(); 
+
     return false;
 }
 
