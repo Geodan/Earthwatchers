@@ -4,7 +4,7 @@
 var geohexcode = null;
 var startZoomlevel = 12;
 var localStoragePrefix = 'EW_'; // earthWatchers
-var user = localStorage.getItem(localStoragePrefix + 'user') || 'barack' ;
+var user = localStorage.getItem(localStoragePrefix + 'user') || 'anonymous' ;
 var satelliteImages = null;
 var map = null;
 var polygon = null;
