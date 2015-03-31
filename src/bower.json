@@ -5,6 +5,7 @@
     "leaflet": "~0.7.3",
     "leaflet-plugins": "~1.2.1",
     "leaflet-omnivore": "~0.3.2",
-    "pathjs-amd": "~0.10.0"
+    "pathjs-amd": "~0.10.0",
+    "turf": "~2.0.2"
   }
 }
