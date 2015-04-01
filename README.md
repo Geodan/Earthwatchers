@@ -8,17 +8,13 @@ Permalink, for example to land PO2670248: http://earthwatchers.azurewebsites.net
 
 Server side: Node.js with Express, Dotenv, Turf
 
-Client side: Javascript client with Leaflet for mapping, Leaflet-omnivore, TopoJSON, Bower
+Client side: Leaflet, Leaflet-omnivore, Turf
 
-Unit testing: Mocha (http://unitjs.com/)
-
-Package management: npm (https://www.npmjs.com/)
+Data: GeoJSON files
 
 # Dependencies
 
-To get Earthwatchers running on your machine, install the following dependencies:
-
-* Node.js (http://nodejs.org/)
+To get Earthwatchers running on your machine, install Node.js (http://nodejs.org/)
 
 # Development
 
@@ -39,9 +35,3 @@ http://localhost:3000/
 # Team communication
 
 Slack room:  https://earthwatchers.slack.com
-
-
-
-
-
-
