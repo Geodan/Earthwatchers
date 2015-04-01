@@ -178,9 +178,9 @@ function updateUserinfo() {
 }
 
 function processHexagonResponse(resp){
-    document.getElementById('btnYes').innerHTML = '<span> Yes (' + resp.yes + ')</span>';
-    document.getElementById('btnNo').innerHTML = '<span> No (' + resp.no + ')</span>';
-    document.getElementById('btnMaybe').innerHTML = '<span>Maybe (' + resp.maybe + ')</span>';
+    document.getElementById('btnYes').innerText = 'Yes (' + resp.yes + ')';
+    document.getElementById('btnNo').innerText = 'No (' + resp.no + ')';
+    document.getElementById('btnMaybe').innerText = 'Maybe (' + resp.maybe + ')';
 
     uservote = resp.uservote;
     styleButton (document.getElementById('btnYes'),uservote === 'yes');
