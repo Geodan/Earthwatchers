@@ -178,7 +178,8 @@ function updateUserinfo() {
 }
 
 function processHexagonResponse(resp){
-    alert("hex response");
+    //alert("hex response");
+    resp.yes=25;
     document.getElementById('btnYes').innerText = 'Yes (' + resp.yes + ')';
     document.getElementById('btnNo').innerText = 'No (' + resp.no + ')';
     document.getElementById('btnMaybe').innerText = 'Maybe (' + resp.maybe + ')';
