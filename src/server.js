@@ -48,7 +48,14 @@ router.get('/version', function (req, res) {
     });
 });
 
-router.get('/hexagons/:id', function (req, res) {
+function nocache(req, res, next) {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.header('Expires', '-1');
+  res.header('Pragma', 'no-cache');
+  next();
+}
+
+router.get('/hexagons/:id', nocache, function (req, res) {
     // get stats for the given hexagon
     var hex = req.params.id;
     var username = req.query.user;
