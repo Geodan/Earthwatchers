@@ -29,19 +29,19 @@ function getHexagon(geohex, username, callback) {
 
 
 function loadJSON(file, callback) {   
-    var xobj = new XMLHttpRequest();
-    xobj.overrideMimeType("application/json");
-    xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
-    xobj.onreadystatechange = function () {
-          if (xobj.readyState == 4 && xobj.status == "200") {
+    var request = new XMLHttpRequest();
+    request.overrideMimeType("application/json");
+    request.open('GET', file, true); // Replace 'my_data' with the path to your file
+    request.onreadystatechange = function () {
+          if (request.readyState == 4 && request.status == "200") {
             // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-            callback(xobj.responseText);
+            callback(request.responseText);
           }
     };
-    xobj.send(null);  
+    request.send(null);  
  }
 
- function postObservation(observation) {
+ function postObservation(observation,user,geohexcode,callback) {
     var zone = GEOHEX.getZoneByCode(geohexcode);
     var obs = JSON.stringify({
         "user": user,
@@ -55,15 +55,13 @@ function loadJSON(file, callback) {
     var request = new XMLHttpRequest();
     request.open('POST', url, true);
     request.setRequestHeader("Content-type", "application/json");
-    request.send(obs);
     saveCleanedObservation(obs);
 
     request.onload = function () {
         if (request.status == 201) {
-            getHexagon(geohexcode, user, function(resp){
-                processHexagonResponse(resp);
-            });
+            callback(request.responseText);
         }
     };
+    request.send(obs);
 }
 

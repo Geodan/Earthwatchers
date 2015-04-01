@@ -125,7 +125,12 @@ function satelliteTypeSelectionChanged(sel) {
 function sendObservation(observation){
     if(observation!=uservote){
         colorizePolygon(observation);
-        postObservation(observation);
+        postObservation(observation,user,geohexcode,function(resp){
+            getHexagon(geohexcode, user, function(resp){
+                processHexagonResponse(resp);
+            });
+
+        });
     };
 }
 
@@ -178,8 +183,6 @@ function updateUserinfo() {
 }
 
 function processHexagonResponse(resp){
-    //alert("hex response");
-    resp.yes=25;
     document.getElementById('btnYes').innerText = 'Yes (' + resp.yes + ')';
     document.getElementById('btnNo').innerText = 'No (' + resp.no + ')';
     document.getElementById('btnMaybe').innerText = 'Maybe (' + resp.maybe + ')';
@@ -253,6 +256,5 @@ function processHexagonResponse(resp){
 
     var ggl2 = new L.Google('satellite');
     map.addLayer(ggl2);
-    //omnivore.topojson('project.topojson').addTo(map);
     map.addLayer(polygon);
 }(window, document, L));

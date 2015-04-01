@@ -32,6 +32,7 @@ dotenv.load();
 
 var port = process.env.PORT || 3000;
 var host = process.env.LOCALHOST || 'localhost';
+console.log('host: ' + process.env.localhost);
 var router = express.Router();
 
 router.get('/', function (req, res) {
