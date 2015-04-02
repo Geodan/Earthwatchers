@@ -11,6 +11,7 @@ var polygon = null;
 var default_geohex_level = 7;
 var defaultSatelliteType = 'Landsat';
 var uservote = null;
+var defaultProject = 'Borneo';
 
 function getSatelliteImageByDate(date) {
     for (var i = 0; i < satelliteImages.features.length; i++) {
@@ -205,56 +206,63 @@ function processHexagonResponse(resp){
 
     initUserpanel();
 
-    var lon_min = 111.0;
-    var lon_max = 112.0;
-    var lat_min = 1;
-    var lat_max = 2;
-
     loadJSON('data/projects.geojson', function(response) {
         var projects = JSON.parse(response);
+
+        for(var p=0;p<projects.features.length;p++){
+            var project = projects.features[p];
+            if(project.properties.Name === defaultProject){
+                var env = turf.envelope(project);
+                var bbox = env.geometry.coordinates[0];
+                // get random point in env
+                // todo: add check if hexagon is within the project (not only within envelope)
+                var lon_rnd = random(bbox[0][0], bbox[1][0]);
+                var lat_rnd = random(bbox[0][1], bbox[2][1]);
+                if(geohexcode===null){
+                    geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, default_geohex_level).code;
+                    location.hash = '#/hexagon/' + geohexcode;
+                }
+            }
+        }
+
+        // fire onchange event of first combobox
+        satelliteTypeSelectionChanged({value: defaultSatelliteType});
+
+        map = L.map('map', {
+            zoomControl: false,
+            attributionControl: false
+        });
+
+        var myStyle = {
+            'color': '#000000',
+            'weight': 5,
+            'opacity': 0.65,
+            fillOpacity: 0
+        };
+
+        getHexagon(geohexcode, user, function (resp){
+            processHexagonResponse(resp);
+        });
+
+        polygon = getGeohexPolygon(geohexcode, myStyle);
+        var centerHex = polygon.getBounds().getCenter();
+        map.setView(centerHex, startZoomlevel, {
+            animation: true
+        });
+
+        map.addControl(new L.Control.ZoomMin({
+            position: 'topright', startLevel: startZoomlevel, startCenter: centerHex
+        }));
+
+        L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
+
+        var ggl2 = new L.Google('satellite');
+        map.addLayer(ggl2);
+        map.addLayer(polygon);
+
         L.geoJson(projects,{fill:false}).addTo(map);
         // todo: calculate hexagon based on project areas
     });
 
-    if(geohexcode===null){
-        var lon_rnd = random(lon_min, lon_max);
-        var lat_rnd = random(lat_min, lat_max);
-        geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, default_geohex_level).code;
-        location.hash = '#/hexagon/' + geohexcode;
-    }
 
-    // fire onchange event of first combobox
-    satelliteTypeSelectionChanged({value: defaultSatelliteType});
-
-    map = L.map('map', {
-        zoomControl: false,
-        attributionControl: false
-    });
-
-    var myStyle = {
-        'color': '#000000',
-        'weight': 5,
-        'opacity': 0.65,
-        fillOpacity: 0
-    };
-
-    getHexagon(geohexcode, user, function (resp){
-        processHexagonResponse(resp);
-    });
-
-    polygon = getGeohexPolygon(geohexcode, myStyle);
-    var centerHex = polygon.getBounds().getCenter();
-    map.setView(centerHex, startZoomlevel, {
-        animation: true
-    });
-
-    map.addControl(new L.Control.ZoomMin({
-        position: 'topright', startLevel: startZoomlevel, startCenter: centerHex
-    }));
-
-    L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
-
-    var ggl2 = new L.Google('satellite');
-    map.addLayer(ggl2);
-    map.addLayer(polygon);
 }(window, document, L));
