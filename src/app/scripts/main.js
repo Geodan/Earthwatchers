@@ -13,20 +13,12 @@ var defaultSatelliteType = 'Landsat';
 var uservote = null;
 var defaultProject = 'Borneo';
 
-function getSatelliteImageByDate(date) {
-    for (var i = 0; i < satelliteImages.features.length; i++) {
-        if (satelliteImages.features[i].properties.Published === date) {
-            return satelliteImages.features[i];
-        }
-    }
-    return null;
-}
 
-function findEarthWatchersLayer() {
+function findLayerByType(type) {
     var result = null;
     map.eachLayer(function (layer) {
         if (layer.options.type !== null) {
-            if (layer.options.type === 'earthWatchers') {
+            if (layer.options.type === type) {
                 result = layer;
             }
         }
@@ -53,9 +45,9 @@ function timeSliderChanged(ctrl) {
     // update label positioning
     label.className = 'value' + ctrl.value;
 
-    var earthWatchersLayer = findEarthWatchersLayer();
+    var earthWatchersLayer = findLayerByType('earthWatchers');
 
-    var s = getSatelliteImageByDate(day);
+    var s = getSatelliteImageByDate(satelliteImages, day);
     var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
     var maxlevel = s.properties.MaxLevel;
     var newLayer = L.tileLayer(url, {
