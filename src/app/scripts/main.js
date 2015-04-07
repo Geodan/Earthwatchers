@@ -209,20 +209,10 @@ function processHexagonResponse(resp){
     loadJSON('data/projects.geojson', function(response) {
         var projects = JSON.parse(response);
 
-        for(var p=0;p<projects.features.length;p++){
-            var project = projects.features[p];
-            if(project.properties.Name === defaultProject){
-                var env = turf.envelope(project);
-                var bbox = env.geometry.coordinates[0];
-                // get random point in env
-                // todo: add check if hexagon is within the project (not only within envelope)
-                var lon_rnd = random(bbox[0][0], bbox[1][0]);
-                var lat_rnd = random(bbox[0][1], bbox[2][1]);
-                if(geohexcode===null){
-                    geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, default_geohex_level).code;
-                    location.hash = '#/hexagon/' + geohexcode;
-                }
-            }
+        if(geohexcode===null){
+            var project = getProjectByName(projects,defaultProject);
+            geohexcode = getRandomHexagon(project,default_geohex_level);
+            location.hash = '#/hexagon/' + geohexcode;
         }
 
         // fire onchange event of first combobox
