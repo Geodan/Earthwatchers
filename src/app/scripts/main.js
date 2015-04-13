@@ -7,35 +7,12 @@ var localStoragePrefix = 'EW_'; // earthWatchers
 var user = localStorage.getItem(localStoragePrefix + 'user') || 'anonymous' ;
 var satelliteImages = null;
 var map = null;
-var polygon = null;
 var default_geohex_level = 7;
 var defaultSatelliteType = 'Landsat';
-var uservote = null;
 var defaultProject = 'Borneo';
-
-
-function findLayerByType(type) {
-    var result = null;
-    map.eachLayer(function (layer) {
-        if (layer.options.type !== null) {
-            if (layer.options.type === type) {
-                result = layer;
-            }
-        }
-    });
-    return result;
-}
-
-function saveCleanedObservation(observationString) {
-    // logging user actions
-    //
-    // create new line in localStorage like
-    // { ...,
-    //      'EW_1427635304381': '{"user":"barack","lat":1.0347919593425408,"lon":111.97073616826705,"level":7,"observation":"no","geohex":"PO5020737"}',
-    //      ...}
-    localStorage.setItem(
-            localStoragePrefix + (new Date()).getTime(), observationString);
-}
+var observationCategory = null;
+var project = null;
+var categories=null;
 
 
 function timeSliderChanged(ctrl) {
@@ -45,7 +22,7 @@ function timeSliderChanged(ctrl) {
     // update label positioning
     label.className = 'value' + ctrl.value;
 
-    var earthWatchersLayer = findLayerByType('earthWatchers');
+    var earthwatchersLayer = findLayerByType('earthWatchers');
 
     var s = getSatelliteImageByDate(satelliteImages, day);
     var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
@@ -57,30 +34,14 @@ function timeSliderChanged(ctrl) {
     });
     map.addLayer(newLayer);
 
-    if (earthWatchersLayer !== null) {
-        map.removeLayer(earthWatchersLayer);
+    if (earthwatchersLayer !== null) {
+        map.removeLayer(earthwatchersLayer);
     }
 }
-
-
-function getGeohexPolygon(geohexcode, style) {
-    var zone = GEOHEX.getZoneByCode(geohexcode);
-    return L.polygon(zone.getHexCoords(), style);
-}
-
 
 function next() {
     var url = location.href.replace(location.hash,'');
     location.href=url;
-}
-
-function styleButton(button,checked){
-    if(checked){
-        button.style.border='5px solid black'
-    }
-    else{
-        button.style.border='0px solid black'
-    }
 }
 
 function toggleSatelliteType(sel) {
@@ -115,22 +76,50 @@ function satelliteTypeSelectionChanged(sel) {
 }
 
 
-function sendObservation(observation){
-    if(observation!=uservote){
-        colorizePolygon(observation);
-        postObservation(observation,user,geohexcode,function(resp){
-            getHexagon(geohexcode, user, function(resp){
-                processHexagonResponse(resp);
-            });
-
-        });
-    };
+function setCategory(category){
+    observationCategory = category;
+    styleCategoryButtons(categories,category);
 }
 
-function updateUsername(newName) {
-    // update global var and localstorage value
-    user = newName;
-    localStorage.setItem(localStoragePrefix + 'user', newName);
+
+function onMapClick(e){
+    // todo: add hexagon with currently active button
+    // send message to server
+    // check if clicked point is inside the project
+    var pt = turf.point([e.latlng.lng, e.latlng.lat]);
+    isinside = turf.inside(pt, project);
+    if(isinside){
+        // todo draw hexagon
+        // alert('click on map');
+        var newMarker = new L.marker(e.latlng, {draggable:true});
+        var div = document.createElement('div');
+        div.innerHTML = observationCategory + '<br/>' ;
+        var inputButton = document.createElement('input');
+        inputButton.className='marker-delete-button';
+        inputButton.value='delete';
+        inputButton.type='button';
+        inputButton.onclick = function(){
+            map.removeLayer(newMarker);
+        };
+        div.appendChild(inputButton);
+        newMarker.bindPopup(div);
+        newMarker.addTo(map);
+    }
+    else{
+        alert('Please click inside the project area');
+    }
+
+}
+
+
+function onPopupOpen(){
+    var tempMarker = this;
+
+    var list = document.getElementsByClassName('marker-delete-button');
+    for (var i = 0; i < list.length; i++) {
+        list[i].click(function () {
+        });
+    }
 }
 
 function changeName(event) {
@@ -147,43 +136,7 @@ function changeName(event) {
     form.children[0].value = '';
 
     updateUserinfo();
-    uservote=null;
-    getHexagon(geohexcode, user, function(resp){
-        processHexagonResponse(resp);
-    });
-
     return false;
-}
-
-function showUserForm() {
-    var userform = document.getElementById('userform');
-
-    userform.classList.remove('hide');
-}
-
-function initUserpanel() {
-    updateUserinfo();
-    var userform = document.getElementById('userform');
-    userform.children[0].onsubmit = changeName;
-}
-
-function updateUserinfo() {
-    var userinfo = document.getElementById('userinfo');
-
-    userinfo.innerHTML =
-        '<span class="username"> Hi, ' + user + '!</span> ' +
-        '<a class="userhint" onclick="showUserForm();">Change?</a>';
-}
-
-function processHexagonResponse(resp){
-    document.getElementById('btnYes').innerText = 'Yes (' + resp.yes + ')';
-    document.getElementById('btnNo').innerText = 'No (' + resp.no + ')';
-    document.getElementById('btnMaybe').innerText = 'Maybe (' + resp.maybe + ')';
-
-    uservote = resp.uservote;
-    styleButton (document.getElementById('btnYes'),uservote === 'yes');
-    styleButton (document.getElementById('btnNo'),uservote === 'no');
-    styleButton (document.getElementById('btnMaybe'),uservote === 'maybe');
 }
 
 (function (window, document, L) {
@@ -200,9 +153,13 @@ function processHexagonResponse(resp){
 
     loadJSON('data/projects.geojson', function(response) {
         var projects = JSON.parse(response);
-
+        project = getProjectByName(projects,defaultProject);
+        categories = project.properties.ObservationCategories.split(',');
+        addCategoryButtons(categories);
+        setCategory(categories[0]);
+        default_geohex_level = project.properties.GeohexLevel;
+        
         if(geohexcode===null){
-            var project = getProjectByName(projects,defaultProject);
             geohexcode = getRandomHexagon(project,default_geohex_level);
             location.hash = '#/hexagon/' + geohexcode;
         }
@@ -214,6 +171,10 @@ function processHexagonResponse(resp){
             zoomControl: false,
             attributionControl: false
         });
+        map.dragging.disable();
+        if (map.tap) map.tap.disable();
+
+        map.on('click', onMapClick);
 
         var myStyle = {
             'color': '#000000',
@@ -222,11 +183,7 @@ function processHexagonResponse(resp){
             fillOpacity: 0
         };
 
-        getHexagon(geohexcode, user, function (resp){
-            processHexagonResponse(resp);
-        });
-
-        polygon = getGeohexPolygon(geohexcode, myStyle);
+        var polygon = getGeohexPolygon(geohexcode, myStyle);
         var centerHex = polygon.getBounds().getCenter();
         map.setView(centerHex, startZoomlevel, {
             animation: true

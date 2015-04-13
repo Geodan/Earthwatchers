@@ -16,3 +16,9 @@ function getRandomHexagon(project,geohexlevel){
     geohexcode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, geohexlevel).code;
     return geohexcode;
 }
+
+
+function getGeohexPolygon(geohexcode, style) {
+    var zone = GEOHEX.getZoneByCode(geohexcode);
+    return L.polygon(zone.getHexCoords(), style);
+}

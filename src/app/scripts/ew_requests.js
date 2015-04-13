@@ -55,7 +55,7 @@ function loadJSON(file, callback) {
     var request = new XMLHttpRequest();
     request.open('POST', url, true);
     request.setRequestHeader("Content-type", "application/json");
-    saveCleanedObservation(obs);
+    saveObservation(obs);
 
     request.onload = function () {
         if (request.status == 201) {
