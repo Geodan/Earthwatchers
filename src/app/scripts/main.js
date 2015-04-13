@@ -159,17 +159,16 @@ function changeName(event) {
     var projectTypes;
     loadJSON('data/projecttypes.json', function (typesResponse){
         projectTypes = JSON.parse(typesResponse);
-        console.log(projectTypes);
     });
 
 
 
     loadJSON('data/projects.geojson', function(response) {
-        console.log("async");
         var projects = JSON.parse(response);
         project = getProjectByName(projects,defaultProject);
         categories = project.properties.ObservationCategories.split(',');
         addCategoryButtons(categories, projectTypes);
+
         setCategory(categories[0]);
         default_geohex_level = project.properties.GeohexLevel;
         
