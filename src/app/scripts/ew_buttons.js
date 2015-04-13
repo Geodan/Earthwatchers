@@ -1,9 +1,10 @@
 function styleButton(button,checked){
+    console.log(button);
     if(checked){
-        button.style.border='5px solid black'
+        button.style.border='5px solid black';
     }
     else{
-        button.style.border='0px solid black'
+        button.style.border='0px solid black';
     }
 }
 
@@ -17,10 +18,17 @@ function addCategoryButton(buttonsDiv, category){
     buttonsDiv.insertBefore(btn,btnNext);
 }
 
-function addCategoryButtons(categories){
+function addCategoryButtons(categories, types){
     var buttonsDiv = document.getElementById("buttons");
+
     for (var i = 0; i < categories.length; i++) {
-        addCategoryButton(buttonsDiv, categories[i]);
+        for (var j= 0; j < types.length; j++)
+        {
+            if (types[j].type === categories[i]){
+                addCategoryButton(buttonsDiv, types[j].name);
+            }
+        }
+        //TODO fallback projectType not found...
     }
 }
 

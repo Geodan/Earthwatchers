@@ -1,0 +1,17 @@
+[
+    {
+        "type": "mining",
+        "name": "Mining",
+        "icon": "mining.png"
+    },
+    {
+        "type": "deforestation",
+        "name": "Deforestation",
+        "icon": "deforestation.png"
+    },
+    {
+        "type": "road",
+        "name": "Road construction",
+        "icon": "road.png"
+    }
+]
