@@ -41,12 +41,12 @@ function loadJSON(file, callback) {
     request.send(null);  
  }
 
- function postObservation(observation,user,geohexcode,callback) {
+ function postObservation(observation,user,geohexcode,longitude,latitude,callback) {
     var zone = GEOHEX.getZoneByCode(geohexcode);
     var obs = JSON.stringify({
         "user": user,
-        "lat": zone.lat,
-        "lon": zone.lon,
+        "lat": latitude,
+        "lon": longitude,
         "level": zone.getLevel(),
         "observation": observation,
         "geohex": geohexcode
@@ -59,7 +59,8 @@ function loadJSON(file, callback) {
 
     request.onload = function () {
         if (request.status == 201) {
-            callback(request.responseText);
+            var res = JSON.parse(request.responseText);
+            callback(res);
         }
     };
     request.send(obs);

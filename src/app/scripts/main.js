@@ -99,11 +99,16 @@ function onMapClick(e){
         inputButton.value='delete';
         inputButton.type='button';
         inputButton.onclick = function(){
+            // alert('delete: ' + newMarker.id);
             map.removeLayer(newMarker);
         };
         div.appendChild(inputButton);
         newMarker.bindPopup(div);
         newMarker.addTo(map);
+
+        postObservation(observationCategory,user,geohexcode,e.latlng.lng,e.latlng.lat,function(resp){
+            newMarker.id = resp.id;
+        });
     }
     else{
         alert('Please click inside the project area');

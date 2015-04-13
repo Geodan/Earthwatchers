@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var HttpStatus = require('http-status-codes');
 var lineReader = require('line-reader');
+var uuid = require('node-uuid');
 
 var imageTypes = {
     'Landsat': 2,
@@ -131,6 +132,7 @@ router.get('/satelliteimages', function (req, res) {
 });
 
 router.post('/observations', jsonParser, function (req, res) {
+    var id = uuid.v4(); 
     req.checkBody('user', 'User is required').notEmpty();
     req.checkBody('lat', 'lat is required').notEmpty();
     req.checkBody('lon', 'lon is required').notEmpty();
@@ -142,6 +144,8 @@ router.post('/observations', jsonParser, function (req, res) {
 
     if (errors === null) {
         req.body.date = new Date().toISOString();
+        console.log('id: ' + id);
+        req.body.id = id;
 
         fs.appendFile(observationsFile, JSON.stringify(req.body) + '\n', function (err) {
             if (err) {
