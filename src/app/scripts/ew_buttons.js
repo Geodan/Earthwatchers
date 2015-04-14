@@ -10,8 +10,12 @@ function styleButton(button,checked){
 function addCategoryButton(buttonsDiv, type){
     var btn = document.createElement("BUTTON");
     btn.className = 'button';
-    btn.innerText=type.name;
-    btn.id=type.type;
+    btn.innerText = type.name;
+    btn.id = type.type;
+    btn.style.backgroundImage = "url('images/" + type.icon +"')";
+    btn.style.backgroundRepeat =  "no-repeat";
+    btn.style.backgroundSize = "20px";
+    btn.style.color = "#0000ff";
     btn.addEventListener("click", function(){setCategory(type.type)},false);
     var btnNext = document.getElementById('btnNext');
     buttonsDiv.insertBefore(btn,btnNext);
