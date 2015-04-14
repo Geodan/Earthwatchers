@@ -1,13 +1,13 @@
 /*jslint browser: true*/
 /*global L */
 /*global GEOHEX */
-var geohexcode = null;
-var startZoomlevel = 12;
+var geohexCode = null;
+var startZoomLevel = 12;
 var localStoragePrefix = 'EW_'; // earthWatchers
 var user = localStorage.getItem(localStoragePrefix + 'user') || 'anonymous' ;
 var satelliteImages = null;
 var map = null;
-var default_geohex_level = 7;
+var defaultGeohexLevel = 7;
 var defaultSatelliteType = 'Landsat';
 var defaultProject = 'Borneo';
 var observationCategory = null;
@@ -26,10 +26,10 @@ function timeSliderChanged(ctrl) {
 
     var s = getSatelliteImageByDate(satelliteImages, day);
     var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
-    var maxlevel = s.properties.MaxLevel;
+    var maxLevel = s.properties.MaxLevel;
     var newLayer = L.tileLayer(url, {
         tms: true,
-        maxZoom: maxlevel,
+        maxZoom: maxLevel,
         type: 'earthWatchers'
     });
     map.addLayer(newLayer);
@@ -65,7 +65,7 @@ function toggleSatelliteType(sel) {
 
 function satelliteTypeSelectionChanged(sel) {
     var currentImageType = sel.value;
-    var polygon = getGeohexPolygon(geohexcode);
+    var polygon = getGeohexPolygon(geohexCode);
     var bbox = polygon.getBounds().toBBoxString();
     getSatelliteImageData(bbox, currentImageType, function(resp){
         satelliteImages = resp;
@@ -87,8 +87,8 @@ function onMapClick(e){
     // send message to server
     // check if clicked point is inside the project
     var pt = turf.point([e.latlng.lng, e.latlng.lat]);
-    isinside = turf.inside(pt, project);
-    if(isinside){
+    var isInside = turf.inside(pt, project);
+    if(isInside){
         // todo draw hexagon
         // alert('click on map');
         var newMarker = new L.marker(e.latlng, {draggable:true});
@@ -115,7 +115,7 @@ function onMapClick(e){
 
         newMarker.addTo(map);
 
-        postObservation(observationCategory,user,geohexcode,e.latlng.lng,e.latlng.lat,function(resp){
+        postObservation(observationCategory,user,geohexCode,e.latlng.lng,e.latlng.lat,function(resp){
             newMarker.id = resp.id;
         });
     }
@@ -159,18 +159,16 @@ function changeName(event) {
 
     Path.map("#/hexagon/:hex").to(function(){
         // sample: #/hexagon/PO2670248
-        geohexcode = this.params['hex'];
+        geohexCode = this.params['hex'];
     });
     Path.listen();
 
     initUserpanel();
 
     var projectTypes;
-    loadJSON('data/projecttypes.json', function (typesResponse){
+    loadJSON('data/projectTypes.json', function (typesResponse){
         projectTypes = JSON.parse(typesResponse);
     });
-
-
 
     loadJSON('data/projects.geojson', function(response) {
         var projects = JSON.parse(response);
@@ -179,11 +177,11 @@ function changeName(event) {
         addCategoryButtons(categories, projectTypes);
 
         setCategory(categories[0]);
-        default_geohex_level = project.properties.GeohexLevel;
+        defaultGeohexLevel = project.properties.GeohexLevel;
         
-        if(geohexcode===null){
-            geohexcode = getRandomHexagon(project,default_geohex_level);
-            location.hash = '#/hexagon/' + geohexcode;
+        if(geohexCode===null){
+            geohexCode = getRandomHexagon(project,defaultGeohexLevel);
+            location.hash = '#/hexagon/' + geohexCode;
         }
 
         // fire onchange event of first combobox
@@ -205,14 +203,14 @@ function changeName(event) {
             fillOpacity: 0
         };
 
-        var polygon = getGeohexPolygon(geohexcode, myStyle);
+        var polygon = getGeohexPolygon(geohexCode, myStyle);
         var centerHex = polygon.getBounds().getCenter();
-        map.setView(centerHex, startZoomlevel, {
+        map.setView(centerHex, startZoomLevel, {
             animation: true
         });
 
         map.addControl(new L.Control.ZoomMin({
-            position: 'topright', startLevel: startZoomlevel, startCenter: centerHex
+            position: 'topright', startLevel: startZoomLevel, startCenter: centerHex
         }));
 
         L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
