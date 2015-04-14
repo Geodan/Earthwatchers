@@ -10,7 +10,7 @@ var map = null;
 var defaultGeohexLevel = 7;
 var defaultSatelliteType = 'Landsat';
 var defaultProject = 'Borneo';
-var observationCategory = null;
+var observationType = null;
 var project = null;
 var categories=null;
 
@@ -76,9 +76,9 @@ function satelliteTypeSelectionChanged(sel) {
 }
 
 
-function setCategory(category){
-    observationCategory = category;
-    styleCategoryButtons(categories,category);
+function setCategory(projectType){
+    observationType = projectType;
+    styleCategoryButtons(categories,projectType.type);
 }
 
 
@@ -91,9 +91,18 @@ function onMapClick(e){
     if(isInside){
         // todo draw hexagon
         // alert('click on map');
-        var newMarker = new L.marker(e.latlng, {draggable:true});
+
+        var markerIcon = L.icon({
+            iconUrl: "./images/" + observationType.icon,
+            iconSize:     [30, 30],
+            iconAnchor:   [15, 15],
+            popupAnchor:  [0, -15]
+        });
+
+        var newMarker = new L.marker(e.latlng, {icon: markerIcon, draggable:true});
         var div = document.createElement('div');
-        div.innerHTML = observationCategory + '<br/>' ;
+        div.innerHTML = observationType.name + '<br/>' ;
+
         var inputButton = document.createElement('input');
         inputButton.className='marker-delete-button';
         inputButton.value='delete';
@@ -115,7 +124,7 @@ function onMapClick(e){
 
         newMarker.addTo(map);
 
-        postObservation(observationCategory,user,geohexCode,e.latlng.lng,e.latlng.lat,function(resp){
+        postObservation(observationType.type,user,geohexCode,e.latlng.lng,e.latlng.lat,function(resp){
             newMarker.id = resp.id;
         });
     }
@@ -176,10 +185,10 @@ function changeName(event) {
         categories = project.properties.ObservationCategories.split(',');
         addCategoryButtons(categories, projectTypes);
 
-        setCategory(categories[0]);
+        setCategory(projectTypes[0]);
         defaultGeohexLevel = project.properties.GeohexLevel;
         
-        if(geohexCode===null){
+        if(geohexCode === null){
             geohexCode = getRandomHexagon(project,defaultGeohexLevel);
             location.hash = '#/hexagon/' + geohexCode;
         }

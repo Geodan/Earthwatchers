@@ -16,7 +16,7 @@ function addCategoryButton(buttonsDiv, type){
     btn.style.backgroundRepeat =  "no-repeat";
     btn.style.backgroundSize = "20px";
     btn.style.color = "#0000ff";
-    btn.addEventListener("click", function(){setCategory(type.type)},false);
+    btn.addEventListener("click", function(){setCategory(type)},false);
     var btnNext = document.getElementById('btnNext');
     buttonsDiv.insertBefore(btn,btnNext);
 }
