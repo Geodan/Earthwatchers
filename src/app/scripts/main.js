@@ -10,9 +10,9 @@ var map = null;
 var defaultGeohexLevel = 7;
 var defaultSatelliteType = 'Landsat';
 var defaultProject = 'Borneo';
-var observationType = null;
+var selectedObservationType = null;
 var project = null;
-var categories=null;
+var projectObservationTypes = null;
 
 
 function timeSliderChanged(ctrl) {
@@ -76,9 +76,9 @@ function satelliteTypeSelectionChanged(sel) {
 }
 
 
-function setCategory(projectType){
-    observationType = projectType;
-    styleCategoryButtons(categories,projectType.type);
+function setObservationType(observationType){
+    selectedObservationType = observationType;
+    styleObservationTypeButtons(projectObservationTypes,observationType.type);
 }
 
 
@@ -93,7 +93,7 @@ function onMapClick(e){
         // alert('click on map');
 
         var markerIcon = L.icon({
-            iconUrl: "./images/" + observationType.icon,
+            iconUrl: "./images/" + selectedObservationType.icon,
             iconSize:     [30, 30],
             iconAnchor:   [15, 15],
             popupAnchor:  [0, -15]
@@ -101,7 +101,7 @@ function onMapClick(e){
 
         var newMarker = new L.marker(e.latlng, {icon: markerIcon, draggable:true});
         var div = document.createElement('div');
-        div.innerHTML = observationType.name + '<br/>' ;
+        div.innerHTML = selectedObservationType.name + '<br/>' ;
 
         var inputButton = document.createElement('input');
         inputButton.className='marker-delete-button';
@@ -124,7 +124,7 @@ function onMapClick(e){
 
         newMarker.addTo(map);
 
-        postObservation(observationType.type,user,geohexCode,e.latlng.lng,e.latlng.lat,function(resp){
+        postObservation(selectedObservationType.type,user,geohexCode,e.latlng.lng,e.latlng.lat,function(resp){
             newMarker.id = resp.id;
         });
     }
@@ -174,18 +174,18 @@ function changeName(event) {
 
     initUserpanel();
 
-    var projectTypes;
-    loadJSON('data/projectTypes.json', function (typesResponse){
-        projectTypes = JSON.parse(typesResponse);
+    var observationTypes;
+    loadJSON('data/observationTypes.json', function (typesResponse){
+        observationTypes = JSON.parse(typesResponse);
     });
 
     loadJSON('data/projects.geojson', function(response) {
         var projects = JSON.parse(response);
         project = getProjectByName(projects,defaultProject);
-        categories = project.properties.ObservationCategories.split(',');
-        addCategoryButtons(categories, projectTypes);
+        projectObservationTypes = project.properties.ObservationCategories.split(',');
+        addObservationTypeButtons(projectObservationTypes, observationTypes);
 
-        setCategory(projectTypes[0]);
+        setObservationType(observationTypes[0]);
         defaultGeohexLevel = project.properties.GeohexLevel;
         
         if(geohexCode === null){
