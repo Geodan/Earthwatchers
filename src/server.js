@@ -137,14 +137,12 @@ router.post('/observations', jsonParser, function (req, res) {
     req.checkBody('lat', 'lat is required').notEmpty();
     req.checkBody('lon', 'lon is required').notEmpty();
     req.checkBody('geohex', 'geohex is required').notEmpty();
-    req.checkBody('level', 'level is required').notEmpty();
     req.checkBody('observation', 'observation is required').notEmpty();
 
     var errors = req.validationErrors();
 
     if (errors === null) {
         req.body.date = new Date().toISOString();
-        console.log('id: ' + id);
         req.body.id = id;
 
         fs.appendFile(observationsFile, JSON.stringify(req.body) + '\n', function (err) {
@@ -161,6 +159,44 @@ router.post('/observations', jsonParser, function (req, res) {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }
 });
+
+router.put('/observations', jsonParser, function (req, res) {
+    req.checkBody('id', 'Id is required').notEmpty();
+    req.checkBody('lat', 'lat is required').notEmpty();
+    req.checkBody('lon', 'lon is required').notEmpty();
+
+    var errors = req.validationErrors();
+    console.log ('http put rocks!');
+
+    if (errors === null) {
+        var id = req.body.id;
+
+        if (fs.exists(observationsFile, function(res){
+            lineReader.eachLine(observationsFile, function (line, last) {
+                console.log('line:'+line);
+                var json = JSON.parse(line);
+                if(json.id===id){
+                    json.lat=req.body.lat;
+                    json.lon=req.body.lon;
+                    json.date=new Date().toISOString();
+
+                    //and now save
+                    console.log('fix it!');
+                    fs.writeFile(observationsFile,JSON.stringify(json)+'\n', function(err) {
+                        err || console.log('Data replaced!', json);
+                    });
+                }
+            });
+        }));
+
+        // send back complete resource 
+        res.status(HttpStatus.OK).send(req.body);
+    } else {
+        res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
+    }
+});
+
+
 
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));

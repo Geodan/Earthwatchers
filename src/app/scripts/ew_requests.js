@@ -55,7 +55,7 @@ function loadJSON(file, callback) {
     var request = new XMLHttpRequest();
     request.open('POST', url, true);
     request.setRequestHeader("Content-type", "application/json");
-    saveObservation(obs);
+    // saveObservation(obs);
 
     request.onload = function () {
         if (request.status == 201) {
@@ -65,4 +65,25 @@ function loadJSON(file, callback) {
     };
     request.send(obs);
 }
+
+ function updateObservationPosition(id,longitude,latitude,callback) {
+    var body = JSON.stringify({
+        "id": id,
+        "lat": latitude,
+        "lon": longitude,
+    });
+    var url = 'api/observations';
+    var request = new XMLHttpRequest();
+    request.open('PUT', url, true);
+    request.setRequestHeader("Content-type", "application/json");
+    // saveObservation(obs);
+
+    request.onload = function () {
+        if (request.status == 201) {
+            var res = JSON.parse(request.responseText);
+            callback(res);
+        }
+    };
+    request.send(body);
+ }
 

@@ -104,6 +104,15 @@ function onMapClick(e){
         };
         div.appendChild(inputButton);
         newMarker.bindPopup(div);
+        newMarker.on('dragend', function(event){
+            var marker = event.target;
+            var position = marker.getLatLng();
+            updateObservationPosition(marker.id,position.lng,position.lat,function(resp){
+                alert(resp);
+            });
+            // alert('dragend' + newMarker.id);
+        });
+
         newMarker.addTo(map);
 
         postObservation(observationCategory,user,geohexcode,e.latlng.lng,e.latlng.lat,function(resp){
