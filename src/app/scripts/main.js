@@ -106,7 +106,7 @@ function onMapClick(e){
 
         var inputButton = document.createElement('input');
         inputButton.className='marker-delete-button';
-        inputButton.value='delete';
+        inputButton.value='remove';
         inputButton.type='button';
         inputButton.onclick = function(){
             // alert('delete: ' + newMarker.id);

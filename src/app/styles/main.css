@@ -332,3 +332,13 @@ input[type=range]::-ms-tooltip {
     font-size: 18px;
     padding: 2px 4px;
 }
+
+.marker-delete-button {
+    width: 75px;
+    height:30px;
+    border-radius: 5px;
+    color: #ff0000;
+    font-weight: bold;
+}
+
+
