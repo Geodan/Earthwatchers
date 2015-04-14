@@ -182,9 +182,9 @@ router.put('/observations', jsonParser, function (req, res) {
 
                     //and now save
                     console.log('fix it!');
-                    fs.writeFile(observationsFile,JSON.stringify(json)+'\n', function(err) {
-                        err || console.log('Data replaced!', json);
-                    });
+                    //fs.writeFile(observationsFile,JSON.stringify(json)+'\n', function(err) {
+                    //    err || console.log('Data replaced!', json);
+                    //});
                 }
             });
         }));

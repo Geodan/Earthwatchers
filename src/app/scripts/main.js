@@ -2,12 +2,12 @@
 /*global L */
 /*global GEOHEX */
 var geohexCode = null;
-var startZoomLevel = 12;
+var startZoomLevel = 10;
 var localStoragePrefix = 'EW_'; // earthWatchers
 var user = localStorage.getItem(localStoragePrefix + 'user') || 'anonymous' ;
 var satelliteImages = null;
 var map = null;
-var defaultGeohexLevel = 7;
+var defaultGeohexLevel = null;
 var defaultSatelliteType = 'Landsat';
 var defaultProject = 'Borneo';
 var selectedObservationType = null;
@@ -87,7 +87,8 @@ function onMapClick(e){
     // send message to server
     // check if clicked point is inside the project
     var pt = turf.point([e.latlng.lng, e.latlng.lat]);
-    var isInside = turf.inside(pt, project);
+    var poly=getGeohexPolygon(geohexCode, null); 
+    var isInside = turf.inside(pt, poly.toGeoJSON());
     if(isInside){
         // todo draw hexagon
         // alert('click on map');
@@ -129,7 +130,7 @@ function onMapClick(e){
         });
     }
     else{
-        alert('Please click inside the project area');
+        alert('Please click inside the hexagon');
     }
 
 }
@@ -187,7 +188,7 @@ function changeName(event) {
 
         setObservationType(observationTypes[0]);
         defaultGeohexLevel = project.properties.GeohexLevel;
-        
+
         if(geohexCode === null){
             geohexCode = getRandomHexagon(project,defaultGeohexLevel);
             location.hash = '#/hexagon/' + geohexCode;
@@ -200,9 +201,6 @@ function changeName(event) {
             zoomControl: false,
             attributionControl: false
         });
-        map.dragging.disable();
-        if (map.tap) map.tap.disable();
-
         map.on('click', onMapClick);
 
         var myStyle = {
