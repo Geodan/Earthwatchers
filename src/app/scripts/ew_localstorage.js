@@ -3,7 +3,7 @@ function saveObservation(observationString) {
             localStoragePrefix + (new Date()).getTime(), observationString);
 }
 
-function updateUsername(user) {
-    localStorage.setItem(localStoragePrefix + 'user', user);
+function updateUsername(username) {
+    localStorage.setItem(localStoragePrefix + 'user', username);
 }
 

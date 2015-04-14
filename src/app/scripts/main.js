@@ -147,19 +147,20 @@ function onPopupOpen(){
 }
 
 function changeName(event) {
-    var form = event.target,
-        newName = form.children[0].value;
+    var form = event.target;
+    var newName = form.children[0].value;
 
     // stop from saving empty name
     if (!newName) return false;
 
+    user = newName;
     updateUsername(newName);
 
     // clean and hide form
     form.parentElement.classList.add('hide');
     form.children[0].value = '';
 
-    updateUserinfo();
+    updateUserInfo();
     return false;
 }
 
@@ -173,7 +174,7 @@ function changeName(event) {
     });
     Path.listen();
 
-    initUserpanel();
+    initUserPanel();
 
     var observationTypes;
     loadJSON('data/observationTypes.json', function (typesResponse){
