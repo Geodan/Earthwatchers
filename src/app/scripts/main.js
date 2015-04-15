@@ -13,6 +13,7 @@ var defaultProject = 'Borneo';
 var selectedObservationType = null;
 var project = null;
 var projectObservationTypes = null;
+var dragMarkerPosition = null;
 
 
 function timeSliderChanged(ctrl) {
@@ -82,17 +83,16 @@ function setObservationType(observationType){
 }
 
 
-function onMapClick(e){
-    // todo: add hexagon with currently active button
-    // send message to server
-    // check if clicked point is inside the project
-    var pt = turf.point([e.latlng.lng, e.latlng.lat]);
-    var poly=getGeohexPolygon(geohexCode, null); 
+function isPointInHexagon(geohexcode, latlng){
+    var pt = turf.point([latlng.lng, latlng.lat]);
+    var poly=getGeohexPolygon(geohexcode, null); 
     var isInside = turf.inside(pt, poly.toGeoJSON());
-    if(isInside){
-        // todo draw hexagon
-        // alert('click on map');
+    return isInside;
+}
 
+function onMapClick(e){
+    var isInside = isPointInHexagon(geohexCode,e.latlng);
+    if(isInside){
         var markerIcon = L.icon({
             iconUrl: "./images/" + selectedObservationType.icon,
             iconSize:     [30, 30],
@@ -117,10 +117,19 @@ function onMapClick(e){
         newMarker.on('dragend', function(event){
             var marker = event.target;
             var position = marker.getLatLng();
-            updateObservationPosition(marker.id,position.lng,position.lat,function(resp){
-                alert(resp);
-            });
-            // alert('dragend' + newMarker.id);
+            var isInside = isPointInHexagon(geohexCode,position);
+            if(isInside){
+                updateObservationPosition(marker.id,position.lng,position.lat,function(resp){
+                    alert(resp);
+                });
+            }
+            else{
+                newMarker.setLatLng(dragMarkerPosition); 
+            }
+
+        });
+        newMarker.on('dragstart',function(event){
+            dragMarkerPosition=event.target.getLatLng();
         });
 
         newMarker.addTo(map);
@@ -129,10 +138,6 @@ function onMapClick(e){
             newMarker.id = resp.id;
         });
     }
-    else{
-        alert('Please click inside the hexagon');
-    }
-
 }
 
 
