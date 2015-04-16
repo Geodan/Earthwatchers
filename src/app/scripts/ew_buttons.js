@@ -29,10 +29,15 @@ function addObservationTypeButtons(categories, types){
         {
             if (types[j].type === categories[i]){
                 addObservationTypeButton(buttonsDiv, types[j]);
+                //set the first button as default
+                if (i === 0) {
+                    selectedObservationType = types[j];
+                }
             }
         }
         //TODO fallback projectType not found...
     }
+    setObservationType(selectedObservationType);
 }
 
 function styleObservationTypeButtons(observationTypes,selectedObservation){

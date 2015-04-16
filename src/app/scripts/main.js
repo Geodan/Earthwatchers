@@ -191,9 +191,9 @@ function changeName(event) {
             }
             project = getProjectByName(projects, projectName);
             projectObservationTypes = project.properties.ObservationCategories.split(',');
+
             addObservationTypeButtons(projectObservationTypes, observationTypes);
 
-            setObservationType(observationTypes[0]);
             defaultGeohexLevel = project.properties.GeohexLevel;
 
             if (geohexCode === null) {
