@@ -2,11 +2,15 @@
 
 Development preview: http://earthwatchers.azurewebsites.net/
 
-Permalink, for example to land PO2670248: http://earthwatchers.azurewebsites.net/#/hexagon/PO2670248
+Landing page: http://earthwatchers.azurewebsites.net/landing.html
+
+Permalink, for example to project 'Borneo', hexagon PO2662: 
+
+http://earthwatchers.azurewebsites.net/#/Borneo/PO2662
 
 # Technology stack
 
-Server side: Node.js with Express, Dotenv, Turf
+Server side: Node.js with Express, Dotenv, Turf, NoSql
 
 Client side: Leaflet, Leaflet-omnivore, Turf
 
