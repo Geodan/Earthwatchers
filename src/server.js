@@ -60,45 +60,9 @@ function nocache(req, res, next) {
 }
 
 router.get('/hexagons/:id', nocache, function (req, res) {
-    // get stats for the given hexagon
     var hex = req.params.id;
     var username = req.query.user;
-    var yes = 0, no = 0, maybe = 0; uservote=null;
-    if (fs.existsSync(observationsFile)) {
-        lineReader.eachLine(observationsFile, function (line, last) {
-            var json = JSON.parse(line);
-            if (json.geohex === hex &&json.user!=username) {
-                if (json.observation === "yes") yes++;
-                if (json.observation === "no") no++;
-                if (json.observation === "maybe") maybe++;
-            }
-
-            if(json.geohex === hex && json.user===username)
-            {
-                uservote=json.observation;
-            }
-
-            if (last) {
-                var stats = {
-                    "geohex": hex, "yes": yes, "no": no, "maybe": maybe
-                }
-                if(uservote!=null){
-                    stats.uservote=uservote;
-                    if (uservote === "yes") stats.yes++;
-                    if (uservote === "no") stats.no++;
-                    if (uservote === "maybe") stats.maybe++;
-                }
-                res.json(stats);
-            }
-        });
-    }
-    else {
-        var stats = {
-            "geohex": hex, "yes": yes, "no": no, "maybe": maybe
-        }
-        res.json(stats);
-    }
-
+    // get stats for the given hexagon
 });
 
 // spatial select the stalliteimages that intersect with client envelope
@@ -141,6 +105,7 @@ router.post('/observations', jsonParser, function (req, res) {
     req.checkBody('lon', 'lon is required').notEmpty();
     req.checkBody('geohex', 'geohex is required').notEmpty();
     req.checkBody('observation', 'observation is required').notEmpty();
+    req.checkBody('project', 'project is required').notEmpty();
 
     var errors = req.validationErrors();
 
@@ -148,9 +113,10 @@ router.post('/observations', jsonParser, function (req, res) {
         req.body.date = new Date().toISOString();
         req.body.id = id;
 
-        dbObservations.insert(req.body, 'insert new observation');
-        // send back complete resource 
-        res.status(HttpStatus.CREATED).send(req.body);
+        dbObservations.insert(req.body, function(err, count){
+            console.log('new observation is saved');
+            res.status(HttpStatus.CREATED).send(req.body);
+        });
     } else {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }

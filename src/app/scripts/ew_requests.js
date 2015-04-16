@@ -41,7 +41,7 @@ function loadJSON(file, callback) {
     request.send(null);  
  }
 
- function postObservation(observation,user,geohexcode,longitude,latitude,callback) {
+ function postObservation(observation,user,geohexcode,longitude,latitude,project,callback) {
     var zone = GEOHEX.getZoneByCode(geohexcode);
     var obs = JSON.stringify({
         "user": user,
@@ -49,7 +49,8 @@ function loadJSON(file, callback) {
         "lon": longitude,
         "level": zone.getLevel(),
         "observation": observation,
-        "geohex": geohexcode
+        "geohex": geohexcode,
+        "project":project
     });
     var url = 'api/observations';
     var request = new XMLHttpRequest();
