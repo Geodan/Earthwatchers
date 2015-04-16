@@ -8,3 +8,6 @@ dist
 *.suo
 *.dat
 *.tmp
+*.changelog
+*.meta
+*.nosql

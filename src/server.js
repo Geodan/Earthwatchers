@@ -9,18 +9,17 @@ var expressValidator = require('express-validator');
 var HttpStatus = require('http-status-codes');
 var lineReader = require('line-reader');
 var uuid = require('node-uuid');
+var nosql = require('nosql');
 
 var imageTypes = {
     'Landsat': 2,
     'Sentinel': 4
 };
 
-var observationsFile = 'ew_observations.txt';
-
+// var observationsFile = 'ew_observations.txt';
 var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {
     flags: 'a'
 });
-
 
 var app = express();
 app.use(morgan('combined', {
@@ -34,6 +33,10 @@ dotenv.load();
 var port = process.env.PORT || 3000;
 var host = process.env.LOCALHOST || 'localhost';
 console.log('host: ' + process.env.localhost);
+
+var dbObservations=nosql.load('./db/ew_observations.nosql');
+dbObservations.description('Earthwatchers observations.');
+
 var router = express.Router();
 
 router.get('/', function (req, res) {
@@ -145,14 +148,7 @@ router.post('/observations', jsonParser, function (req, res) {
         req.body.date = new Date().toISOString();
         req.body.id = id;
 
-        fs.appendFile(observationsFile, JSON.stringify(req.body) + '\n', function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('The Earthwatchers ' + req.body.user + ' observation was saved at ' + req.body.date);
-            }
-        });
-
+        dbObservations.insert(req.body, 'insert new observation');
         // send back complete resource 
         res.status(HttpStatus.CREATED).send(req.body);
     } else {
