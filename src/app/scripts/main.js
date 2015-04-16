@@ -4,7 +4,7 @@
 var geohexCode = null;
 var startZoomLevel = 10;
 var localStoragePrefix = 'EW_'; // earthWatchers
-var user = localStorage.getItem(localStoragePrefix + 'user') || 'anonymous' ;
+var user = localStorage.getItem(localStoragePrefix + 'user') || 'anonymous';
 var satelliteImages = null;
 var map = null;
 var defaultGeohexLevel = null;
@@ -14,11 +14,11 @@ var selectedObservationType = null;
 var project = null;
 var projectObservationTypes = null;
 var dragMarkerPosition = null;
-var projectName =null;
+var projectName = null;
 
 
 function timeSliderChanged(ctrl) {
-    if(satelliteImages.features.length>0){
+    if (satelliteImages.features.length > 0) {
         var day = satelliteImages.features[ctrl.value].properties.Published;
         var label = document.getElementById('rangeValLabel');
         label.innerHTML = day;
@@ -44,8 +44,8 @@ function timeSliderChanged(ctrl) {
 }
 
 function next() {
-    var url = location.href.replace(location.hash,'#/'+projectName);
-    location.href=url;
+    var url = location.href.replace(location.hash, '#/' + projectName);
+    location.href = url;
     window.location.reload();
 }
 
@@ -72,7 +72,7 @@ function satelliteTypeSelectionChanged(sel) {
     var currentImageType = sel.value;
     var polygon = getGeohexPolygon(geohexCode);
     var bbox = polygon.getBounds().toBBoxString();
-    getSatelliteImageData(bbox, currentImageType, function(resp){
+    getSatelliteImageData(bbox, currentImageType, function (resp) {
         satelliteImages = resp;
         var sel = document.getElementById('timeSlider');
         satelliteImages.features.sort(compare);
@@ -80,63 +80,63 @@ function satelliteTypeSelectionChanged(sel) {
     });
 }
 
-function setObservationType(observationType){
+function setObservationType(observationType) {
     selectedObservationType = observationType;
-    styleObservationTypeButtons(projectObservationTypes,observationType.type);
+    styleObservationTypeButtons(projectObservationTypes, observationType.type);
 }
 
-function onMapClick(e){
-    var isInside = isPointInHexagon(geohexCode,e.latlng);
-    if(isInside){
+function onMapClick(e) {
+    var isInside = isPointInHexagon(geohexCode, e.latlng);
+    if (isInside) {
         var markerIcon = L.icon({
             iconUrl: "./images/" + selectedObservationType.icon,
-            iconSize:     [30, 30],
-            iconAnchor:   [15, 15],
-            popupAnchor:  [0, -15]
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -15]
         });
 
-        var newMarker = new L.marker(e.latlng, {icon: markerIcon, draggable:true});
+        var newMarker = new L.marker(e.latlng, {icon: markerIcon, draggable: true});
         var div = document.createElement('div');
-        div.innerHTML = selectedObservationType.name + '<br/>' ;
+        div.innerHTML = selectedObservationType.name + '<br/>';
 
         var inputButton = document.createElement('input');
-        inputButton.className='marker-delete-button';
-        inputButton.value='remove';
-        inputButton.type='button';
-        inputButton.onclick = function(){
+        inputButton.className = 'marker-delete-button';
+        inputButton.value = 'remove';
+        inputButton.type = 'button';
+        inputButton.onclick = function () {
             // alert('delete: ' + newMarker.id);
             map.removeLayer(newMarker);
         };
         div.appendChild(inputButton);
         newMarker.bindPopup(div);
-        newMarker.on('dragend', function(event){
+        newMarker.on('dragend', function (event) {
             var marker = event.target;
             var position = marker.getLatLng();
-            var isInside = isPointInHexagon(geohexCode,position);
-            if(isInside){
-                updateObservationPosition(marker.id,position.lng,position.lat,function(resp){
+            var isInside = isPointInHexagon(geohexCode, position);
+            if (isInside) {
+                updateObservationPosition(marker.id, position.lng, position.lat, function (resp) {
                     alert(resp);
                 });
             }
-            else{
-                newMarker.setLatLng(dragMarkerPosition); 
+            else {
+                newMarker.setLatLng(dragMarkerPosition);
             }
 
         });
-        newMarker.on('dragstart',function(event){
-            dragMarkerPosition=event.target.getLatLng();
+        newMarker.on('dragstart', function (event) {
+            dragMarkerPosition = event.target.getLatLng();
         });
 
         newMarker.addTo(map);
 
-        postObservation(selectedObservationType.type,user,geohexCode,e.latlng.lng,e.latlng.lat,function(resp){
+        postObservation(selectedObservationType.type, user, geohexCode, e.latlng.lng, e.latlng.lat, function (resp) {
             newMarker.id = resp.id;
         });
     }
 }
 
 
-function onPopupOpen(){
+function onPopupOpen() {
     var tempMarker = this;
 
     var list = document.getElementsByClassName('marker-delete-button');
@@ -168,12 +168,12 @@ function changeName(event) {
     'use strict';
     L.Icon.Default.imagePath = 'images/';
 
-    Path.map("#/:project").to(function(){
+    Path.map("#/:project").to(function () {
         // sample: #/borneo
         geohexCode = null;
         projectName = this.params['project'];
     });
-    Path.map("#/:project/:hex").to(function(){
+    Path.map("#/:project/:hex").to(function () {
         // sample: #/borneo/PO2670248
         projectName = this.params['project'];
         geohexCode = this.params['hex'];
@@ -183,24 +183,24 @@ function changeName(event) {
     initUserPanel();
 
     var observationTypes;
-    loadJSON('data/observationTypes.json', function (typesResponse){
+    loadJSON('data/observationTypes.json', function (typesResponse) {
         observationTypes = JSON.parse(typesResponse);
     });
 
-    loadJSON('data/projects.geojson', function(response) {
+    loadJSON('data/projects.geojson', function (response) {
         var projects = JSON.parse(response);
-        if(projectName === null) {
+        if (projectName === null) {
             projectName = defaultProject;
         }
-        project = getProjectByName(projects,projectName);
+        project = getProjectByName(projects, projectName);
         projectObservationTypes = project.properties.ObservationCategories.split(',');
         addObservationTypeButtons(projectObservationTypes, observationTypes);
 
         setObservationType(observationTypes[0]);
         defaultGeohexLevel = project.properties.GeohexLevel;
 
-        if(geohexCode === null){
-            geohexCode = getRandomHexagon(project,defaultGeohexLevel);
+        if (geohexCode === null) {
+            geohexCode = getRandomHexagon(project, defaultGeohexLevel);
             location.hash = '#/' + projectName + '/' + geohexCode;
         }
 
@@ -236,7 +236,7 @@ function changeName(event) {
         map.addLayer(ggl2);
         map.addLayer(polygon);
 
-        L.geoJson(projects,{fill:false}).addTo(map);
+        L.geoJson(projects, {fill: false}).addTo(map);
         // todo: calculate hexagon based on project areas
     });
 
