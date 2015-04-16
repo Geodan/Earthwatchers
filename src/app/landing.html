@@ -1,0 +1,30 @@
+<html>
+<head>
+<script src="scripts/ew_requests.js"></script>
+</head>
+<body>
+Earthwatchers 2.0 Landing page<br/>
+<br/>
+Active projects:
+<br/>
+<div id='projects'></div>
+<script>
+    var projectsDiv = document.getElementById('projects');
+    loadJSON('data/projects.geojson', function(response) {
+        var projects = JSON.parse(response);
+        for(var i=0;i<projects.features.length;i++){
+            var project = projects.features[i];
+            var url = location.origin + '/#/' + project.properties.Name;
+
+            var a = document.createElement('a');
+            var linkText = document.createTextNode(project.properties.Name);
+            a.appendChild(linkText);
+            a.href = url;
+
+            projectsDiv.appendChild(a);
+            projectsDiv.innerHTML += ', categories: ' + project.properties.ObservationCategories + '<br/>';
+        }
+    });
+</script>
+</body>
+</html>
