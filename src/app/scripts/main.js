@@ -14,35 +14,39 @@ var selectedObservationType = null;
 var project = null;
 var projectObservationTypes = null;
 var dragMarkerPosition = null;
+var projectName =null;
 
 
 function timeSliderChanged(ctrl) {
-    var day = satelliteImages.features[ctrl.value].properties.Published;
-    var label = document.getElementById('rangeValLabel');
-    label.innerHTML = day;
-    // update label positioning
-    label.className = 'value' + ctrl.value;
+    if(satelliteImages.features.length>0){
+        var day = satelliteImages.features[ctrl.value].properties.Published;
+        var label = document.getElementById('rangeValLabel');
+        label.innerHTML = day;
+        // update label positioning
+        label.className = 'value' + ctrl.value;
 
-    var earthwatchersLayer = findLayerByType('earthWatchers');
+        var earthwatchersLayer = findLayerByType('earthWatchers');
 
-    var s = getSatelliteImageByDate(satelliteImages, day);
-    var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
-    var maxLevel = s.properties.MaxLevel;
-    var newLayer = L.tileLayer(url, {
-        tms: true,
-        maxZoom: maxLevel,
-        type: 'earthWatchers'
-    });
-    map.addLayer(newLayer);
+        var s = getSatelliteImageByDate(satelliteImages, day);
+        var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
+        var maxLevel = s.properties.MaxLevel;
+        var newLayer = L.tileLayer(url, {
+            tms: true,
+            maxZoom: maxLevel,
+            type: 'earthWatchers'
+        });
+        map.addLayer(newLayer);
 
-    if (earthwatchersLayer !== null) {
-        map.removeLayer(earthwatchersLayer);
+        if (earthwatchersLayer !== null) {
+            map.removeLayer(earthwatchersLayer);
+        }
     }
 }
 
 function next() {
-    var url = location.href.replace(location.hash,'');
+    var url = location.href.replace(location.hash,'#/'+projectName);
     location.href=url;
+    window.location.reload();
 }
 
 function toggleSatelliteType(sel) {
@@ -76,18 +80,9 @@ function satelliteTypeSelectionChanged(sel) {
     });
 }
 
-
 function setObservationType(observationType){
     selectedObservationType = observationType;
     styleObservationTypeButtons(projectObservationTypes,observationType.type);
-}
-
-
-function isPointInHexagon(geohexcode, latlng){
-    var pt = turf.point([latlng.lng, latlng.lat]);
-    var poly=getGeohexPolygon(geohexcode, null); 
-    var isInside = turf.inside(pt, poly.toGeoJSON());
-    return isInside;
 }
 
 function onMapClick(e){
@@ -173,8 +168,14 @@ function changeName(event) {
     'use strict';
     L.Icon.Default.imagePath = 'images/';
 
-    Path.map("#/hexagon/:hex").to(function(){
-        // sample: #/hexagon/PO2670248
+    Path.map("#/:project").to(function(){
+        // sample: #/borneo
+        geohexCode = null;
+        projectName = this.params['project'];
+    });
+    Path.map("#/:project/:hex").to(function(){
+        // sample: #/borneo/PO2670248
+        projectName = this.params['project'];
         geohexCode = this.params['hex'];
     });
     Path.listen();
@@ -188,7 +189,10 @@ function changeName(event) {
 
     loadJSON('data/projects.geojson', function(response) {
         var projects = JSON.parse(response);
-        project = getProjectByName(projects,defaultProject);
+        if(projectName === null) {
+            projectName = defaultProject;
+        }
+        project = getProjectByName(projects,projectName);
         projectObservationTypes = project.properties.ObservationCategories.split(',');
         addObservationTypeButtons(projectObservationTypes, observationTypes);
 
@@ -197,7 +201,7 @@ function changeName(event) {
 
         if(geohexCode === null){
             geohexCode = getRandomHexagon(project,defaultGeohexLevel);
-            location.hash = '#/hexagon/' + geohexCode;
+            location.hash = '#/' + projectName + '/' + geohexCode;
         }
 
         // fire onchange event of first combobox

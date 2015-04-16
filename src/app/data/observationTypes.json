@@ -13,5 +13,10 @@
         "type": "road",
         "name": "Road Construction",
         "icon": "road.png"
+    },
+    {
+        "type": "other",
+        "name": "other",
+        "icon": "road.png"
     }
 ]

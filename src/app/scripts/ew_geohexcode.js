@@ -22,3 +22,11 @@ function getGeohexPolygon(geohexCode, style) {
     var zone = GEOHEX.getZoneByCode(geohexCode);
     return L.polygon(zone.getHexCoords(), style);
 }
+
+
+function isPointInHexagon(geohexcode, latlng){
+    var pt = turf.point([latlng.lng, latlng.lat]);
+    var poly=getGeohexPolygon(geohexcode, null); 
+    var isInside = turf.inside(pt, poly.toGeoJSON());
+    return isInside;
+}
