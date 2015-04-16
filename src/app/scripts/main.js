@@ -182,63 +182,60 @@ function changeName(event) {
 
     initUserPanel();
 
-    var observationTypes;
     loadJSON('data/observationTypes.json', function (typesResponse) {
-        observationTypes = JSON.parse(typesResponse);
-    });
+        var observationTypes = JSON.parse(typesResponse);
+        loadJSON('data/projects.geojson', function (response) {
+            var projects = JSON.parse(response);
+            if (projectName === null) {
+                projectName = defaultProject;
+            }
+            project = getProjectByName(projects, projectName);
+            projectObservationTypes = project.properties.ObservationCategories.split(',');
+            addObservationTypeButtons(projectObservationTypes, observationTypes);
 
-    loadJSON('data/projects.geojson', function (response) {
-        var projects = JSON.parse(response);
-        if (projectName === null) {
-            projectName = defaultProject;
-        }
-        project = getProjectByName(projects, projectName);
-        projectObservationTypes = project.properties.ObservationCategories.split(',');
-        addObservationTypeButtons(projectObservationTypes, observationTypes);
+            setObservationType(observationTypes[0]);
+            defaultGeohexLevel = project.properties.GeohexLevel;
 
-        setObservationType(observationTypes[0]);
-        defaultGeohexLevel = project.properties.GeohexLevel;
+            if (geohexCode === null) {
+                geohexCode = getRandomHexagon(project, defaultGeohexLevel);
+                location.hash = '#/' + projectName + '/' + geohexCode;
+            }
 
-        if (geohexCode === null) {
-            geohexCode = getRandomHexagon(project, defaultGeohexLevel);
-            location.hash = '#/' + projectName + '/' + geohexCode;
-        }
+            // fire onchange event of first combobox
+            satelliteTypeSelectionChanged({value: defaultSatelliteType});
 
-        // fire onchange event of first combobox
-        satelliteTypeSelectionChanged({value: defaultSatelliteType});
+            map = L.map('map', {
+                zoomControl: false,
+                attributionControl: false
+            });
+            map.on('click', onMapClick);
 
-        map = L.map('map', {
-            zoomControl: false,
-            attributionControl: false
+            var myStyle = {
+                'color': '#000000',
+                'weight': 5,
+                'opacity': 0.65,
+                fillOpacity: 0
+            };
+
+            var polygon = getGeohexPolygon(geohexCode, myStyle);
+            var centerHex = polygon.getBounds().getCenter();
+            map.setView(centerHex, startZoomLevel, {
+                animation: true
+            });
+
+            map.addControl(new L.Control.ZoomMin({
+                position: 'topright', startLevel: startZoomLevel, startCenter: centerHex
+            }));
+
+            L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
+
+            var ggl2 = new L.Google('satellite');
+            map.addLayer(ggl2);
+            map.addLayer(polygon);
+
+            L.geoJson(projects, {fill: false}).addTo(map);
+            // todo: calculate hexagon based on project areas
         });
-        map.on('click', onMapClick);
-
-        var myStyle = {
-            'color': '#000000',
-            'weight': 5,
-            'opacity': 0.65,
-            fillOpacity: 0
-        };
-
-        var polygon = getGeohexPolygon(geohexCode, myStyle);
-        var centerHex = polygon.getBounds().getCenter();
-        map.setView(centerHex, startZoomLevel, {
-            animation: true
-        });
-
-        map.addControl(new L.Control.ZoomMin({
-            position: 'topright', startLevel: startZoomLevel, startCenter: centerHex
-        }));
-
-        L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
-
-        var ggl2 = new L.Google('satellite');
-        map.addLayer(ggl2);
-        map.addLayer(polygon);
-
-        L.geoJson(projects, {fill: false}).addTo(map);
-        // todo: calculate hexagon based on project areas
     });
-
 
 }(window, document, L));
