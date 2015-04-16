@@ -106,6 +106,9 @@ function onMapClick(e) {
         inputButton.onclick = function () {
             // alert('delete: ' + newMarker.id);
             map.removeLayer(newMarker);
+            deleteObservation(newMarker.id, function(res){
+                alert('marker is deleted');
+            });
         };
         div.appendChild(inputButton);
         newMarker.bindPopup(div);

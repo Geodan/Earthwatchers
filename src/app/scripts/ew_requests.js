@@ -88,3 +88,17 @@ function loadJSON(file, callback) {
     request.send(body);
  }
 
+function deleteObservation(id,callback) {
+    var url = 'api/observations/' + id;
+    var request = new XMLHttpRequest();
+    request.open('DELETE', url, true);
+
+    request.onload = function () {
+        if (request.status == 200) {
+            callback(res);
+        }
+    };
+    request.send(null);
+ }
+
+

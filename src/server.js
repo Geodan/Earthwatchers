@@ -16,7 +16,6 @@ var imageTypes = {
     'Sentinel': 4
 };
 
-// var observationsFile = 'ew_observations.txt';
 var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {
     flags: 'a'
 });
@@ -112,6 +111,7 @@ router.post('/observations', jsonParser, function (req, res) {
     if (errors === null) {
         req.body.date = new Date().toISOString();
         req.body.id = id;
+        req.body.status = 'active';
 
         dbObservations.insert(req.body, function(err, count){
             console.log('new observation is saved');
@@ -122,37 +122,50 @@ router.post('/observations', jsonParser, function (req, res) {
     }
 });
 
+
+router.delete('/observations/:id', function (req, res) {
+    var id = req.params.id;
+    console.log('delete id: ' + id);
+
+    dbObservations.update(function(doc) {
+        if (doc.id === id && doc.status === 'active'){
+            doc.status='cancelled';
+        }
+
+        return doc;
+    }, function(error,count){
+        res.status(HttpStatus.OK).send(req.body);
+    }
+    );
+
+});
+
+
 router.put('/observations', jsonParser, function (req, res) {
     req.checkBody('id', 'Id is required').notEmpty();
     req.checkBody('lat', 'lat is required').notEmpty();
     req.checkBody('lon', 'lon is required').notEmpty();
 
     var errors = req.validationErrors();
-    console.log ('http put rocks!');
 
     if (errors === null) {
         var id = req.body.id;
+        console.log('update observation: ' + id);
 
-        if (fs.exists(observationsFile, function(res){
-            lineReader.eachLine(observationsFile, function (line, last) {
-                console.log('line:'+line);
-                var json = JSON.parse(line);
-                if(json.id===id){
-                    json.lat=req.body.lat;
-                    json.lon=req.body.lon;
-                    json.date=new Date().toISOString();
+        dbObservations.update(function(doc) {
+            if (doc.id === id){
+                doc.date = new Date().toISOString();
+                doc.lat=req.body.lat;
+                doc.lon=req.body.lon;
+            }
 
-                    //and now save
-                    console.log('fix it!');
-                    //fs.writeFile(observationsFile,JSON.stringify(json)+'\n', function(err) {
-                    //    err || console.log('Data replaced!', json);
-                    //});
-                }
-            });
-        }));
+            return doc;
+        }, function(error,count){
+            res.status(HttpStatus.OK).send(req.body);
+        }
+        );
 
-        // send back complete resource 
-        res.status(HttpStatus.OK).send(req.body);
+
     } else {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }
@@ -165,3 +178,6 @@ app.use(express.static(path.join(__dirname, 'app')));
 var server = app.listen(port, host);
 module.exports = server;
 console.log('Earthwatchers server started on port http://' + host + ':' + port);
+
+
+
