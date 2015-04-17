@@ -9,18 +9,16 @@ var expressValidator = require('express-validator');
 var HttpStatus = require('http-status-codes');
 var lineReader = require('line-reader');
 var uuid = require('node-uuid');
+var nosql = require('nosql');
 
 var imageTypes = {
     'Landsat': 2,
     'Sentinel': 4
 };
 
-var observationsFile = 'ew_observations.txt';
-
 var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {
     flags: 'a'
 });
-
 
 var app = express();
 app.use(morgan('combined', {
@@ -34,6 +32,10 @@ dotenv.load();
 var port = process.env.PORT || 3000;
 var host = process.env.LOCALHOST || 'localhost';
 console.log('host: ' + process.env.localhost);
+
+var dbObservations=nosql.load('./db/ew_observations.nosql');
+dbObservations.description('Earthwatchers observations.');
+
 var router = express.Router();
 
 router.get('/', function (req, res) {
@@ -57,45 +59,9 @@ function nocache(req, res, next) {
 }
 
 router.get('/hexagons/:id', nocache, function (req, res) {
-    // get stats for the given hexagon
     var hex = req.params.id;
     var username = req.query.user;
-    var yes = 0, no = 0, maybe = 0; uservote=null;
-    if (fs.existsSync(observationsFile)) {
-        lineReader.eachLine(observationsFile, function (line, last) {
-            var json = JSON.parse(line);
-            if (json.geohex === hex &&json.user!=username) {
-                if (json.observation === "yes") yes++;
-                if (json.observation === "no") no++;
-                if (json.observation === "maybe") maybe++;
-            }
-
-            if(json.geohex === hex && json.user===username)
-            {
-                uservote=json.observation;
-            }
-
-            if (last) {
-                var stats = {
-                    "geohex": hex, "yes": yes, "no": no, "maybe": maybe
-                }
-                if(uservote!=null){
-                    stats.uservote=uservote;
-                    if (uservote === "yes") stats.yes++;
-                    if (uservote === "no") stats.no++;
-                    if (uservote === "maybe") stats.maybe++;
-                }
-                res.json(stats);
-            }
-        });
-    }
-    else {
-        var stats = {
-            "geohex": hex, "yes": yes, "no": no, "maybe": maybe
-        }
-        res.json(stats);
-    }
-
+    // get stats for the given hexagon
 });
 
 // spatial select the stalliteimages that intersect with client envelope
@@ -138,27 +104,42 @@ router.post('/observations', jsonParser, function (req, res) {
     req.checkBody('lon', 'lon is required').notEmpty();
     req.checkBody('geohex', 'geohex is required').notEmpty();
     req.checkBody('observation', 'observation is required').notEmpty();
+    req.checkBody('project', 'project is required').notEmpty();
 
     var errors = req.validationErrors();
 
     if (errors === null) {
         req.body.date = new Date().toISOString();
         req.body.id = id;
+        req.body.status = 'active';
 
-        fs.appendFile(observationsFile, JSON.stringify(req.body) + '\n', function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('The Earthwatchers ' + req.body.user + ' observation was saved at ' + req.body.date);
-            }
+        dbObservations.insert(req.body, function(err, count){
+            console.log('new observation is saved');
+            res.status(HttpStatus.CREATED).send(req.body);
         });
-
-        // send back complete resource 
-        res.status(HttpStatus.CREATED).send(req.body);
     } else {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }
 });
+
+
+router.delete('/observations/:id', function (req, res) {
+    var id = req.params.id;
+    console.log('delete id: ' + id);
+
+    dbObservations.update(function(doc) {
+        if (doc.id === id && doc.status === 'active'){
+            doc.status='cancelled';
+        }
+
+        return doc;
+    }, function(error,count){
+        res.status(HttpStatus.OK).send(req.body);
+    }
+    );
+
+});
+
 
 router.put('/observations', jsonParser, function (req, res) {
     req.checkBody('id', 'Id is required').notEmpty();
@@ -166,31 +147,25 @@ router.put('/observations', jsonParser, function (req, res) {
     req.checkBody('lon', 'lon is required').notEmpty();
 
     var errors = req.validationErrors();
-    console.log ('http put rocks!');
 
     if (errors === null) {
         var id = req.body.id;
+        console.log('update observation: ' + id);
 
-        if (fs.exists(observationsFile, function(res){
-            lineReader.eachLine(observationsFile, function (line, last) {
-                console.log('line:'+line);
-                var json = JSON.parse(line);
-                if(json.id===id){
-                    json.lat=req.body.lat;
-                    json.lon=req.body.lon;
-                    json.date=new Date().toISOString();
+        dbObservations.update(function(doc) {
+            if (doc.id === id){
+                doc.date = new Date().toISOString();
+                doc.lat=req.body.lat;
+                doc.lon=req.body.lon;
+            }
 
-                    //and now save
-                    console.log('fix it!');
-                    //fs.writeFile(observationsFile,JSON.stringify(json)+'\n', function(err) {
-                    //    err || console.log('Data replaced!', json);
-                    //});
-                }
-            });
-        }));
+            return doc;
+        }, function(error,count){
+            res.status(HttpStatus.OK).send(req.body);
+        }
+        );
 
-        // send back complete resource 
-        res.status(HttpStatus.OK).send(req.body);
+
     } else {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }
@@ -203,3 +178,6 @@ app.use(express.static(path.join(__dirname, 'app')));
 var server = app.listen(port, host);
 module.exports = server;
 console.log('Earthwatchers server started on port http://' + host + ':' + port);
+
+
+

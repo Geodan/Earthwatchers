@@ -106,6 +106,9 @@ function onMapClick(e) {
         inputButton.onclick = function () {
             // alert('delete: ' + newMarker.id);
             map.removeLayer(newMarker);
+            deleteObservation(newMarker.id, function(res){
+                alert('marker is deleted');
+            });
         };
         div.appendChild(inputButton);
         newMarker.bindPopup(div);
@@ -129,7 +132,7 @@ function onMapClick(e) {
 
         newMarker.addTo(map);
 
-        postObservation(selectedObservationType.type, user, geohexCode, e.latlng.lng, e.latlng.lat, function (resp) {
+        postObservation(selectedObservationType.type, user, geohexCode, e.latlng.lng, e.latlng.lat, project.properties.Name, function (resp) {
             newMarker.id = resp.id;
         });
     }
