@@ -11,12 +11,17 @@
     },
     {
         "type": "road",
-        "name": "Road Construction",
+        "name": "road",
         "icon": "road.png"
     },
     {
         "type": "other",
         "name": "other",
         "icon": "road.png"
+    },
+    {
+        "type": "airplane",
+        "name": "airplane",
+        "icon": "airplane.png"
     }
 ]
