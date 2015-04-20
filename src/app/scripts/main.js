@@ -43,10 +43,36 @@ function timeSliderChanged(ctrl) {
     }
 }
 
-function next() {
+function getObservationsCount(){
+    var i=0;
+    map.eachLayer(function (layer) {
+        if(layer.id!=null) {
+            i++;
+        }
+    });
+    return i;
+}
+
+function gotoNextHexagon(){
     var url = location.href.replace(location.hash, '#/' + projectName);
     location.href = url;
     window.location.reload();
+}
+
+
+function next() {
+    // todo count observation
+    var observations = getObservationsCount();
+    if(observations===0){
+        // send message that nothing is observed
+        postObservation('clear', user, geohexCode,0,0, project.properties.Name, function (resp) {
+            gotoNextHexagon();
+        });
+    }
+    else{
+        gotoNextHexagon()        
+    }
+
 }
 
 function toggleSatelliteType(sel) {

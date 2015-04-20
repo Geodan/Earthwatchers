@@ -114,7 +114,7 @@ router.post('/observations', jsonParser, function (req, res) {
         req.body.status = 'active';
 
         dbObservations.insert(req.body, function(err, count){
-            console.log('new observation is saved');
+            console.log(req.body.date + ': added user: ' + req.body.user + ', hexagon: ' + req.body.geohex + ', project: ' + req.body.project + ', observation: ' + req.body.observation );
             res.status(HttpStatus.CREATED).send(req.body);
         });
     } else {
