@@ -12,7 +12,6 @@ function getSatelliteImageData(bbox, imagetype, callback) {
     request.send();
 }
 
-
 function getHexagon(geohex, username, callback) {
     var url = 'api/hexagons/' + geohex + '?user=' + username;
     var request = new XMLHttpRequest();
@@ -27,15 +26,14 @@ function getHexagon(geohex, username, callback) {
     request.send();
 }
 
-
 function loadJSON(file, callback) {   
     var request = new XMLHttpRequest();
     request.overrideMimeType("application/json");
     request.open('GET', file, true); // Replace 'my_data' with the path to your file
     request.onreadystatechange = function () {
           if (request.readyState == 4 && request.status == "200") {
-            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-            callback(request.responseText);
+            var response = JSON.parse(request.responseText);
+            callback(response);
           }
     };
     request.send(null);  
@@ -66,7 +64,7 @@ function loadJSON(file, callback) {
     request.send(obs);
 }
 
- function updateObservationPosition(id,longitude,latitude,callback) {
+function updateObservationPosition(id,longitude,latitude,callback) {
     var body = JSON.stringify({
         "id": id,
         "lat": latitude,
@@ -76,8 +74,6 @@ function loadJSON(file, callback) {
     var request = new XMLHttpRequest();
     request.open('PUT', url, true);
     request.setRequestHeader("Content-type", "application/json");
-    // saveObservation(obs);
-
     request.onload = function () {
         if (request.status == 201) {
             var res = JSON.parse(request.responseText);
@@ -85,7 +81,7 @@ function loadJSON(file, callback) {
         }
     };
     request.send(body);
- }
+}
 
 function deleteObservation(id,callback) {
     var url = 'api/observations/' + id;
@@ -94,10 +90,9 @@ function deleteObservation(id,callback) {
 
     request.onload = function () {
         if (request.status == 200) {
-            callback(res);
+            //var res = JSON.parse(request.responseText);
+            callback(null);
         }
     };
     request.send(null);
  }
-
-

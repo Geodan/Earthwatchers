@@ -207,6 +207,10 @@ function initializeRouting(){
     Path.listen();
 }
 
+function drawObservations(observations){
+    // alert('draw obs: ' + observations.length);
+}
+
 
 (function (window, document, L) {
     'use strict';
@@ -215,10 +219,8 @@ function initializeRouting(){
 
     initUserPanel();
 
-    loadJSON('data/observationTypes.json', function (typesResponse) {
-        var observationTypes = JSON.parse(typesResponse);
-        loadJSON('data/projects.geojson', function (response) {
-            var projects = JSON.parse(response);
+    loadJSON('data/observationTypes.json', function (observationTypes) {
+        loadJSON('data/projects.geojson', function (projects) {
             if (projectName === null) {
                 projectName = defaultProject;
             }
@@ -234,42 +236,43 @@ function initializeRouting(){
                 location.hash = '#/' + projectName + '/' + geohexCode;
             }
 
-            alert('retrieve observations for hexagon ' + geohexCode);
+            loadJSON('/api/observations/' + projectName + '/' + geohexCode + '/' + user,function(observations){
+                if(observations.length > 0){
+                    drawObservations(observations);
+                }
+                satelliteTypeSelectionChanged({value: defaultSatelliteType});
 
-            // fire onchange event of first combobox
-            satelliteTypeSelectionChanged({value: defaultSatelliteType});
+                map = L.map('map', {
+                    zoomControl: false,
+                    attributionControl: false
+                });
+                map.on('click', onMapClick);
 
-            map = L.map('map', {
-                zoomControl: false,
-                attributionControl: false
+                var myStyle = {
+                    'color': '#000000',
+                    'weight': 5,
+                    'opacity': 0.65,
+                    fillOpacity: 0
+                };
+
+                var polygon = getGeohexPolygon(geohexCode, myStyle);
+                var centerHex = polygon.getBounds().getCenter();
+                map.setView(centerHex, startZoomLevel, {
+                    animation: true
+                });
+
+                map.addControl(new L.Control.ZoomMin({
+                    position: 'topright', startLevel: startZoomLevel, startCenter: centerHex
+                }));
+
+                L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
+
+                var ggl2 = new L.Google('satellite');
+                map.addLayer(ggl2);
+                map.addLayer(polygon);
+
+                L.geoJson(projects, {fill: false}).addTo(map);
             });
-            map.on('click', onMapClick);
-
-            var myStyle = {
-                'color': '#000000',
-                'weight': 5,
-                'opacity': 0.65,
-                fillOpacity: 0
-            };
-
-            var polygon = getGeohexPolygon(geohexCode, myStyle);
-            var centerHex = polygon.getBounds().getCenter();
-            map.setView(centerHex, startZoomLevel, {
-                animation: true
-            });
-
-            map.addControl(new L.Control.ZoomMin({
-                position: 'topright', startLevel: startZoomLevel, startCenter: centerHex
-            }));
-
-            L.control.scale({imperial: false, position: 'topleft'}).addTo(map);
-
-            var ggl2 = new L.Google('satellite');
-            map.addLayer(ggl2);
-            map.addLayer(polygon);
-
-            L.geoJson(projects, {fill: false}).addTo(map);
-            // todo: calculate hexagon based on project areas
         });
     });
 
