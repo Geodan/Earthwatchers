@@ -58,9 +58,16 @@ function nocache(req, res, next) {
   next();
 }
 
-router.get('/hexagons/:id', nocache, function (req, res) {
-    var hex = req.params.id;
-    var username = req.query.user;
+router.get('/observations/:project/:geohexcode/:username', nocache, function (req, res) {
+    // sampleurl : observations/Borneo/PO2632/bert
+    var project = req.params.project;
+    var geohexcode = req.params.geohexcode;
+    var username = req.params.username;
+    console.log('request observations for project: ' + project + ', geohexcode:' + geohexcode + ', username: ' + username );
+
+    // read observations from file
+    // dbObservations
+    res.status(HttpStatus.OK).send();
     // get stats for the given hexagon
 });
 
@@ -111,7 +118,6 @@ router.post('/observations', jsonParser, function (req, res) {
     if (errors === null) {
         req.body.date = new Date().toISOString();
         req.body.id = id;
-        req.body.status = 'active';
 
         dbObservations.insert(req.body, function(err, count){
             console.log(req.body.date + ': added user: ' + req.body.user + ', hexagon: ' + req.body.geohex + ', project: ' + req.body.project + ', observation: ' + req.body.observation );
@@ -125,21 +131,14 @@ router.post('/observations', jsonParser, function (req, res) {
 
 router.delete('/observations/:id', function (req, res) {
     var id = req.params.id;
-    console.log('delete id: ' + id);
-
-    dbObservations.update(function(doc) {
-        if (doc.id === id && doc.status === 'active'){
-            doc.status='cancelled';
-        }
-
-        return doc;
+    console.log('delete observation id: ' + id);
+    dbObservations.remove(function(doc) {
+        return (doc.id === id);
     }, function(error,count){
         res.status(HttpStatus.OK).send(req.body);
     }
     );
-
 });
-
 
 router.put('/observations', jsonParser, function (req, res) {
     req.checkBody('id', 'Id is required').notEmpty();

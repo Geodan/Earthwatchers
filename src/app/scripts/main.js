@@ -193,10 +193,7 @@ function changeName(event) {
     return false;
 }
 
-(function (window, document, L) {
-    'use strict';
-    L.Icon.Default.imagePath = 'images/';
-
+function initializeRouting(){
     Path.map("#/:project").to(function () {
         // sample: #/borneo
         geohexCode = null;
@@ -208,6 +205,13 @@ function changeName(event) {
         geohexCode = this.params['hex'];
     });
     Path.listen();
+}
+
+
+(function (window, document, L) {
+    'use strict';
+    L.Icon.Default.imagePath = 'images/';
+    initializeRouting();
 
     initUserPanel();
 
@@ -229,6 +233,8 @@ function changeName(event) {
                 geohexCode = getRandomHexagon(project, defaultGeohexLevel);
                 location.hash = '#/' + projectName + '/' + geohexCode;
             }
+
+            alert('retrieve observations for hexagon ' + geohexCode);
 
             // fire onchange event of first combobox
             satelliteTypeSelectionChanged({value: defaultSatelliteType});
