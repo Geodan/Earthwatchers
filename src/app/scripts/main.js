@@ -133,7 +133,7 @@ function onMapClick(e) {
             // alert('delete: ' + newMarker.id);
             map.removeLayer(newMarker);
             deleteObservation(newMarker.id, function(res){
-                alert('marker is deleted');
+                // alert('marker is deleted');
             });
         };
         div.appendChild(inputButton);
