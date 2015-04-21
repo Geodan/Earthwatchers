@@ -65,10 +65,11 @@ router.get('/observations/:project/:geohexcode/:username', nocache, function (re
     var username = req.params.username;
     console.log('request observations for project: ' + project + ', geohexcode:' + geohexcode + ', username: ' + username );
 
-    // read observations from file
-    // dbObservations
-    res.status(HttpStatus.OK).send();
-    // get stats for the given hexagon
+    dbObservations.all(function(doc) {
+        return (doc.project === project && doc.geohex === geohexcode && doc.user === username);
+    }, function(error,selected){
+        res.status(HttpStatus.OK).send(selected);
+    });
 });
 
 // spatial select the stalliteimages that intersect with client envelope
