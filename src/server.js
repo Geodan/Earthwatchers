@@ -30,16 +30,12 @@ app.disable('x-powered-by');
 dotenv.load();
 
 var port = process.env.PORT || 3000;
-var host = process.env.LOCALHOST || 'localhost';
-console.log('host: ' + process.env.localhost);
-
 var dbObservations=nosql.load('./db/ew_observations.nosql');
 dbObservations.description('Earthwatchers observations.');
 
 var router = express.Router();
 
 router.get('/', function (req, res) {
-    // todo: return root document
     res.json({
         message: 'Earthwatchers serverside'
     });
@@ -175,9 +171,9 @@ router.put('/observations', jsonParser, function (req, res) {
 
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));
-var server = app.listen(port, host);
+var server = app.listen(port);
 module.exports = server;
-console.log('Earthwatchers server started on port http://' + host + ':' + port);
+console.log('Earthwatchers server started on port ' + port);
 
 
 
