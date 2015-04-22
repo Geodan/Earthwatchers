@@ -17,41 +17,6 @@ var dragMarkerPosition = null;
 var projectName = null;
 
 
-function timeSliderChanged(ctrl) {
-    if (satelliteImages.features.length > 0) {
-        var day = satelliteImages.features[ctrl.value].properties.Published;
-        var label = document.getElementById('rangeValLabel');
-        label.innerHTML = day;
-        label.className = 'value' + ctrl.value;
-
-        var earthwatchersLayer = findLayerByType('earthWatchers');
-
-        var s = getSatelliteImageByDate(satelliteImages, day);
-        var url = s.properties.UrlTileCache + '/{z}/{x}/{y}.png';
-        var maxLevel = s.properties.MaxLevel;
-        var newLayer = L.tileLayer(url, {
-            tms: true,
-            maxZoom: maxLevel,
-            type: 'earthWatchers'
-        });
-        map.addLayer(newLayer);
-
-        if (earthwatchersLayer !== null) {
-            map.removeLayer(earthwatchersLayer);
-        }
-    }
-}
-
-function getObservationsCount(){
-    var i=0;
-    map.eachLayer(function (layer) {
-        if(layer.id!=null) {
-            i++;
-        }
-    });
-    return i;
-}
-
 function gotoNextHexagon(){
     var url = location.href.replace(location.hash, '#/' + projectName);
     location.href = url;
@@ -72,72 +37,9 @@ function next() {
     }
 }
 
-function toggleSatelliteType(sel) {
-    var labels = {
-            Landsat: 'Landsat 8',
-            Sentinel: 'Sentinel 1'
-        },
-        newtype = sel.value === 'Landsat' ? 'Sentinel' : 'Landsat';
-
-    // change map layer
-    satelliteTypeSelectionChanged({value: newtype});
-
-    // update satellite type value
-    sel.parentNode.classList.remove(sel.value.toLowerCase());
-    sel.setAttribute('value', newtype);
-    sel.parentNode.classList.add(sel.value.toLowerCase());
-
-    // update satellite type label
-    document.getElementById('satTypeLabel').innerText = labels[newtype];
-}
-
-function satelliteTypeSelectionChanged(sel) {
-    var currentImageType = sel.value;
-    var polygon = getGeohexPolygon(geohexCode);
-    var bbox = polygon.getBounds().toBBoxString();
-    getSatelliteImageData(bbox, currentImageType, function (resp) {
-        satelliteImages = resp;
-        var sel = document.getElementById('timeSlider');
-        satelliteImages.features.sort(compare);
-        sel.onchange();
-    });
-}
-
 function setObservationType(observationType) {
     selectedObservationType = observationType;
     styleObservationTypeButtons(projectObservationTypes, observationType.type);
-}
-
-function getObservationMarker(map, lon,lat,geohexcode, observation,id,observationType){
-    var markerIcon = L.icon({
-        iconUrl: "./images/" + observationType.icon,
-        iconSize: [30, 30],
-        iconAnchor: [15, 15],
-        popupAnchor: [0, -15]
-    });
-    var ll=new L.LatLng(lat, lon);
-    var newMarker = new L.marker(ll, {icon: markerIcon, draggable: true});
-    newMarker.id = id;
-    var div = getPopupContent(map, newMarker,observation);
-    newMarker.bindPopup(div);
-    newMarker.on('dragend', function (event) {
-        var marker = event.target;
-        var position = marker.getLatLng();
-        var isInside = isPointInHexagon(geohexcode, position);
-        if (isInside) {
-            updateObservationPosition(marker.id, position.lng, position.lat, function (resp) {
-                // do nothing for now
-            });
-        }
-        else {
-            newMarker.setLatLng(dragMarkerPosition);
-        }
-
-    });
-    newMarker.on('dragstart', function (event) {
-        dragMarkerPosition = event.target.getLatLng();
-    });
-    return newMarker;
 }
 
 function onMapClick(e) {
@@ -149,24 +51,6 @@ function onMapClick(e) {
             newMarker.addTo(map);
         });
     }
-}
-
-function changeName(event) {
-    var form = event.target;
-    var newName = form.children[0].value;
-
-    // stop from saving empty name
-    if (!newName) return false;
-
-    user = newName;
-    updateUsername(newName);
-
-    // clean and hide form
-    form.parentElement.classList.add('hide');
-    form.children[0].value = '';
-
-    updateUserInfo();
-    return false;
 }
 
 function initializeRouting(){
@@ -182,28 +66,6 @@ function initializeRouting(){
     });
     Path.listen();
 }
-
-function drawObservations(observations,observationTypes){
-    for(var i=0;i<observations.length;i++){
-        var observation = observations[i];
-        if(observation.observation!='clear'){
-            var observationType = getObservationType(observationTypes,observation.observation);
-            var newMarker = getObservationMarker(map, observation.lon,observation.lat,observation.geohex, observation.observation,observation.id,observationType);
-            newMarker.addTo(map);
-        }
-    }
-}
-
-function getObservationType(observationTypes, type){
-    for(var i=0;i<observationTypes.length;i++){
-        var observationType = observationTypes[i];
-        if(observationType.type === type){
-            return observationType;
-        }
-    }
-    return null;
-}
-
 
 (function (window, document, L) {
     'use strict';
@@ -248,7 +110,6 @@ function getObservationType(observationTypes, type){
                 if(observations.length > 0){
                     drawObservations(observations,observationTypes);
                 }
-
 
                 var polygon = getGeohexPolygon(geohexCode, myStyle);
                 var centerHex = polygon.getBounds().getCenter();

@@ -33,3 +33,22 @@ function compare(a, b) {
 function random(low, high) {
     return Math.random() * (high - low) + low;
 }
+
+
+function changeName(event) {
+    var form = event.target;
+    var newName = form.children[0].value;
+
+    // stop from saving empty name
+    if (!newName) return false;
+
+    user = newName;
+    updateUsername(newName);
+
+    // clean and hide form
+    form.parentElement.classList.add('hide');
+    form.children[0].value = '';
+
+    updateUserInfo();
+    return false;
+}
