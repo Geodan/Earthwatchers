@@ -8,5 +8,5 @@ RUN apt-get update && \
 WORKDIR /src
 ADD . /
 RUN cd /src  && npm install
-EXPOSE  8080
+EXPOSE  3000
 CMD ["node", "/src/server.js"]
