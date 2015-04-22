@@ -45,6 +45,7 @@ function drawHexagon(map,geohexCode){
     map.setView(centerHex, startZoomLevel, {
         animation: true
     });
+    polygon.name='hexagon';
     map.addLayer(polygon);
     return polygon;
 }

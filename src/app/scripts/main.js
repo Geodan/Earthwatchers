@@ -44,11 +44,26 @@ function setObservationType(observationType) {
 function onMapClick(e) {
     var isInside = isPointInHexagon(geohexCode, e.latlng);
     if (isInside) {
+        var observations = getObservationsCount();
 
         postObservation(selectedObservationType.type, user, geohexCode, e.latlng.lng, e.latlng.lat, project.properties.Name, function (resp) {
             var newMarker = getObservationMarker(map,e.latlng.lng,e.latlng.lat,geohexCode, selectedObservationType.name,resp.id,selectedObservationType);
             newMarker.addTo(map);
         });
+
+        if(observations===0){
+            setHexagonColor('hasObservations');
+        }
+    }
+}
+
+function setHexagonColor(status){
+    var layer = findLayerByName('hexagon');
+    if(status==='hasObservations'){
+        layer.setStyle({color: '#FF0000'});;
+    }
+    else if(status ==='clear'){
+        layer.setStyle({color: '#00FF00'});;
     }
 }
 
@@ -103,7 +118,13 @@ function initializeRouting(){
                 var centerHex = polygon.getBounds().getCenter();
 
                 if(observations.length > 0){
-                    drawObservations(observations,observationTypes);
+                    if(observations[0].observation === 'clear'){
+                        setHexagonColor('clear');
+                    }
+                    else{
+                        drawObservations(observations,observationTypes);
+                        setHexagonColor('hasObservations');
+                    }
                 }
 
                 map.addControl(new L.Control.ZoomMin({

@@ -40,6 +40,10 @@ function getPopupContent(map, marker,observation){
     inputButton.onclick = function () {
         map.removeLayer(marker);
         deleteObservation(marker.id, function(res){
+            var obs=getObservationsCount();
+            if(obs===0){
+                setHexagonColor('clear');
+            }
         });
     };
     div.appendChild(inputButton);

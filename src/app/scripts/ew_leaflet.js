@@ -9,3 +9,15 @@ function findLayerByType(type) {
     });
     return result;
 }
+
+function findLayerByName(name) {
+    var result = null;
+    map.eachLayer(function (layer) {
+        if (layer.name !== null) {
+            if (layer.name === name) {
+                result = layer;
+            }
+        }
+    });
+    return result;
+}
