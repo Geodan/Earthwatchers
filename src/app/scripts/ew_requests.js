@@ -75,7 +75,7 @@ function updateObservationPosition(id,longitude,latitude,callback) {
     request.open('PUT', url, true);
     request.setRequestHeader("Content-type", "application/json");
     request.onload = function () {
-        if (request.status == 201) {
+        if (request.status == 200) {
             var res = JSON.parse(request.responseText);
             callback(res);
         }

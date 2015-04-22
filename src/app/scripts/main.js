@@ -22,7 +22,6 @@ function timeSliderChanged(ctrl) {
         var day = satelliteImages.features[ctrl.value].properties.Published;
         var label = document.getElementById('rangeValLabel');
         label.innerHTML = day;
-        // update label positioning
         label.className = 'value' + ctrl.value;
 
         var earthwatchersLayer = findLayerByType('earthWatchers');
@@ -111,6 +110,23 @@ function setObservationType(observationType) {
     styleObservationTypeButtons(projectObservationTypes, observationType.type);
 }
 
+function getPopupContent(marker,observation){
+    var div = document.createElement('div');
+    div.innerHTML = observation + '<br/>';
+
+    var inputButton = document.createElement('input');
+    inputButton.className = 'marker-delete-button';
+    inputButton.value = 'remove';
+    inputButton.type = 'button';
+    inputButton.onclick = function () {
+        map.removeLayer(marker);
+        deleteObservation(marker.id, function(res){
+        });
+    };
+    div.appendChild(inputButton);
+    return div;
+}
+
 function getObservationMarker( lon,lat,geohexcode, observation,id,observationType){
 
     var markerIcon = L.icon({
@@ -122,19 +138,7 @@ function getObservationMarker( lon,lat,geohexcode, observation,id,observationTyp
     var ll=new L.LatLng(lat, lon);
     var newMarker = new L.marker(ll, {icon: markerIcon, draggable: true});
     newMarker.id = id;
-    var div = document.createElement('div');
-    div.innerHTML = observation + '<br/>';
-
-    var inputButton = document.createElement('input');
-    inputButton.className = 'marker-delete-button';
-    inputButton.value = 'remove';
-    inputButton.type = 'button';
-    inputButton.onclick = function () {
-        map.removeLayer(newMarker);
-        deleteObservation(newMarker.id, function(res){
-        });
-    };
-    div.appendChild(inputButton);
+    var div = getPopupContent(newMarker,observation);
     newMarker.bindPopup(div);
     newMarker.on('dragend', function (event) {
         var marker = event.target;
@@ -142,7 +146,7 @@ function getObservationMarker( lon,lat,geohexcode, observation,id,observationTyp
         var isInside = isPointInHexagon(geohexcode, position);
         if (isInside) {
             updateObservationPosition(marker.id, position.lng, position.lat, function (resp) {
-                alert(resp);
+                // do nothing for now
             });
         }
         else {
