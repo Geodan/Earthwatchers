@@ -5,8 +5,8 @@ RUN apt-get update && \
     curl -sL https://deb.nodesource.com/setup | sudo bash - && \
     apt-get -y install python build-essential nodejs
 
-RUN npm install
 WORKDIR /src
-ADD . /src
+ADD . /
+RUN cd /src  && npm install
 EXPOSE  8080
 CMD ["node", "/src/server.js"]
