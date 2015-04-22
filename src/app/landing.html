@@ -10,8 +10,7 @@ Active projects:
 <div id='projects'></div>
 <script>
     var projectsDiv = document.getElementById('projects');
-    loadJSON('data/projects.geojson', function(response) {
-        var projects = JSON.parse(response);
+    loadJSON('data/projects.geojson', function(projects) {
         for(var i=0;i<projects.features.length;i++){
             var project = projects.features[i];
             var url = location.origin + '/#/' + project.properties.Name;
