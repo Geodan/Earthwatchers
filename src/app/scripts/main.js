@@ -16,7 +16,6 @@ var projectObservationTypes = null;
 var dragMarkerPosition = null;
 var projectName = null;
 
-
 function gotoNextHexagon(){
     var url = location.href.replace(location.hash, '#/' + projectName);
     location.href = url;
@@ -100,22 +99,12 @@ function initializeRouting(){
                 });
                 map.on('click', onMapClick);
 
-                var myStyle = {
-                    'color': '#000000',
-                    'weight': 5,
-                    'opacity': 0.65,
-                    fillOpacity: 0
-                };
+                var polygon = drawHexagon(map,geohexCode);
+                var centerHex = polygon.getBounds().getCenter();
 
                 if(observations.length > 0){
                     drawObservations(observations,observationTypes);
                 }
-
-                var polygon = getGeohexPolygon(geohexCode, myStyle);
-                var centerHex = polygon.getBounds().getCenter();
-                map.setView(centerHex, startZoomLevel, {
-                    animation: true
-                });
 
                 map.addControl(new L.Control.ZoomMin({
                     position: 'topright', startLevel: startZoomLevel, startCenter: centerHex
@@ -125,7 +114,6 @@ function initializeRouting(){
 
                 var ggl2 = new L.Google('satellite');
                 map.addLayer(ggl2);
-                map.addLayer(polygon);
 
                 L.geoJson(projects, {fill: false}).addTo(map);
             });

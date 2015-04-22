@@ -30,3 +30,21 @@ function isPointInHexagon(geohexcode, latlng){
     var isInside = turf.inside(pt, poly.toGeoJSON());
     return isInside;
 }
+
+
+function drawHexagon(map,geohexCode){
+    var myStyle = {
+        'color': '#000000',
+        'weight': 5,
+        'opacity': 0.65,
+        fillOpacity: 0
+    };
+
+    var polygon = getGeohexPolygon(geohexCode, myStyle);
+    var centerHex = polygon.getBounds().getCenter();
+    map.setView(centerHex, startZoomLevel, {
+        animation: true
+    });
+    map.addLayer(polygon);
+    return polygon;
+}
