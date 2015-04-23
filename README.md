@@ -10,6 +10,8 @@ Permalink, for example to project 'Borneo', hexagon PO2662:
 
 http://earthwatchers.azurewebsites.net/#/Borneo/PO2662
 
+Issues: https://huboard.com/Geodan/Earthwatchers/
+
 # Technology stack
 
 Server side: Node.js with Express, Dotenv, Turf, NoSql
@@ -32,12 +34,21 @@ cd earthwatchers\src
 npm install
 
 node server.js
+
+http://localhost:3000
 ```
 
-# Start testing:
+# Docker
 
-http://localhost:3000/
+```
+docker pull bertt/earthwatchers
 
-# Team communication
+docker run -p 3000:3000 bertt/earthwatchers
+
+http://localhost:3000
+```
+
+
+# Communication
 
 Slack room:  https://earthwatchers.slack.com
