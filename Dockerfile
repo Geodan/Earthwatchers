@@ -7,6 +7,8 @@ RUN apt-get update && \
 
 WORKDIR /src
 ADD . /
-RUN cd /src  && npm install && bower install
+RUN npm install -g bower
+RUN cd /src  && npm install
+
 EXPOSE  3000
 CMD ["node", "/src/server.js"]
