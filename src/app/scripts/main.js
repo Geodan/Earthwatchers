@@ -118,7 +118,7 @@ function initializeRouting(){
                 var centerHex = polygon.getBounds().getCenter();
 
                 if(observations.length > 0){
-                    if(observations[0].observation === 'clear'){
+                    if(observations.length === 1 && observations[0].observation === 'clear'){
                         setHexagonColor('clear');
                     }
                     else{
