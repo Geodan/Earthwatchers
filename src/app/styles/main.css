@@ -341,4 +341,21 @@ input[type=range]::-ms-tooltip {
     font-weight: bold;
 }
 
+.message {
+    color: #ffffff;
+    background-color: #0086b3;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+}
 
+.messagesShown {
+    transition: opacity 500ms;
+    opacity: 1;
+}
+
+.messagesNotShown {
+    opacity: 0;
+}

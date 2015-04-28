@@ -23,16 +23,21 @@ function gotoNextHexagon(){
 }
 
 function next() {
+    var messageDiv = document.getElementById('messageDiv');
     // todo count observation
     var observations = getObservationsCount();
-    if(observations===0){
-        // send message that nothing is observed
-        postObservation('clear', user, geohexCode,0,0, project.properties.Name, function (resp) {
-            gotoNextHexagon();
-        });
+    if (observations === 0) {
+        //TODO ??? send message that nothing is observed
+        messageDiv.innerHTML = "This hexagon is saved with no observations...";
+        messageDiv.className = "message messagesShown";
+        window.setTimeout(gotoNextHexagon, 750);
     }
-    else{
-        gotoNextHexagon()        
+    else {
+        postObservation('clear', user, geohexCode, 0, 0, project.properties.Name, function (resp) {
+            messageDiv.innerHTML = "This hexagon is saved with " + observations + " observations...";
+            messageDiv.className = "message messagesShown";
+            window.setTimeout(gotoNextHexagon, 750);
+        });
     }
 }
 
