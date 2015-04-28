@@ -27,17 +27,17 @@ function next() {
     // todo count observation
     var observations = getObservationsCount();
     if (observations === 0) {
-        //TODO ??? send message that nothing is observed
-        messageDiv.innerHTML = "This hexagon is saved with no observations...";
-        messageDiv.className = "message messagesShown";
-        window.setTimeout(gotoNextHexagon, 750);
-    }
-    else {
         postObservation('clear', user, geohexCode, 0, 0, project.properties.Name, function (resp) {
-            messageDiv.innerHTML = "This hexagon is saved with " + observations + " observations...";
+            //TODO ??? send message that nothing is observed
+            messageDiv.innerHTML = "This hexagon is saved with no observations...";
             messageDiv.className = "message messagesShown";
             window.setTimeout(gotoNextHexagon, 750);
         });
+    }
+    else {
+        messageDiv.innerHTML = "This hexagon is saved with " + observations + " observation" + (observations === 1 ? "..." : "s...");
+        messageDiv.className = "message messagesShown";
+        window.setTimeout(gotoNextHexagon, 750);
     }
 }
 
