@@ -135,6 +135,7 @@ html {
     left: 80px;
     bottom: 0px;
     width: 150px;
+    height: 73px;
     padding: 10px 5px;
     background: rgba(0,0,0,0.5);
 }
@@ -156,6 +157,13 @@ input[type=range] {
     -webkit-appearance: none;
     margin: 13px 0;
     width: 100%;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    /* IE10+ specific styles go here */
+    input[type=range] {
+        margin: 0px;
+    }
 }
 
 input[type=range]:focus {

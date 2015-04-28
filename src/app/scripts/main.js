@@ -27,8 +27,8 @@ function next() {
     // todo count observation
     var observations = getObservationsCount();
     if (observations === 0) {
+        //post/save there are no observations for this hexagon
         postObservation('clear', user, geohexCode, 0, 0, project.properties.Name, function (resp) {
-            //TODO ??? send message that nothing is observed
             messageDiv.innerHTML = "This hexagon is saved with no observations...";
             messageDiv.className = "message messagesShown";
             window.setTimeout(gotoNextHexagon, 750);
