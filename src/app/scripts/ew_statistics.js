@@ -44,3 +44,9 @@ function setTableCell(tableCell, value) {
     var cell = document.getElementById(tableCell);
     cell.innerHTML = value;
 }
+
+function loadUserStatistics(projectName, user) {
+    loadJSON('/api/observations/' + projectName + '/' + user, function (statistics) {
+        document.getElementById('userstatistics').innerHTML = 'Hexagons: ' + statistics.hexagons + '<br/>Observations:' + statistics.observations;
+    });
+}

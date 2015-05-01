@@ -30,7 +30,7 @@ app.disable('x-powered-by');
 dotenv.load();
 
 var port = process.env.PORT || 3000;
-var dbObservations=nosql.load('./db/ew_observations.nosql');
+var dbObservations = nosql.load('./db/ew_observations.nosql');
 dbObservations.description('Earthwatchers observations.');
 
 var router = express.Router();
@@ -58,16 +58,15 @@ router.get('/version', function (req, res) {
 });
 
 function nocache(req, res, next) {
-  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-  res.header('Expires', '-1');
-  res.header('Pragma', 'no-cache');
-  next();
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    next();
 }
 
 router.get('/statistics/:project', nocache, function (req, res) {
     // sampleurl : observations/Borneo
     var projectName = req.params.project;
-    //var username = req.params.username;
     console.log('request observations for project: ' + projectName);
 
     var observations = 0;
@@ -99,18 +98,45 @@ router.get('/statistics/:project', nocache, function (req, res) {
     });
 });
 
+router.get('/observations/:project/:username', nocache, function (req, res) {
+    // sampleurl : observations/Borneo/bert
+    var project = req.params.project;
+    var username = req.params.username;
+    console.log('Request observations for project: ' + project + ', username: ' + username);
 
+    var observations = 0;
+    var hexagons = [];
+
+    dbObservations.each(function (observation) {
+        if (observation.project === project && observation.user === username) {
+            //search for unique hexagons
+            if (arraySearch(hexagons, observation.geohex) === -1) {
+                hexagons.push(observation.geohex);
+            }
+            observations++;
+        }
+    }, function (err) {
+        console.log('observations:' + observations + ', hexagons:' + hexagons.length);
+        var returnObject = {
+            "project": project,
+            "observations": observations,
+            "hexagons": hexagons.length,
+            "user": username
+        };
+        res.status(HttpStatus.OK).send(returnObject);
+    });
+});
 
 router.get('/observations/:project/:geohexcode/:username', nocache, function (req, res) {
     // sampleurl : observations/Borneo/PO2632/bert
     var project = req.params.project;
     var geohexcode = req.params.geohexcode;
     var username = req.params.username;
-    console.log('request observations for project: ' + project + ', geohexcode:' + geohexcode + ', username: ' + username );
+    console.log('request observations for project: ' + project + ', geohexcode:' + geohexcode + ', username: ' + username);
 
-    dbObservations.all(function(doc) {
+    dbObservations.all(function (doc) {
         return (doc.project === project && doc.geohex === geohexcode && doc.user === username);
-    }, function(error,selected){
+    }, function (error, selected) {
         res.status(HttpStatus.OK).send(selected);
     });
 });
@@ -130,7 +156,7 @@ router.get('/satelliteimages', function (req, res) {
         }
         var poly = turf.bboxPolygon(bbox);
 
-        var satelliteimages = fs.readFileSync(__dirname +'/satelliteimages.geojson', 'utf8');
+        var satelliteimages = fs.readFileSync(__dirname + '/satelliteimages.geojson', 'utf8');
         var jsonSatelliteImages = JSON.parse(satelliteimages);
         var selectedSatelliteImages = [];
         for (var f in jsonSatelliteImages.features) {
@@ -149,7 +175,7 @@ router.get('/satelliteimages', function (req, res) {
 });
 
 router.post('/observations', jsonParser, function (req, res) {
-    var id = uuid.v4(); 
+    var id = uuid.v4();
     req.checkBody('user', 'User is required').notEmpty();
     req.checkBody('lat', 'lat is required').notEmpty();
     req.checkBody('lon', 'lon is required').notEmpty();
@@ -163,8 +189,8 @@ router.post('/observations', jsonParser, function (req, res) {
         req.body.date = new Date().toISOString();
         req.body.id = id;
 
-        dbObservations.insert(req.body, function(err, count){
-            console.log(req.body.date + ': added user: ' + req.body.user + ', hexagon: ' + req.body.geohex + ', project: ' + req.body.project + ', observation: ' + req.body.observation );
+        dbObservations.insert(req.body, function (err, count) {
+            console.log(req.body.date + ': added user: ' + req.body.user + ', hexagon: ' + req.body.geohex + ', project: ' + req.body.project + ', observation: ' + req.body.observation);
             res.status(HttpStatus.CREATED).send(req.body);
         });
     } else {
@@ -176,11 +202,11 @@ router.post('/observations', jsonParser, function (req, res) {
 router.delete('/observations/:id', function (req, res) {
     var id = req.params.id;
     console.log('delete observation id: ' + id);
-    dbObservations.remove(function(doc) {
-        return (doc.id === id);
-    }, function(error,count){
-        res.status(HttpStatus.OK).send(req.body);
-    }
+    dbObservations.remove(function (doc) {
+            return (doc.id === id);
+        }, function (error, count) {
+            res.status(HttpStatus.OK).send(req.body);
+        }
     );
 });
 
@@ -195,17 +221,17 @@ router.put('/observations', jsonParser, function (req, res) {
         var id = req.body.id;
         console.log('update observation: ' + id);
 
-        dbObservations.update(function(doc) {
-            if (doc.id === id){
-                doc.date = new Date().toISOString();
-                doc.lat=req.body.lat;
-                doc.lon=req.body.lon;
-            }
+        dbObservations.update(function (doc) {
+                if (doc.id === id) {
+                    doc.date = new Date().toISOString();
+                    doc.lat = req.body.lat;
+                    doc.lon = req.body.lon;
+                }
 
-            return doc;
-        }, function(error,count){
-            res.status(HttpStatus.OK).send(req.body);
-        }
+                return doc;
+            }, function (error, count) {
+                res.status(HttpStatus.OK).send(req.body);
+            }
         );
 
 
@@ -213,7 +239,6 @@ router.put('/observations', jsonParser, function (req, res) {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }
 });
-
 
 
 app.use('/api', router);

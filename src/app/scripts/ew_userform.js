@@ -14,5 +14,7 @@ function updateUserInfo() {
 
     userInfo.innerHTML =
         '<span class="username"> Hi, ' + user + '!</span> ' +
-        '<a class="userhint" onclick="showUserForm();">Change?</a>';
+            '<a class="userhint" onclick="showUserForm();">Change?</a>';
+
+    loadUserStatistics(projectName, user);
 }

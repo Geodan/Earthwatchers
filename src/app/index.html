@@ -25,23 +25,24 @@
     <link rel="shortcut icon" href="/favicon.ico">
 </head>
 <body>
-    <div class="userpanel" id="userpanel">
-        <div id="userinfo">
-        </div>
-        <div class="userform hide" id="userform">
-            <form>
-                <input type="text" name="username" placeholder="Type new name here"/>
-                <button type="submit">Save</button>
-            </form>
-        </div>
+<div class="userpanel" id="userpanel">
+    <div id="userinfo">
     </div>
+    <div class="userform hide" id="userform">
+        <form>
+            <input type="text" name="username" placeholder="Type new name here"/>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div id="userstatistics"></div>
+</div>
 <div class="buttons" id="buttons">
     <button type="button" class="button" onclick="next();" id="btnNext">Next</button>
 </div>
 <div class="group">
     <div class="minimap landsat">
         <button type="button" class="toggleSatelliteType" value='Landsat'
-            onclick="toggleSatelliteType(this);"></button>
+                onclick="toggleSatelliteType(this);"></button>
         <div class="satelliteTypeLabel">
             <label id="satTypeLabel">Landsat 8</label>
         </div>
@@ -49,9 +50,9 @@
     <div class="timerange">
         <label id="rangeValLabel">&nbsp;</label>
         <input type="range" max="2" min="0" id="timeSlider"
-            data-popup-enabled="false"
-            onchange="timeSliderChanged(this);"
-            step="1" name="rangeVal" value="2" />
+               data-popup-enabled="false"
+               onchange="timeSliderChanged(this);"
+               step="1" name="rangeVal" value="2"/>
     </div>
 </div>
 <div class="map-application">
@@ -79,6 +80,7 @@
 <script src="scripts/ew_requests.js"></script>
 <script src="scripts/ew_satelliteimages.js"></script>
 <script src="scripts/ew_projects.js"></script>
+<script src="scripts/ew_statistics.js"></script>
 <script src="scripts/ew_leaflet.js"></script>
 <script src="scripts/ew_utils.js"></script>
 <script src="scripts/ew_geohexcode.js"></script>
@@ -90,7 +92,7 @@
 
 <!-- endbuild -->
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 </body>
 </html>

@@ -111,6 +111,9 @@ function initializeRouting(){
             }
 
             loadJSON('/api/observations/' + projectName + '/' + geohexCode + '/' + user,function(observations){
+
+                loadUserStatistics(projectName, user);
+
                 satelliteTypeSelectionChanged({value: defaultSatelliteType});
 
                 map = L.map('map', {
