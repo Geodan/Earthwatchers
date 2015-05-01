@@ -64,7 +64,7 @@ function nocache(req, res, next) {
   next();
 }
 
-router.get('/observations/:project', nocache, function (req, res) {
+router.get('/statistics/:project', nocache, function (req, res) {
     // sampleurl : observations/Borneo
     var projectName = req.params.project;
     //var username = req.params.username;

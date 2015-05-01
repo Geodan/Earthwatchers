@@ -33,7 +33,7 @@ function createProjectLink(projectName) {
 }
 
 function loadStatistics(projectName) {
-    loadJSON('/api/observations/' + projectName, function (projectStatistics) {
+    loadJSON('/api/statistics/' + projectName, function (projectStatistics) {
         setTableCell(projectStatistics.project + '3', projectStatistics.hexagons.length);
         setTableCell(projectStatistics.project + '4', projectStatistics.users.length);
         setTableCell(projectStatistics.project + '5', projectStatistics.observations);
