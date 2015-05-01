@@ -35,6 +35,16 @@ dbObservations.description('Earthwatchers observations.');
 
 var router = express.Router();
 
+//TODO where to put this
+function arraySearch(arr, val) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === val) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 router.get('/', function (req, res) {
     res.json({
         message: 'Earthwatchers serverside'
@@ -53,6 +63,43 @@ function nocache(req, res, next) {
   res.header('Pragma', 'no-cache');
   next();
 }
+
+router.get('/observations/:project', nocache, function (req, res) {
+    // sampleurl : observations/Borneo
+    var projectName = req.params.project;
+    //var username = req.params.username;
+    console.log('request observations for project: ' + projectName);
+
+    var observations = 0;
+    var users = [];
+    var hexagons = [];
+
+    dbObservations.each(function (observation) {
+        if (observation.project === projectName) {
+            //search for unique users
+            if (arraySearch(users, observation.user) === -1) {
+                users.push(observation.user);
+            }
+
+            //search for unique hexagons
+            if (arraySearch(hexagons, observation.geohex) === -1) {
+                hexagons.push(observation.geohex);
+            }
+            observations++;
+        }
+    }, function (err) {
+        console.log('observations:' + observations + ', hexagons:' + hexagons.length + ', users: ' + users.length);
+        var returnObject = {
+            "project": projectName,
+            "observations": observations,
+            "hexagons": hexagons,
+            "users": users
+        };
+        res.status(HttpStatus.OK).send(returnObject);
+    });
+});
+
+
 
 router.get('/observations/:project/:geohexcode/:username', nocache, function (req, res) {
     // sampleurl : observations/Borneo/PO2632/bert
