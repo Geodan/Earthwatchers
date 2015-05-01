@@ -129,7 +129,7 @@ html {
     font-family: sans-serif;
 }
 
-/* timeslider css */
+/* timeSlider css */
 .timerange {
     position: absolute;
     left: 80px;
@@ -162,7 +162,7 @@ input[type=range] {
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     /* IE10+ specific styles go here */
     input[type=range] {
-        margin: 0px;
+        margin: 0;
     }
 }
 
@@ -353,7 +353,7 @@ input[type=range]::-ms-tooltip {
     color: #ffffff;
     background-color: #0086b3;
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
     width: 100%;
     height: 50px;
     text-align: center;
