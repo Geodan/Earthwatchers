@@ -16,7 +16,7 @@ var projectObservationTypes = null;
 var dragMarkerPosition = null;
 var projectName = null;
 
-function gotoNextHexagon(){
+function gotoNextHexagon() {
     var url = location.href.replace(location.hash, '#/' + projectName);
     location.href = url;
     window.location.reload();
@@ -52,27 +52,27 @@ function onMapClick(e) {
         var observations = getObservationsCount();
 
         postObservation(selectedObservationType.type, user, geohexCode, e.latlng.lng, e.latlng.lat, project.properties.Name, function (resp) {
-            var newMarker = getObservationMarker(map,e.latlng.lng,e.latlng.lat,geohexCode, selectedObservationType.name,resp.id,selectedObservationType);
+            var newMarker = getObservationMarker(map, e.latlng.lng, e.latlng.lat, geohexCode, selectedObservationType.name, resp.id, selectedObservationType);
             newMarker.addTo(map);
         });
 
-        if(observations===0){
+        if (observations === 0) {
             setHexagonColor('hasObservations');
         }
     }
 }
 
-function setHexagonColor(status){
+function setHexagonColor(status) {
     var layer = findLayerByName('hexagon');
-    if(status==='hasObservations'){
-        layer.setStyle({color: '#FF0000'});;
+    if (status === 'hasObservations') {
+        layer.setStyle({color: '#FF0000'});
     }
-    else if(status ==='clear'){
-        layer.setStyle({color: '#00FF00'});;
+    else if (status === 'clear') {
+        layer.setStyle({color: '#00FF00'});
     }
 }
 
-function initializeRouting(){
+function initializeRouting() {
     Path.map("#/:project").to(function () {
         // sample: #/borneo
         geohexCode = null;
@@ -110,9 +110,12 @@ function initializeRouting(){
                 location.hash = '#/' + projectName + '/' + geohexCode;
             }
 
-            loadJSON('/api/observations/' + projectName + '/' + geohexCode + '/' + user,function(observations){
+            var hexagons = getTotalHexagons();
+            console.log('Total Hexagons: ' + hexagons.length);
 
-                loadUserStatistics(projectName, user);
+            loadJSON('/api/observations/' + projectName + '/' + geohexCode + '/' + user, function (observations) {
+
+                loadUserStatistics(projectName, user, hexagons.length);
 
                 satelliteTypeSelectionChanged({value: defaultSatelliteType});
 
@@ -122,15 +125,15 @@ function initializeRouting(){
                 });
                 map.on('click', onMapClick);
 
-                var polygon = drawHexagon(map,geohexCode);
+                var polygon = drawHexagon(map, geohexCode);
                 var centerHex = polygon.getBounds().getCenter();
 
-                if(observations.length > 0){
-                    if(observations.length === 1 && observations[0].observation === 'clear'){
+                if (observations.length > 0) {
+                    if (observations.length === 1 && observations[0].observation === 'clear') {
                         setHexagonColor('clear');
                     }
-                    else{
-                        drawObservations(observations,observationTypes);
+                    else {
+                        drawObservations(observations, observationTypes);
                         setHexagonColor('hasObservations');
                     }
                 }
@@ -145,6 +148,7 @@ function initializeRouting(){
                 map.addLayer(ggl2);
 
                 L.geoJson(projects, {fill: false}).addTo(map);
+
             });
         });
     });

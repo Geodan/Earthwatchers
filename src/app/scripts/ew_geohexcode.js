@@ -13,8 +13,7 @@ function getRandomHexagon(project, geohexlevel) {
         var pt = turf.point([lon_rnd, lat_rnd]);
         isInside = turf.inside(pt, project);
     }
-    geohexCode = GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, geohexlevel).code;
-    return geohexCode;
+    return GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, geohexlevel).code;
 }
 
 
@@ -24,15 +23,14 @@ function getGeohexPolygon(geohexCode, style) {
 }
 
 
-function isPointInHexagon(geohexcode, latlng){
+function isPointInHexagon(geohexcode, latlng) {
     var pt = turf.point([latlng.lng, latlng.lat]);
-    var poly=getGeohexPolygon(geohexcode, null); 
-    var isInside = turf.inside(pt, poly.toGeoJSON());
-    return isInside;
+    var poly = getGeohexPolygon(geohexcode, null);
+    return turf.inside(pt, poly.toGeoJSON());
 }
 
 
-function drawHexagon(map,geohexCode){
+function drawHexagon(map, geohexCode) {
     var myStyle = {
         'color': '#000000',
         'weight': 5,
@@ -45,7 +43,66 @@ function drawHexagon(map,geohexCode){
     map.setView(centerHex, startZoomLevel, {
         animation: true
     });
-    polygon.name='hexagon';
+    polygon.name = 'hexagon';
     map.addLayer(polygon);
     return polygon;
+}
+
+//TODO where to put this
+function arraySearch(arr, val) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === val) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function getTotalHexagons() {
+    console.log(project);
+    console.log(defaultGeohexLevel);
+    var startHexagon = getRandomHexagon(project, defaultGeohexLevel);
+    var zone = GEOHEX.getZoneByCode(startHexagon);
+    var allHexagons = [zone.code];
+    return getNeighbourHexagon(allHexagons, zone);
+}
+
+function getNeighbourHexagon(allHexagons, zone) {
+    var neighbours = getSixNeighbours(zone);
+
+    for (var i = 0; i < neighbours.length; i++) {
+        if (arraySearch(allHexagons, neighbours[i].code) === -1) {
+            if (hexagonInsideProject(neighbours[i])) {
+                allHexagons.push(neighbours[i].code);
+                getNeighbourHexagon(allHexagons, neighbours[i]);
+            }
+        }
+    }
+    return allHexagons;
+}
+
+function getSixNeighbours(zone) {
+
+    var sixNeighbours = [];
+    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x - 1, zone.y, defaultGeohexLevel));
+    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x - 1, zone.y + 1, defaultGeohexLevel));
+
+    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x, zone.y - 1, defaultGeohexLevel));
+    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x, zone.y + 1, defaultGeohexLevel));
+
+    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x + 1, zone.y - 1, defaultGeohexLevel));
+    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x + 1, zone.y, defaultGeohexLevel));
+
+    return sixNeighbours;
+}
+
+function hexagonInsideProject(hexagon) {
+    var coordinates = hexagon.getHexCoords();
+    for (var i = 0; i < coordinates.length; i++) {
+        var point = turf.point([coordinates[i].lon, coordinates[i].lat]);
+        if (turf.inside(point, project)) {
+            return true;
+        }
+    }
+    return false;
 }
