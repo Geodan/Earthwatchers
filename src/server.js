@@ -241,6 +241,58 @@ router.put('/observations', jsonParser, function (req, res) {
 });
 
 
+
+router.get('/leaderboard', nocache, function (req, res) {
+    // sampleurl : leaderboard/
+    var projectName = req.params.project;
+    console.log('request leaderboard for all projects');
+
+    var observations = [];
+    var users = [];
+    var hexagons = [];
+    var projects = [];
+
+    dbObservations.each(function (observation) {
+            //search for unique users
+            var userNumber = arraySearch(users, observation.user);
+
+            if (userNumber === -1) {
+                users.push(observation.user);
+                hexagons.push([observation.geohex]);
+                projects.push([observation.project]);
+                observation.observation === 'clear' ? observations.push(0) : observations.push(1);
+            } else {
+                //search for unique hexagons
+                if (arraySearch( hexagons[userNumber], observation.geohex) === -1) {
+                    hexagons[userNumber].push(observation.geohex);
+                }
+
+                //search for unique projects
+                if (arraySearch( projects[userNumber], observation.project) === -1) {
+                    projects[userNumber].push(observation.project);
+                }
+
+                //show real observations (don't show an observed hexagon with no observations as a observation
+                if (observation.observation !== 'clear') {
+                    observations[userNumber]++;
+                }
+            }
+    }, function (err) {
+        var returnObject = [];
+        for (var i = 0; i < users.length; i++) {
+            var userObject = {
+                "username": users[i],
+                "hexagons": hexagons[i].length,
+                "projects": projects[i].length,
+                "observations": observations[i]
+            };
+            returnObject.push(userObject);
+        }
+        res.status(HttpStatus.OK).send(returnObject);
+    });
+});
+
+
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));
 var server = app.listen(port);
