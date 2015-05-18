@@ -47,6 +47,12 @@ function setTableCell(tableCell, value) {
 
 function loadUserStatistics(projectName, user, hexagons) {
     loadJSON('/api/observations/' + projectName + '/' + user, function (statistics) {
-        document.getElementById('userstatistics').innerHTML = 'Hexagons: ' + statistics.hexagons + ' of ' + hexagons + '<br/>Observations:' + statistics.observations;
+        document.getElementById('hexagonstatistics').innerHTML = statistics.hexagons + ' of ' + hexagons;
+        document.getElementById('observationstatistics').innerHTML = statistics.observations;
     });
+}
+
+function updateObservationStatistics(added) {
+    var observation = +document.getElementById('observationstatistics').innerHTML;
+    document.getElementById('observationstatistics').innerHTML = observation + added;
 }

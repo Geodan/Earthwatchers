@@ -26,20 +26,22 @@ function getHexagon(geohex, username, callback) {
     request.send();
 }
 
-function loadJSON(file, callback) {   
+function loadJSON(file, callback) {
     var request = new XMLHttpRequest();
     request.overrideMimeType("application/json");
     request.open('GET', file, true); // Replace 'my_data' with the path to your file
     request.onreadystatechange = function () {
-          if (request.readyState == 4 && request.status == "200") {
+        if (request.readyState == 4 && request.status == "200") {
             var response = JSON.parse(request.responseText);
             callback(response);
-          }
+        }
     };
-    request.send(null);  
- }
+    request.send(null);
+}
 
- function postObservation(observation,user,geohexcode,longitude,latitude,project,callback) {
+function postObservation(observation, user, geohexcode, longitude, latitude, project, callback) {
+    updateObservationStatistics(1);
+
     var zone = GEOHEX.getZoneByCode(geohexcode);
     var obs = JSON.stringify({
         "user": user,
@@ -48,7 +50,7 @@ function loadJSON(file, callback) {
         "level": zone.getLevel(),
         "observation": observation,
         "geohex": geohexcode,
-        "project":project
+        "project": project
     });
     var url = 'api/observations';
     var request = new XMLHttpRequest();
@@ -64,11 +66,11 @@ function loadJSON(file, callback) {
     request.send(obs);
 }
 
-function updateObservationPosition(id,longitude,latitude,callback) {
+function updateObservationPosition(id, longitude, latitude, callback) {
     var body = JSON.stringify({
         "id": id,
         "lat": latitude,
-        "lon": longitude,
+        "lon": longitude
     });
     var url = 'api/observations';
     var request = new XMLHttpRequest();
@@ -83,7 +85,9 @@ function updateObservationPosition(id,longitude,latitude,callback) {
     request.send(body);
 }
 
-function deleteObservation(id,callback) {
+function deleteObservation(id, callback) {
+    updateObservationStatistics(-1);
+
     var url = 'api/observations/' + id;
     var request = new XMLHttpRequest();
     request.open('DELETE', url, true);
@@ -95,4 +99,4 @@ function deleteObservation(id,callback) {
         }
     };
     request.send(null);
- }
+}
