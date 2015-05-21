@@ -29,9 +29,17 @@ function isPointInHexagon(geohexcode, latlng) {
     return turf.inside(pt, poly.toGeoJSON());
 }
 
+function drawHexagons(map, hexagons) {
+    for (var i = 0; i < hexagons.length; i++) {
+        drawHexagon(map, hexagons[i], 1);
+    }
+}
 
-function drawHexagon(map, geohexCode) {
-    var myStyle = {
+
+function drawHexagon(map, geohexCode, styleNumber) {
+
+    //Current Hexagon
+    var style = {
         'color': '#000000',
         'weight': 5,
         'opacity': 0.65,
@@ -39,11 +47,14 @@ function drawHexagon(map, geohexCode) {
         fillOpacity: 0
     };
 
-    var polygon = getGeohexPolygon(geohexCode, myStyle);
-    var centerHex = polygon.getBounds().getCenter();
-    map.setView(centerHex, startZoomLevel, {
-        animation: true
-    });
+    //allHexagons
+    if (styleNumber  === 1) {
+        style.weight = 1;
+        style.color = '#FFFFFF';
+    }
+
+    var polygon = getGeohexPolygon(geohexCode, style);
+
     polygon.name = 'hexagon';
     map.addLayer(polygon);
     return polygon;

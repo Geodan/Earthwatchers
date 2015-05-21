@@ -132,12 +132,15 @@ function initializeRouting() {
                 map.on('click', onMapClick);
 
                 getHexagonNavigation(geohexCode, map);
-//                for (var i = 0; i < hexagons.length; i++) {
-//                    drawHexagon(map, hexagons[i]);
-//                }
+                drawHexagons(map, hexagons);
+
 
                 var polygon = drawHexagon(map, geohexCode);
+
                 var centerHex = polygon.getBounds().getCenter();
+                map.setView(centerHex, startZoomLevel, {
+                    animation: true
+                });
 
                 if (observations.length > 0) {
                     if (observations.length === 1 && observations[0].observation === 'clear') {
