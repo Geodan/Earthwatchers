@@ -281,7 +281,6 @@ input[type=range]::-ms-tooltip {
     height: 74px;
     background: rgba(0,0,0,0.5);
     border: 1px solid #fff;
-    position: absolute;
     bottom: 0;
 }
 .minimap .toggleSatelliteType {
@@ -366,4 +365,10 @@ input[type=range]::-ms-tooltip {
 
 .messagesNotShown {
     opacity: 0;
+}
+
+
+.navigateTriangle img {
+    width: 20px;
+    height: 20px;
 }

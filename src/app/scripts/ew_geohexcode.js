@@ -136,24 +136,21 @@ function getHexagonNavigation(geohexCode, maplocal) {
 
     var currentHexagon = GEOHEX.getZoneByCode(geohexCode);
 
-    showNavigationTriangle(currentHexagon, getHexagonUp(currentHexagon), [0,15], false, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonDown(currentHexagon), [0,-15], true, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonUpLeft(currentHexagon), [10,5], true, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonUp(currentHexagon), [0, 15], false, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonDown(currentHexagon), [0, -15], true, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonUpLeft(currentHexagon), [10, 5], true, maplocal);
     showNavigationTriangle(currentHexagon, getHexagonDownLeft(currentHexagon), [10, -5], false, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonUpRight(currentHexagon), [-10,5], true, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonDownRight(currentHexagon), [-10,-5], false, maplocal);
-
+    showNavigationTriangle(currentHexagon, getHexagonUpRight(currentHexagon), [-10, 5], true, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonDownRight(currentHexagon), [-10, -5], false, maplocal);
 }
 
 function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downward, maplocal) {
 
     var points = getMixedPoints(currentHexagon, neighbourHexagon);
     var latLonPoints = getCalculatedCenter(points);
-    var latLon = new L.LatLng(latLonPoints[0],latLonPoints[1]);
+    var latLon = new L.LatLng(latLonPoints[0], latLonPoints[1]);
 
-    addNavigationMarker(latLon, offset, downward, maplocal);
-
-    drawHexagon(maplocal,neighbourHexagon.code);
+    addNavigationMarker(latLon, offset, downward, neighbourHexagon.code, maplocal);
 }
 
 function getMixedPoints(hexagonA, hexagonB) {
@@ -183,23 +180,21 @@ function getCalculatedCenter(points) {
     var calculatedLon = (pointA[1] + pointB[1]) / 2;
 
     return [calculatedLat, calculatedLon];
-
 }
 
 
-function addNavigationMarker (latLon, offSet, downward, maplocal) {
-    var icon = new L.Icon({
-        iconUrl: downward ? './images/navtriangledown.png' : './images/navtriangle.png',
-//                iconRetinaUrl: 'my-icon@2x.png',
-        iconAnchor: [10 + offSet[0],10 + offSet[1]],
-        iconSize: [20, 20]
-//                popupAnchor: [-3, -76],
-//                shadowUrl: 'my-icon-shadow.png',
-//                shadowRetinaUrl: 'my-icon-shadow@2x.png',
-//                shadowSize: [68, 95],
-//                shadowAnchor: [22, 94]
+function addNavigationMarker(latLon, offSet, downward, hexCode, maplocal) {
+    var iconUrl = downward ? './images/navtriangledown.png' : './images/navtriangle.png';
+    var icon = new L.divIcon({
+        html: "<img src=" + iconUrl + " onClick=\"navigateToHexagon('" + hexCode + "')\" />",
+        className: "navigateTriangle",
+        iconAnchor: [10 + offSet[0], 10 + offSet[1]]
     });
+
     var newMarker = new L.marker(latLon, {icon: icon});
-    newMarker.id = "nav" + i;
     newMarker.addTo(maplocal);
+}
+
+function navigateToHexagon(hexCode) {
+    console.log(hexCode);
 }
