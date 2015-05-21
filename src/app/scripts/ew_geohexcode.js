@@ -133,23 +133,27 @@ function hexagonInsideProject(hexagon) {
 }
 
 function getHexagonNavigation(geohexCode, maplocal) {
-    //bepalen buren binnen project
+
     var currentHexagon = GEOHEX.getZoneByCode(geohexCode);
-    var coordinatesCurrentHexagon = currentHexagon.getHexCoords();
 
+    showNavigationTriangle(currentHexagon, getHexagonUp(currentHexagon), [0,15], false, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonDown(currentHexagon), [0,-15], true, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonUpLeft(currentHexagon), [10,5], true, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonDownLeft(currentHexagon), [10, -5], false, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonUpRight(currentHexagon), [-10,5], true, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonDownRight(currentHexagon), [-10,-5], false, maplocal);
 
-    var allHexagons = getSixNeighbours(currentHexagon);
+}
 
-    for (var i = 0; i < allHexagons.length; i++) {
-            var points = getMixedPoints(currentHexagon, allHexagons[i]);
-            var latLonPoints = getCalculatedCenter(points);
-            var latLon = new L.LatLng(latLonPoints[0],latLonPoints[1]);
+function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downward, maplocal) {
 
-        drawHexagon(maplocal, allHexagons[i].code);
-        addNavigationMarker(latLon, [0,0], maplocal);
-    }
-    //tekeken snijpunt met link naar buur (url + geohexcode)
+    var points = getMixedPoints(currentHexagon, neighbourHexagon);
+    var latLonPoints = getCalculatedCenter(points);
+    var latLon = new L.LatLng(latLonPoints[0],latLonPoints[1]);
 
+    addNavigationMarker(latLon, offset, downward, maplocal);
+
+    drawHexagon(maplocal,neighbourHexagon.code);
 }
 
 function getMixedPoints(hexagonA, hexagonB) {
@@ -157,16 +161,12 @@ function getMixedPoints(hexagonA, hexagonB) {
     var coordinatesHexagonA = hexagonA.getHexCoords();
     var coordinatesHexagonB = hexagonB.getHexCoords();
 
-//    console.log(coordinatesHexagonA);
-//    console.log(coordinatesHexagonB);
-
     var points = [];
     for (var i = 0; i < 6; i++) {
         for (var j = 0; j < 6; j++) {
 
             if (coordinatesHexagonA[i].lat.toFixed(precision) === coordinatesHexagonB[j].lat.toFixed(precision) &&
                 coordinatesHexagonA[i].lon.toFixed(precision) === coordinatesHexagonB[j].lon.toFixed(precision)) {
-                console.log(i + '-' + j);
                 var point = [coordinatesHexagonA[i].lat, coordinatesHexagonA[i].lon];
                 points.push(point);
             }
@@ -187,9 +187,9 @@ function getCalculatedCenter(points) {
 }
 
 
-function addNavigationMarker (latLon, offSet, maplocal) {
+function addNavigationMarker (latLon, offSet, downward, maplocal) {
     var icon = new L.Icon({
-        iconUrl: './images/navtriangle.png',
+        iconUrl: downward ? './images/navtriangledown.png' : './images/navtriangle.png',
 //                iconRetinaUrl: 'my-icon@2x.png',
         iconAnchor: [10 + offSet[0],10 + offSet[1]],
         iconSize: [20, 20]
