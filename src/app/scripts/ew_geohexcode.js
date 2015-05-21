@@ -85,12 +85,12 @@ function getSixNeighbours(zone) {
 
     var sixNeighbours = [];
     sixNeighbours.push(GEOHEX.getZoneByXY(zone.x - 1, zone.y, defaultGeohexLevel));
-    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x - 1, zone.y + 1, defaultGeohexLevel));
+    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x + 1, zone.y + 1, defaultGeohexLevel));
 
     sixNeighbours.push(GEOHEX.getZoneByXY(zone.x, zone.y - 1, defaultGeohexLevel));
     sixNeighbours.push(GEOHEX.getZoneByXY(zone.x, zone.y + 1, defaultGeohexLevel));
 
-    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x + 1, zone.y - 1, defaultGeohexLevel));
+    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x - 1, zone.y - 1, defaultGeohexLevel));
     sixNeighbours.push(GEOHEX.getZoneByXY(zone.x + 1, zone.y, defaultGeohexLevel));
 
     return sixNeighbours;
@@ -105,4 +105,72 @@ function hexagonInsideProject(hexagon) {
         }
     }
     return false;
+}
+
+function getHexagonNavigation(geohexCode, maplocal) {
+    //bepalen buren binnen project
+    var currentHexagon = GEOHEX.getZoneByCode(geohexCode);
+    var coordinatesCurrentHexagon = currentHexagon.getHexCoords();
+    var allHexagons = getSixNeighbours(currentHexagon);
+
+    console.log(coordinatesCurrentHexagon);
+//    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < allHexagons.length; i++) {
+        if (hexagonInsideProject(allHexagons[i])) {
+            drawHexagon(maplocal, allHexagons[i].code);
+
+            var points = getMixedPoints(currentHexagon, allHexagons[i]);
+            console.log(points);
+
+            var pointA = points[0];
+            var pointB = points[1];
+
+            var calculatedLat = (pointA[0] + pointB[0])/2;
+            var calculatedLon = (pointA[1] + pointB[1])/2;
+
+            var ll = new L.LatLng(calculatedLat, calculatedLon);
+            var newMarker = new L.marker(ll);
+            newMarker.id = "nav" + i;
+            newMarker.addTo(maplocal);
+
+
+//            //bepalen snijpunt met buur
+//            var test = turf.intersect(getGeohexPolygon(currentHexagon, null).toGeoJSON(),getGeohexPolygon(allHexagons[i], null).toGeoJSON());
+//
+//            console.log("test");
+//            console.log(test);
+//            if (test) {
+//
+//                var ll = new L.LatLng(test.geometry.coordinates[1], test.geometry.coordinates[0]);
+//                var newMarker = new L.marker(ll);
+//                newMarker.id = "nav" + i;
+//                newMarker.addTo(maplocal);
+//            }
+        }
+    }
+    //tekeken snijpunt met link naar buur (url + geohexcode)
+
+}
+
+function getMixedPoints (hexagonA, hexagonB) {
+    var precision = 4;
+    var coordinatesHexagonA = hexagonA.getHexCoords();
+    var coordinatesHexagonB = hexagonB.getHexCoords();
+
+//    console.log(coordinatesHexagonA);
+//    console.log(coordinatesHexagonB);
+
+    var points = [];
+    for (var i = 0; i < 6; i++) {
+        for (var j = 0; j < 6; j++) {
+
+            if (coordinatesHexagonA[i].lat.toFixed(precision) === coordinatesHexagonB[j].lat.toFixed(precision) &&
+                coordinatesHexagonA[i].lon.toFixed(precision) === coordinatesHexagonB[j].lon.toFixed(precision)) {
+                console.log(i + '-' + j);
+                var point = [coordinatesHexagonA[i].lat, coordinatesHexagonA[i].lon];
+                points.push(point);
+            }
+        }
+    }
+    return points;
 }

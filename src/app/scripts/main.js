@@ -125,6 +125,8 @@ function initializeRouting() {
                 });
                 map.on('click', onMapClick);
 
+                getHexagonNavigation(geohexCode, map);
+
                 var polygon = drawHexagon(map, geohexCode);
                 var centerHex = polygon.getBounds().getCenter();
 
