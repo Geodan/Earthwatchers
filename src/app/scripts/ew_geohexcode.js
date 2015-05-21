@@ -35,6 +35,7 @@ function drawHexagon(map, geohexCode) {
         'color': '#000000',
         'weight': 5,
         'opacity': 0.65,
+        'label': geohexCode,
         fillOpacity: 0
     };
 
@@ -145,12 +146,13 @@ function getHexagonNavigation(geohexCode, maplocal) {
 }
 
 function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downward, maplocal) {
+    if (hexagonInsideProject(neighbourHexagon)) {
+        var points = getMixedPoints(currentHexagon, neighbourHexagon);
+        var latLonPoints = getCalculatedCenter(points);
+        var latLon = new L.LatLng(latLonPoints[0], latLonPoints[1]);
 
-    var points = getMixedPoints(currentHexagon, neighbourHexagon);
-    var latLonPoints = getCalculatedCenter(points);
-    var latLon = new L.LatLng(latLonPoints[0], latLonPoints[1]);
-
-    addNavigationMarker(latLon, offset, downward, neighbourHexagon.code, maplocal);
+        addNavigationMarker(latLon, offset, downward, neighbourHexagon.code, maplocal);
+    }
 }
 
 function getMixedPoints(hexagonA, hexagonB) {
@@ -196,5 +198,5 @@ function addNavigationMarker(latLon, offSet, downward, hexCode, maplocal) {
 }
 
 function navigateToHexagon(hexCode) {
-    console.log(hexCode);
+    gotoHexagon(hexCode);
 }

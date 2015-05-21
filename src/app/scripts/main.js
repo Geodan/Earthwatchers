@@ -22,6 +22,12 @@ function gotoNextHexagon() {
     window.location.reload();
 }
 
+function gotoHexagon(geohex) {
+    var url = location.href.replace(location.hash, '#/' + projectName + "/" + geohex);
+    location.href = url;
+    window.location.reload();
+}
+
 function next() {
     var messageDiv = document.getElementById('messageDiv');
     // todo count observation
@@ -126,6 +132,10 @@ function initializeRouting() {
                 map.on('click', onMapClick);
 
                 getHexagonNavigation(geohexCode, map);
+
+//                for (var i = 0; i < hexagons.length; i++) {
+//                    drawHexagon(map, hexagons[i]);
+//                }
 
                 var polygon = drawHexagon(map, geohexCode);
                 var centerHex = polygon.getBounds().getCenter();
