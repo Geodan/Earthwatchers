@@ -3,5 +3,5 @@ node_js:
   - "0.12"
   - "0.11"
 
-before_script: cd src 
+before_script: cd src && npm install
 script: node server.tests.js
