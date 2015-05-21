@@ -82,19 +82,44 @@ function getNeighbourHexagon(allHexagons, zone) {
 }
 
 function getSixNeighbours(zone) {
-
-    var sixNeighbours = [];
-    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x - 1, zone.y, defaultGeohexLevel));
-    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x + 1, zone.y + 1, defaultGeohexLevel));
-
-    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x, zone.y - 1, defaultGeohexLevel));
-    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x, zone.y + 1, defaultGeohexLevel));
-
-    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x - 1, zone.y - 1, defaultGeohexLevel));
-    sixNeighbours.push(GEOHEX.getZoneByXY(zone.x + 1, zone.y, defaultGeohexLevel));
-
-    return sixNeighbours;
+    return [
+        getHexagonUp(zone),
+        getHexagonUpLeft(zone),
+        getHexagonDownLeft(zone),
+        getHexagonDown(zone),
+        getHexagonDownRight(zone),
+        getHexagonUpRight(zone)
+    ];
 }
+
+function getHexagonUp(zone) {
+    return getHexagonNeighbour(zone.x + 1, zone.y + 1);
+}
+function getHexagonDownRight(zone) {
+    return getHexagonNeighbour(zone.x, zone.y - 1);
+}
+
+function getHexagonDownLeft(zone) {
+    return getHexagonNeighbour(zone.x - 1, zone.y);
+}
+
+function getHexagonUpRight(zone) {
+    return getHexagonNeighbour(zone.x + 1, zone.y);
+}
+
+function getHexagonDown(zone) {
+    return getHexagonNeighbour(zone.x - 1, zone.y - 1);
+}
+
+function getHexagonUpLeft(zone) {
+    return getHexagonNeighbour(zone.x, zone.y + 1);
+}
+
+
+function getHexagonNeighbour(x, y) {
+    return GEOHEX.getZoneByXY(x, y, defaultGeohexLevel);
+}
+
 
 function hexagonInsideProject(hexagon) {
     var coordinates = hexagon.getHexCoords();
@@ -125,8 +150,8 @@ function getHexagonNavigation(geohexCode, maplocal) {
             var pointA = points[0];
             var pointB = points[1];
 
-            var calculatedLat = (pointA[0] + pointB[0])/2;
-            var calculatedLon = (pointA[1] + pointB[1])/2;
+            var calculatedLat = (pointA[0] + pointB[0]) / 2;
+            var calculatedLon = (pointA[1] + pointB[1]) / 2;
 
             var ll = new L.LatLng(calculatedLat, calculatedLon);
             var newMarker = new L.marker(ll);
@@ -152,7 +177,7 @@ function getHexagonNavigation(geohexCode, maplocal) {
 
 }
 
-function getMixedPoints (hexagonA, hexagonB) {
+function getMixedPoints(hexagonA, hexagonB) {
     var precision = 4;
     var coordinatesHexagonA = hexagonA.getHexCoords();
     var coordinatesHexagonB = hexagonB.getHexCoords();
