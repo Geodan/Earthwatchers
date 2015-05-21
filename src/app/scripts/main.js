@@ -22,7 +22,7 @@ function gotoNextHexagon() {
     window.location.reload();
 }
 
-function gotoHexagon(geohex) {
+function goToHexagon(geohex) {
     var url = location.href.replace(location.hash, '#/' + projectName + "/" + geohex);
     location.href = url;
     window.location.reload();

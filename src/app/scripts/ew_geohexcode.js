@@ -148,6 +148,7 @@ function getHexagonNavigation(geohexCode, maplocal) {
 function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downward, maplocal) {
     if (hexagonInsideProject(neighbourHexagon)) {
         var points = getMixedPoints(currentHexagon, neighbourHexagon);
+
         var latLonPoints = getCalculatedCenter(points);
         var latLon = new L.LatLng(latLonPoints[0], latLonPoints[1]);
 
@@ -156,16 +157,20 @@ function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downwa
 }
 
 function getMixedPoints(hexagonA, hexagonB) {
+
     var precision = 4;
     var coordinatesHexagonA = hexagonA.getHexCoords();
     var coordinatesHexagonB = hexagonB.getHexCoords();
-
     var points = [];
     for (var i = 0; i < 6; i++) {
         for (var j = 0; j < 6; j++) {
 
-            if (coordinatesHexagonA[i].lat.toFixed(precision) === coordinatesHexagonB[j].lat.toFixed(precision) &&
-                coordinatesHexagonA[i].lon.toFixed(precision) === coordinatesHexagonB[j].lon.toFixed(precision)) {
+            if ((coordinatesHexagonA[i].lat.toFixed(precision) === coordinatesHexagonB[j].lat.toFixed(precision) ||
+                //check for coordinates around 0 (precision results in -0.000000 and 0.00000)
+                (Math.abs(coordinatesHexagonA[i].lat) < 0.0000001 && Math.abs(coordinatesHexagonB[j].lat) < 0.0000001)) &&
+                (coordinatesHexagonA[i].lon.toFixed(precision) === coordinatesHexagonB[j].lon.toFixed(precision) ||
+                    //check for coordinates around 0 (precision results in -0.000000 and 0.00000)
+                    (Math.abs(coordinatesHexagonA[i].lon) < 0.0000001 && Math.abs(coordinatesHexagonB[j].lon) < 0.0000001))) {
                 var point = [coordinatesHexagonA[i].lat, coordinatesHexagonA[i].lon];
                 points.push(point);
             }
@@ -188,15 +193,11 @@ function getCalculatedCenter(points) {
 function addNavigationMarker(latLon, offSet, downward, hexCode, maplocal) {
     var iconUrl = downward ? './images/navtriangledown.png' : './images/navtriangle.png';
     var icon = new L.divIcon({
-        html: "<img src=" + iconUrl + " onClick=\"navigateToHexagon('" + hexCode + "')\" />",
+        html: "<img src=" + iconUrl + " onClick=\"goToHexagon('" + hexCode + "')\" />",
         className: "navigateTriangle",
         iconAnchor: [10 + offSet[0], 10 + offSet[1]]
     });
 
     var newMarker = new L.marker(latLon, {icon: icon});
     newMarker.addTo(maplocal);
-}
-
-function navigateToHexagon(hexCode) {
-    gotoHexagon(hexCode);
 }
