@@ -132,7 +132,6 @@ function initializeRouting() {
                 map.on('click', onMapClick);
 
                 getHexagonNavigation(geohexCode, map);
-
 //                for (var i = 0; i < hexagons.length; i++) {
 //                    drawHexagon(map, hexagons[i]);
 //                }
