@@ -14,12 +14,11 @@
 ///////////[2013.1.11 adjustXY補正のx<yをx>yの場合に-180補正へ修正]/////////
 ///////////[2013.1.17 getZoneByXY()内 -180度補正Code生成ロジックを修正]/////////
 
-// (function (win) {
+(function (win) {
 
 // namspace GEOHEX;
-// if (!win.GEOHEX)	win.GEOHEX = function(){};
+if (!win.GEOHEX)	win.GEOHEX = function(){};
 // version: 3.2
-var GEOHEX;
 GEOHEX.version = "3.2";
 GEOHEX.cache_on = true;
 
@@ -337,4 +336,4 @@ GEOHEX.loc2xy = loc2xy;
 GEOHEX.xy2loc = xy2loc;
 GEOHEX.adjustXY = adjustXY;
 
-// })(this);
+})(this);
