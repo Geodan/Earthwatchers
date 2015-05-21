@@ -2,6 +2,8 @@
 
 [![Join the chat at https://gitter.im/Geodan/Earthwatchers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Geodan/Earthwatchers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![Build Status](https://travis-ci.org/Geodan/Earthwatchers.svg?branch=master)](https://travis-ci.org/Geodan/Earthwatchers)
+
 Development preview: http://earthwatchers.azurewebsites.net/
 
 Landing page: http://earthwatchers.azurewebsites.net/landing.html

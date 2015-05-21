@@ -45,17 +45,6 @@ function arraySearch(arr, val) {
     return -1;
 }
 
-router.get('/', function (req, res) {
-    res.json({
-        message: 'Earthwatchers serverside'
-    });
-});
-
-router.get('/version', function (req, res) {
-    res.json({
-        message: 'Version 0.2'
-    });
-});
 
 function nocache(req, res, next) {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -64,6 +53,21 @@ function nocache(req, res, next) {
     next();
 }
 
+// get root document
+router.get('/', function (req, res) {
+    res.json({
+        message: 'Earthwatchers serverside'
+    });
+});
+
+// get the version
+router.get('/version', function (req, res) {
+    res.json({
+        message: 'Version 0.2'
+    });
+});
+
+// get statistics for a project
 router.get('/statistics/:project', nocache, function (req, res) {
     // sampleurl : observations/Borneo
     var projectName = req.params.project;
@@ -98,6 +102,7 @@ router.get('/statistics/:project', nocache, function (req, res) {
     });
 });
 
+// get observations for a project and user
 router.get('/observations/:project/:username', nocache, function (req, res) {
     // sampleurl : observations/Borneo/bert
     var project = req.params.project;
@@ -127,6 +132,7 @@ router.get('/observations/:project/:username', nocache, function (req, res) {
     });
 });
 
+// get observations for a project, hexagon and user
 router.get('/observations/:project/:geohexcode/:username', nocache, function (req, res) {
     // sampleurl : observations/Borneo/PO2632/bert
     var project = req.params.project;
@@ -174,6 +180,7 @@ router.get('/satelliteimages', function (req, res) {
     }
 });
 
+// post an observation
 router.post('/observations', jsonParser, function (req, res) {
     var id = uuid.v4();
     req.checkBody('user', 'User is required').notEmpty();
@@ -198,7 +205,7 @@ router.post('/observations', jsonParser, function (req, res) {
     }
 });
 
-
+// delete an observation
 router.delete('/observations/:id', function (req, res) {
     var id = req.params.id;
     console.log('delete observation id: ' + id);
@@ -210,6 +217,7 @@ router.delete('/observations/:id', function (req, res) {
     );
 });
 
+// change an observation
 router.put('/observations', jsonParser, function (req, res) {
     req.checkBody('id', 'Id is required').notEmpty();
     req.checkBody('lat', 'lat is required').notEmpty();
@@ -240,8 +248,7 @@ router.put('/observations', jsonParser, function (req, res) {
     }
 });
 
-
-
+// get the leaderboard
 router.get('/leaderboard', nocache, function (req, res) {
     // sampleurl : leaderboard/
     var projectName = req.params.project;
