@@ -136,42 +136,17 @@ function getHexagonNavigation(geohexCode, maplocal) {
     //bepalen buren binnen project
     var currentHexagon = GEOHEX.getZoneByCode(geohexCode);
     var coordinatesCurrentHexagon = currentHexagon.getHexCoords();
+
+
     var allHexagons = getSixNeighbours(currentHexagon);
 
-    console.log(coordinatesCurrentHexagon);
-//    for (var i = 0; i < 1; i++) {
     for (var i = 0; i < allHexagons.length; i++) {
-        if (hexagonInsideProject(allHexagons[i])) {
-            drawHexagon(maplocal, allHexagons[i].code);
-
             var points = getMixedPoints(currentHexagon, allHexagons[i]);
-            console.log(points);
+            var latLonPoints = getCalculatedCenter(points);
+            var latLon = new L.LatLng(latLonPoints[0],latLonPoints[1]);
 
-            var pointA = points[0];
-            var pointB = points[1];
-
-            var calculatedLat = (pointA[0] + pointB[0]) / 2;
-            var calculatedLon = (pointA[1] + pointB[1]) / 2;
-
-            var ll = new L.LatLng(calculatedLat, calculatedLon);
-            var newMarker = new L.marker(ll);
-            newMarker.id = "nav" + i;
-            newMarker.addTo(maplocal);
-
-
-//            //bepalen snijpunt met buur
-//            var test = turf.intersect(getGeohexPolygon(currentHexagon, null).toGeoJSON(),getGeohexPolygon(allHexagons[i], null).toGeoJSON());
-//
-//            console.log("test");
-//            console.log(test);
-//            if (test) {
-//
-//                var ll = new L.LatLng(test.geometry.coordinates[1], test.geometry.coordinates[0]);
-//                var newMarker = new L.marker(ll);
-//                newMarker.id = "nav" + i;
-//                newMarker.addTo(maplocal);
-//            }
-        }
+        drawHexagon(maplocal, allHexagons[i].code);
+        addNavigationMarker(latLon, [0,0], maplocal);
     }
     //tekeken snijpunt met link naar buur (url + geohexcode)
 
@@ -198,4 +173,33 @@ function getMixedPoints(hexagonA, hexagonB) {
         }
     }
     return points;
+}
+
+function getCalculatedCenter(points) {
+    var pointA = points[0];
+    var pointB = points[1];
+
+    var calculatedLat = (pointA[0] + pointB[0]) / 2;
+    var calculatedLon = (pointA[1] + pointB[1]) / 2;
+
+    return [calculatedLat, calculatedLon];
+
+}
+
+
+function addNavigationMarker (latLon, offSet, maplocal) {
+    var icon = new L.Icon({
+        iconUrl: './images/navtriangle.png',
+//                iconRetinaUrl: 'my-icon@2x.png',
+        iconAnchor: [10 + offSet[0],10 + offSet[1]],
+        iconSize: [20, 20]
+//                popupAnchor: [-3, -76],
+//                shadowUrl: 'my-icon-shadow.png',
+//                shadowRetinaUrl: 'my-icon-shadow@2x.png',
+//                shadowSize: [68, 95],
+//                shadowAnchor: [22, 94]
+    });
+    var newMarker = new L.marker(latLon, {icon: icon});
+    newMarker.id = "nav" + i;
+    newMarker.addTo(maplocal);
 }
