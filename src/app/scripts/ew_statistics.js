@@ -1,6 +1,6 @@
 function loadProjects() {
-    loadJSON('data/projects.geojson', function (projects) {
-        var projectsTable = document.getElementById('projects');
+    loadJSON("data/projects.geojson", function (projects) {
+        var projectsTable = document.getElementById("projects");
 
         for (var i = 0; i < projects.features.length; i++) {
             var project = projects.features[i];
@@ -16,7 +16,7 @@ function loadProjects() {
                 }
             }
 
-            setTableCell(project.properties.Name + '2', project.properties.ObservationCategories);
+            setTableCell(project.properties.Name + "2", project.properties.ObservationCategories);
 
             loadStatistics(project.properties.Name);
         }
@@ -24,8 +24,8 @@ function loadProjects() {
 }
 
 function createProjectLink(projectName) {
-    var url = location.origin + '/#/' + projectName;
-    var a = document.createElement('a');
+    var url = location.origin + "/#/" + projectName;
+    var a = document.createElement("a");
     var linkText = document.createTextNode(projectName);
     a.appendChild(linkText);
     a.href = url;
@@ -33,10 +33,10 @@ function createProjectLink(projectName) {
 }
 
 function loadStatistics(projectName) {
-    loadJSON('/api/statistics/' + projectName, function (projectStatistics) {
-        setTableCell(projectStatistics.project + '3', projectStatistics.hexagons.length);
-        setTableCell(projectStatistics.project + '4', projectStatistics.users.length);
-        setTableCell(projectStatistics.project + '5', projectStatistics.observations);
+    loadJSON("/api/statistics/" + projectName, function (projectStatistics) {
+        setTableCell(projectStatistics.project + "3", projectStatistics.hexagons.length);
+        setTableCell(projectStatistics.project + "4", projectStatistics.users.length);
+        setTableCell(projectStatistics.project + "5", projectStatistics.observations);
     });
 }
 
@@ -46,13 +46,13 @@ function setTableCell(tableCell, value) {
 }
 
 function loadUserStatistics(projectName, user, hexagons) {
-    loadJSON('/api/observations/' + projectName + '/' + user, function (statistics) {
-        document.getElementById('hexagonstatistics').innerHTML = statistics.hexagons + ' of ' + hexagons;
-        document.getElementById('observationstatistics').innerHTML = statistics.observations;
+    loadJSON("/api/observations/" + projectName + "/" + user, function (statistics) {
+        document.getElementById("hexagonstatistics").innerHTML = statistics.hexagons + " of " + hexagons;
+        document.getElementById("observationstatistics").innerHTML = statistics.observations;
     });
 }
 
 function updateObservationStatistics(added) {
-    var observation = +document.getElementById('observationstatistics').innerHTML;
-    document.getElementById('observationstatistics').innerHTML = observation + added;
+    var observation = +document.getElementById("observationstatistics").innerHTML;
+    document.getElementById("observationstatistics").innerHTML = observation + added;
 }

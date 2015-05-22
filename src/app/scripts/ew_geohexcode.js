@@ -41,17 +41,17 @@ function drawHexagon(map, geohexCode, styleNumber) {
     var polygonName = "hexagon" + geohexCode;
     //Current Hexagon
     var style = {
-        'color': '#000000',
-        'weight': 5,
-        'opacity': 0.65,
-        'label': geohexCode,
+        color: " #000000" ,
+        weight: 5,
+        opacity: 0.65,
+        label: geohexCode,
         fillOpacity: 0
     };
 
     if (styleNumber === 1) {
         //allHexagons
         style.weight = 1;
-        style.color = '#FFFFFF';
+        style.color = " #FFFFFF" ;
 
     }
 

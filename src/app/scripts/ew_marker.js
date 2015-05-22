@@ -11,7 +11,7 @@ function getObservationsCount() {
 function drawObservations(observations, observationTypes) {
     for (var i = 0; i < observations.length; i++) {
         var observation = observations[i];
-        if (observation.observation != 'clear') {
+        if (observation.observation != "clear") {
             var observationType = getObservationType(observationTypes, observation.observation);
             var newMarker = getObservationMarker(map, observation.lon, observation.lat, observation.geohex, observation.observation, observation.id, observationType);
             newMarker.options.type = "observation";
@@ -31,19 +31,19 @@ function getObservationType(observationTypes, type) {
 }
 
 function getPopupContent(map, marker, observation) {
-    var div = document.createElement('div');
-    div.innerHTML = observation + '<br/>';
+    var div = document.createElement("div");
+    div.innerHTML = observation + "<br/>";
 
-    var inputButton = document.createElement('input');
-    inputButton.className = 'marker-delete-button';
-    inputButton.value = 'remove';
-    inputButton.type = 'button';
+    var inputButton = document.createElement("input");
+    inputButton.className = "marker-delete-button";
+    inputButton.value = "remove";
+    inputButton.type = "button";
     inputButton.onclick = function () {
         map.removeLayer(marker);
         deleteObservation(marker.id, function (res) {
             var obs = getObservationsCount();
             if (obs === 0) {
-                setHexagonColor('clear');
+                setHexagonColor("clear");
             }
         });
     };
@@ -54,7 +54,7 @@ function getPopupContent(map, marker, observation) {
 function onPopupOpen() {
     var tempMarker = this;
 
-    var list = document.getElementsByClassName('marker-delete-button');
+    var list = document.getElementsByClassName("marker-delete-button");
     for (var i = 0; i < list.length; i++) {
         list[i].click(function () {
         });
@@ -73,7 +73,7 @@ function getObservationMarker(map, lon, lat, geohexcode, observation, id, observ
     newMarker.id = id;
     var div = getPopupContent(map, newMarker, observation);
     newMarker.bindPopup(div);
-    newMarker.on('dragend', function (event) {
+    newMarker.on("dragend", function (event) {
         var marker = event.target;
         var position = marker.getLatLng();
         var isInside = isPointInHexagon(geohexcode, position);
@@ -87,14 +87,14 @@ function getObservationMarker(map, lon, lat, geohexcode, observation, id, observ
         }
 
     });
-    newMarker.on('dragstart', function (event) {
+    newMarker.on("dragstart", function (event) {
         dragMarkerPosition = event.target.getLatLng();
     });
     return newMarker;
 }
 
 function addNavigationMarker(latLon, offSet, downward, hexCode, maplocal) {
-    var iconUrl = downward ? './images/navtriangledown.png' : './images/navtriangle.png';
+    var iconUrl = downward ? "./images/navtriangledown.png" : "./images/navtriangle.png";
     var icon = new L.divIcon({
         html: "<img src=" + iconUrl + " id=\"" + hexCode + "\" onMouseOver=\"addNavigationStyle('" + hexCode + "')\"  onMouseOut=\"removeStyles('" + hexCode + "')\" />",
         className: "navigateTriangle",
@@ -102,7 +102,7 @@ function addNavigationMarker(latLon, offSet, downward, hexCode, maplocal) {
     });
 
     var newMarker = new L.marker(latLon, {icon: icon});
-    newMarker.options.type = 'navigation';
+    newMarker.options.type = "navigation";
     newMarker.on("click", goToHexagon);
     newMarker.addTo(maplocal);
 }
