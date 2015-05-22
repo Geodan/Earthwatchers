@@ -38,6 +38,7 @@ function drawHexagons(map, hexagons) {
 
 function drawHexagon(map, geohexCode, styleNumber) {
 
+    var polygonName = "hexagon" + geohexCode;
     //Current Hexagon
     var style = {
         'color': '#000000',
@@ -47,15 +48,16 @@ function drawHexagon(map, geohexCode, styleNumber) {
         fillOpacity: 0
     };
 
-    //allHexagons
-    if (styleNumber  === 1) {
+    if (styleNumber === 1) {
+        //allHexagons
         style.weight = 1;
         style.color = '#FFFFFF';
+
     }
 
     var polygon = getGeohexPolygon(geohexCode, style);
 
-    polygon.name = 'hexagon';
+    polygon.name = polygonName;
     map.addLayer(polygon);
     return polygon;
 }
@@ -71,8 +73,6 @@ function arraySearch(arr, val) {
 }
 
 function getTotalHexagons() {
-    console.log(project);
-    console.log(defaultGeohexLevel);
     var startHexagon = getRandomHexagon(project, defaultGeohexLevel);
     var zone = GEOHEX.getZoneByCode(startHexagon);
     var allHexagons = [zone.code];
@@ -164,6 +164,8 @@ function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downwa
         var latLon = new L.LatLng(latLonPoints[0], latLonPoints[1]);
 
         addNavigationMarker(latLon, offset, downward, neighbourHexagon.code, maplocal);
+
+//        drawHexagon(maplocal, neighbourHexagon.code, 2);
     }
 }
 
@@ -200,15 +202,40 @@ function getCalculatedCenter(points) {
     return [calculatedLat, calculatedLon];
 }
 
+function addNavigationStyle(geohex) {
+    var layer = findLayerByName("hexagon" + geohex);
+    if (layer) {
+        layer.setStyle({
+            weight: 3,
+            fillOpacity: 0.1,
+            color: "black"
+        });
 
-function addNavigationMarker(latLon, offSet, downward, hexCode, maplocal) {
-    var iconUrl = downward ? './images/navtriangledown.png' : './images/navtriangle.png';
-    var icon = new L.divIcon({
-        html: "<img src=" + iconUrl + " onClick=\"goToHexagon('" + hexCode + "')\" />",
-        className: "navigateTriangle",
-        iconAnchor: [10 + offSet[0], 10 + offSet[1]]
-    });
+    }
+}
 
-    var newMarker = new L.marker(latLon, {icon: icon});
-    newMarker.addTo(maplocal);
+function addCurrentHexagonStyle(geohex) {
+    var layer = findLayerByName("hexagon" + geohex);
+    if (layer) {
+        console.log(geohex);
+        layer.setStyle({
+            weight: 5,
+            fillOpacity: 0,
+            color: "black"
+        });
+
+    }
+}
+
+function removeStyles(geohex) {
+    if (geohex !== geohexCode) { //prevent removing style from new selected hexagon
+        var layer = findLayerByName("hexagon" + geohex);
+        if (layer) {
+            layer.setStyle({
+                weight: 1,
+                fillOpacity: 0,
+                color: "white"
+            });
+        }
+    }
 }

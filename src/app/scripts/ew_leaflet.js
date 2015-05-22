@@ -10,6 +10,18 @@ function findLayerByType(type) {
     return result;
 }
 
+function findLayersByType(type) {
+    var result = [];
+    map.eachLayer(function (layer) {
+        if (layer.options.type !== null) {
+            if (layer.options.type === type) {
+                result.push(layer);
+            }
+        }
+    });
+    return result;
+}
+
 function findLayerByName(name) {
     var result = null;
     map.eachLayer(function (layer) {
@@ -20,4 +32,16 @@ function findLayerByName(name) {
         }
     });
     return result;
+}
+
+function centerOnPolygon(polygon) {
+    var centerHex = polygon.getBounds().getCenter();
+    map.setView(centerHex, startZoomLevel, {
+        animation: true,
+        pan: {
+            duration: 0.4,
+            easeLinearity: 0.5
+        }
+    });
+    return centerHex;
 }

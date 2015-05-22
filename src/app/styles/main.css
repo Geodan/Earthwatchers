@@ -372,3 +372,12 @@ input[type=range]::-ms-tooltip {
     width: 20px;
     height: 20px;
 }
+
+.navigateHexagon {
+    transition: opacity 0.5s ease-out;
+    color: #000000;
+    weight: 5;
+    opacity: 0.65;
+    label: geohexCode;
+    fillOpacity: 1;
+}

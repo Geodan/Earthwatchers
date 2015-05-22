@@ -13,6 +13,7 @@ var defaultProject = 'Borneo';
 var selectedObservationType = null;
 var project = null;
 var projectObservationTypes = null;
+var observationTypesObject = null;
 var dragMarkerPosition = null;
 var projectName = null;
 
@@ -22,10 +23,43 @@ function gotoNextHexagon() {
     window.location.reload();
 }
 
-function goToHexagon(geohex) {
-    var url = location.href.replace(location.hash, '#/' + projectName + "/" + geohex);
+function goToHexagon(event) {
+    event.originalEvent.preventDefault();
+
+    var newGeohexCode = event.originalEvent.srcElement.id;
+    var url = location.href.replace(location.hash, '#/' + projectName + "/" + newGeohexCode);
     location.href = url;
-    window.location.reload();
+
+    var previousSelectedHexagon = geohexCode;
+    geohexCode = newGeohexCode;
+
+    removeMakersByType("navigation");
+    removeMakersByType("observation");
+    removeStyles(previousSelectedHexagon);
+
+    addCurrentHexagonStyle(newGeohexCode);
+    loadJSON('/api/observations/' + projectName + '/' + geohexCode + '/' + user, function (observations) {
+        showObservations(observations);
+    });
+
+    getHexagonNavigation(geohexCode, map);
+
+    var polygon = findLayerByName('hexagon' + newGeohexCode);
+    centerOnPolygon(polygon);
+    //window.location.reload();
+}
+
+function showObservations(observations) {
+    if (observations.length > 0) {
+        if (observations.length === 1 && observations[0].observation === 'clear') {
+            setHexagonColor('clear');
+        }
+        else {
+            drawObservations(observations, observationTypesObject);
+            setHexagonColor('hasObservations');
+        }
+    }
+
 }
 
 function next() {
@@ -59,6 +93,7 @@ function onMapClick(e) {
 
         postObservation(selectedObservationType.type, user, geohexCode, e.latlng.lng, e.latlng.lat, project.properties.Name, function (resp) {
             var newMarker = getObservationMarker(map, e.latlng.lng, e.latlng.lat, geohexCode, selectedObservationType.name, resp.id, selectedObservationType);
+            newMarker.options.type = "observation";
             newMarker.addTo(map);
         });
 
@@ -69,7 +104,7 @@ function onMapClick(e) {
 }
 
 function setHexagonColor(status) {
-    var layer = findLayerByName('hexagon');
+    var layer = findLayerByName('hexagon' + geohexCode);
     if (status === 'hasObservations') {
         layer.setStyle({color: '#FF0000'});
     }
@@ -107,6 +142,7 @@ function initializeRouting() {
             project = getProjectByName(projects, projectName);
             projectObservationTypes = project.properties.ObservationCategories.split(',');
 
+            observationTypesObject = observationTypes;
             addObservationTypeButtons(projectObservationTypes, observationTypes);
 
             defaultGeohexLevel = project.properties.GeohexLevel;
@@ -131,26 +167,17 @@ function initializeRouting() {
                 });
                 map.on('click', onMapClick);
 
-                getHexagonNavigation(geohexCode, map);
                 drawHexagons(map, hexagons);
 
+                getHexagonNavigation(geohexCode, map);
 
-                var polygon = drawHexagon(map, geohexCode);
+//                var polygon = drawHexagon(map, geohexCode);
+                var polygon = getGeohexPolygon(geohexCode, null);
+                addCurrentHexagonStyle(geohexCode);
 
-                var centerHex = polygon.getBounds().getCenter();
-                map.setView(centerHex, startZoomLevel, {
-                    animation: true
-                });
+                var centerHex = centerOnPolygon(polygon);
 
-                if (observations.length > 0) {
-                    if (observations.length === 1 && observations[0].observation === 'clear') {
-                        setHexagonColor('clear');
-                    }
-                    else {
-                        drawObservations(observations, observationTypes);
-                        setHexagonColor('hasObservations');
-                    }
-                }
+                showObservations(observations);
 
                 map.addControl(new L.Control.ZoomMin({
                     position: 'topright', startLevel: startZoomLevel, startCenter: centerHex
