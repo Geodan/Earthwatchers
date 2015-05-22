@@ -167,11 +167,12 @@ function initializeRouting() {
                 });
                 map.on("click", onMapClick);
 
+                drawSatelliteImages(map, defaultSatelliteType);
+
                 drawHexagons(map, hexagons);
 
                 getHexagonNavigation(geohexCode, map);
 
-//                var polygon = drawHexagon(map, geohexCode);
                 var polygon = getGeohexPolygon(geohexCode, null);
                 addCurrentHexagonStyle(geohexCode);
 

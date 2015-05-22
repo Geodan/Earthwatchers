@@ -51,11 +51,18 @@
             <label id="satTypeLabel">Landsat 8</label>
         </div>
     </div>
+    <!--<div class="timerange">-->
+        <!--<label id="rangeValLabel">&nbsp;</label>-->
+        <!--<input type="range" max="2" min="0" id="timeSlider"-->
+               <!--data-popup-enabled="false"-->
+               <!--onchange="timeSliderChanged(this);"-->
+               <!--step="1" name="rangeVal" value="2"/>-->
+    <!--</div>-->
     <div class="timerange">
-        <label id="rangeValLabel">&nbsp;</label>
-        <input type="range" max="2" min="0" id="timeSlider"
+        <label id="satelliteDateLabel">&nbsp;</label>
+        <input type="range" max="2" min="0" id="opacitySlider"
                data-popup-enabled="false"
-               onchange="timeSliderChanged(this);"
+               onchange="opacitySliderChanged(this);"
                step="1" name="rangeVal" value="2"/>
     </div>
 </div>
