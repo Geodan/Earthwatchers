@@ -45,7 +45,7 @@ function goToHexagon(event) {
     getHexagonNavigation(geohexCode, map);
 
     var polygon = findLayerByName("hexagon" + newGeohexCode);
-    centerOnPolygon(polygon);
+    (polygon);
     //window.location.reload();
 }
 
