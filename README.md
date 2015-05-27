@@ -6,8 +6,6 @@
 
 Development preview: http://earthwatchers.azurewebsites.net/
 
-Landing page: http://earthwatchers.azurewebsites.net/landing.html
-
 Permalink, for example to project 'Borneo', hexagon PO2662: 
 
 http://earthwatchers.azurewebsites.net/#/Borneo/PO2662
@@ -50,6 +48,15 @@ docker run -p 3000:3000 bertt/earthwatchers
 http://localhost:3000
 ```
 
+# hexagon status
+
+The hexagons can have the following status:
+
+. clear: User has seen the hexagon and made no observations and pressed clear button. Color green.
+
+. hasObservations: User has put observations on the hexagon
+
+. initial: User has not inspected the hexagon (yet).
 
 # Communication
 

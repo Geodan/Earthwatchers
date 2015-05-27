@@ -60,22 +60,20 @@ function showObservations(observations) {
     }
 }
 
-function next() {
-    var messageDiv = document.getElementById("messageDiv");
-    // todo count observation
+function clearhexagon() {
     var observations = getObservationsCount();
     if (observations === 0) {
         //post/save there are no observations for this hexagon
         postObservation("clear", user, geohexCode, 0, 0, project.properties.Name, function (resp) {
-            messageDiv.innerHTML = "This hexagon is saved with no observations...";
-            messageDiv.className = "message messagesShown";
-            window.setTimeout(gotoNextHexagon, 750);
+            setHexagonColor("clear");
         });
     }
     else {
-        messageDiv.innerHTML = "This hexagon is saved with " + observations + " observation" + (observations === 1 ? "..." : "s...");
+        var messageDiv = document.getElementById("messageDiv");
+        messageDiv.style.display = 'block';
+        messageDiv.innerHTML = "To clear the hexagon remove observations first!";
         messageDiv.className = "message messagesShown";
-        window.setTimeout(gotoNextHexagon, 750);
+        window.setTimeout(function(){messageDiv.style.display = 'none'},750);
     }
 }
 
@@ -169,7 +167,7 @@ function initializeRouting() {
 
                 drawHexagons(map, hexagons);
 
-                getHexagonNavigation(geohexCode, map);
+                getHexagonNavigation(geohexCode, map,user,projectName);
 
                 var polygon = getGeohexPolygon(geohexCode, null);
                 addCurrentHexagonStyle(geohexCode);

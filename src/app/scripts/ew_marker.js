@@ -43,7 +43,7 @@ function getPopupContent(map, marker, observation) {
         deleteObservation(marker.id, function (res) {
             var obs = getObservationsCount();
             if (obs === 0) {
-                setHexagonColor("clear");
+                clearhexagon();
             }
         });
     };
