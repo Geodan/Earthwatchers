@@ -53,7 +53,3 @@ function loadUserStatistics(projectName, user, hexagons) {
     });
 }
 
-function updateObservationStatistics(added) {
-    var observation = +document.getElementById("observationstatistics").innerHTML;
-    document.getElementById("observationstatistics").innerHTML = observation + added;
-}

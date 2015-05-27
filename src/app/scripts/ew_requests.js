@@ -40,8 +40,6 @@ function loadJSON(file, callback) {
 }
 
 function postObservation(observation, user, geohexcode, longitude, latitude, project, callback) {
-    updateObservationStatistics(1);
-
     var zone = GEOHEX.getZoneByCode(geohexcode);
     var obs = JSON.stringify({
         "user": user,
@@ -86,8 +84,6 @@ function updateObservationPosition(id, longitude, latitude, callback) {
 }
 
 function deleteObservation(id, callback) {
-    updateObservationStatistics(-1);
-
     var url = 'api/observations/' + id;
     var request = new XMLHttpRequest();
     request.open('DELETE', url, true);

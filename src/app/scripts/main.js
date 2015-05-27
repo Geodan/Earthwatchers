@@ -66,6 +66,8 @@ function clearhexagon() {
         //post/save there are no observations for this hexagon
         postObservation("clear", user, geohexCode, 0, 0, project.properties.Name, function (resp) {
             setHexagonColor("clear");
+            var total = document.getElementById("hexagonstotal").innerHTML;
+            loadUserStatistics(project.properties.Name,user,total);
         });
     }
     else {
@@ -91,6 +93,11 @@ function onMapClick(e) {
             var newMarker = getObservationMarker(map, e.latlng.lng, e.latlng.lat, geohexCode, selectedObservationType.name, resp.id, selectedObservationType);
             newMarker.options.type = "observation";
             newMarker.addTo(map);
+            
+            // update statistics
+            var total = document.getElementById("hexagonstotal").innerHTML;
+            loadUserStatistics(project.properties.Name,user,total);
+            
         });
 
         if (observations === 0) {
