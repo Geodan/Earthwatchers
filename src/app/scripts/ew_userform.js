@@ -20,7 +20,6 @@ function updateUserInfo() {
 }
 
 function getTotalHexagonsFromStatistics() {
-    var text = document.getElementById('hexagonstatistics').innerHTML;
-    var start = text.indexOf('of ') + 3;
-    return +text.substr(start);
+    var text = document.getElementById('hexagonstotal').innerHTML;
+    return text;
 }
