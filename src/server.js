@@ -196,7 +196,7 @@ router.post('/observations', jsonParser, function (req, res) {
         // delete previous clear observtions
         if(req.body.observation==="clear"){
             dbObservations.remove(function (doc) {
-                    return (doc.observation === req.body.observation);
+                    return (doc.observation === req.body.observation && doc.project === req.body.project && doc.user===req.body.user);
                 }, function (error, count) {
                 }
             );          
