@@ -112,7 +112,8 @@ router.get('/observations/:project/:username', nocache, function (req, res) {
     var observations = 0;
     var hexagons = [];
 
-    dbObservations.each(function (observation) {
+    dbObservations.all(function (observation) {
+        console.log('foudn something?');
         if (observation.project === project && observation.user === username) {
             //search for unique hexagons
             if (arraySearch(hexagons, observation.geohex) === -1) {
@@ -194,10 +195,10 @@ router.post('/observations', jsonParser, function (req, res) {
 
     if (errors === null) {
         // delete previous clear observtions
-        if(req.body.observation==="clear"){
+        if(req.body.observation === "clear"){
             dbObservations.remove(function (doc) {
                     if(doc!==null){
-                        return (doc.observation === req.body.observation && doc.project === req.body.project && doc.user===req.body.user && doc.geohex === req.body.geohex);
+                        return (doc.observation === "clear" && doc.project === req.body.project && doc.user===req.body.user && doc.geohex === req.body.geohex);
                     };
                 }, function (error, count) {
                 }
