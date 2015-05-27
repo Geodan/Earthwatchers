@@ -13,7 +13,8 @@ function drawObservations(observations, observationTypes) {
         var observation = observations[i];
         if (observation.observation != "clear") {
             var observationType = getObservationType(observationTypes, observation.observation);
-            var newMarker = getObservationMarker(map, observation.lon, observation.lat, observation.geohex, observation.observation, observation.id, observationType);
+            var newMarker = getObservationMarker(map, observation.lon, observation.lat, observation.geohex, observation.observation, 
+                        observation.id, observationType, observation.user,observation.project);
             newMarker.options.type = "observation";
             newMarker.addTo(map);
         }
@@ -41,6 +42,9 @@ function getPopupContent(map, marker, observation) {
     inputButton.onclick = function () {
         map.removeLayer(marker);
         deleteObservation(marker.id, function (res) {
+            var total = document.getElementById("hexagonstotal").innerHTML;
+            loadUserStatistics(marker.project,marker.user,total);
+
             var obs = getObservationsCount();
             if (obs === 0) {
                 clearhexagon();
@@ -61,7 +65,7 @@ function onPopupOpen() {
     }
 }
 
-function getObservationMarker(map, lon, lat, geohexcode, observation, id, observationType) {
+function getObservationMarker(map, lon, lat, geohexcode, observation, id, observationType,user,project) {
     var markerIcon = L.icon({
         iconUrl: "./images/" + observationType.icon,
         iconSize: [30, 30],
@@ -71,6 +75,9 @@ function getObservationMarker(map, lon, lat, geohexcode, observation, id, observ
     var ll = new L.LatLng(lat, lon);
     var newMarker = new L.marker(ll, {icon: markerIcon, draggable: true});
     newMarker.id = id;
+    newMarker.geohex=geohexcode;
+    newMarker.user=user;
+    newMarker.project =project;
     var div = getPopupContent(map, newMarker, observation);
     newMarker.bindPopup(div);
     newMarker.on("dragend", function (event) {

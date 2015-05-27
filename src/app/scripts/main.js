@@ -90,7 +90,7 @@ function onMapClick(e) {
         var observations = getObservationsCount();
 
         postObservation(selectedObservationType.type, user, geohexCode, e.latlng.lng, e.latlng.lat, project.properties.Name, function (resp) {
-            var newMarker = getObservationMarker(map, e.latlng.lng, e.latlng.lat, geohexCode, selectedObservationType.name, resp.id, selectedObservationType);
+            var newMarker = getObservationMarker(map, e.latlng.lng, e.latlng.lat, geohexCode, selectedObservationType.name, resp.id, selectedObservationType,user,project.properties.Name);
             newMarker.options.type = "observation";
             newMarker.addTo(map);
             
