@@ -92,9 +92,23 @@ function getObservationMarker(map, lon, lat, geohexcode, observation, id, observ
     });
     return newMarker;
 }
+function getIcon(status, downward){
+    var iconUrl;
+        if(status === "hasObservations"){
+        iconUrl = downward ? "./images/navtriangledown_red.png" : "./images/navtriangleup_red.png";
+    }
+    else if(status === "clear"){
+        iconUrl = downward ? "./images/navtriangledown_green.png" : "./images/navtriangleup_green.png";
+    }
+    else if(status === "initial"){
+        iconUrl = downward ? "./images/navtriangledown_black.png" : "./images/navtriangleup_black.png";
+    }
+    return iconUrl;
+}
 
-function addNavigationMarker(latLon, offSet, downward, hexCode, maplocal) {
-    var iconUrl = downward ? "./images/navtriangledown.png" : "./images/navtriangle.png";
+
+function addNavigationMarker(latLon, offSet, downward, hexCode, maplocal, status) {
+    var iconUrl = getIcon(status,downward);
     var icon = new L.divIcon({
         html: "<img src=" + iconUrl + " id=\"" + hexCode + "\" onMouseOver=\"addNavigationStyle('" + hexCode + "')\"  onMouseOut=\"removeStyles('" + hexCode + "')\" />",
         className: "navigateTriangle",

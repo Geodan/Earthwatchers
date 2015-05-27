@@ -42,7 +42,7 @@ function goToHexagon(event) {
         showObservations(observations);
     });
 
-    getHexagonNavigation(geohexCode, map);
+    getHexagonNavigation(geohexCode, map, user, projectName);
 
     var polygon = findLayerByName("hexagon" + newGeohexCode);
     (polygon);
@@ -50,16 +50,14 @@ function goToHexagon(event) {
 }
 
 function showObservations(observations) {
-    if (observations.length > 0) {
-        if (observations.length === 1 && observations[0].observation === "clear") {
-            setHexagonColor("clear");
-        }
-        else {
-            drawObservations(observations, observationTypesObject);
-            setHexagonColor("hasObservations");
-        }
+    var status = getStatusHexagon(observations);
+    if(status==="clear"){
+       setHexagonColor("clear");
     }
-
+    else if (status==="hasObservations"){
+        drawObservations(observations, observationTypesObject);
+        setHexagonColor("hasObservations");
+    }
 }
 
 function next() {

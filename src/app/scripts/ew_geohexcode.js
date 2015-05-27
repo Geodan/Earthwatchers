@@ -144,28 +144,43 @@ function hexagonInsideProject(hexagon) {
     return false;
 }
 
-function getHexagonNavigation(geohexCode, maplocal) {
+function getHexagonNavigation(geohexCode, maplocal, user, projectName) {
 
     var currentHexagon = GEOHEX.getZoneByCode(geohexCode);
 
-    showNavigationTriangle(currentHexagon, getHexagonUp(currentHexagon), [0, 15], false, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonDown(currentHexagon), [0, -15], true, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonUpLeft(currentHexagon), [10, 5], true, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonDownLeft(currentHexagon), [10, -5], false, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonUpRight(currentHexagon), [-10, 5], true, maplocal);
-    showNavigationTriangle(currentHexagon, getHexagonDownRight(currentHexagon), [-10, -5], false, maplocal);
+    showNavigationTriangle(currentHexagon, getHexagonUp(currentHexagon), [0, 15], false, maplocal,user,projectName);
+    showNavigationTriangle(currentHexagon, getHexagonDown(currentHexagon), [0, -15], true, maplocal,user,projectName);
+    showNavigationTriangle(currentHexagon, getHexagonUpLeft(currentHexagon), [10, 5], true, maplocal,user,projectName);
+    showNavigationTriangle(currentHexagon, getHexagonDownLeft(currentHexagon), [10, -5], false, maplocal,user,projectName);
+    showNavigationTriangle(currentHexagon, getHexagonUpRight(currentHexagon), [-10, 5], true, maplocal,user,projectName);
+    showNavigationTriangle(currentHexagon, getHexagonDownRight(currentHexagon), [-10, -5], false, maplocal,user,projectName);
 }
 
-function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downward, maplocal) {
+function getStatusHexagon(observations){
+    var status = "initial";
+    if (observations.length > 0) {
+        if (observations.length === 1 && observations[0].observation === "clear") {
+            status = "clear";
+        }
+        else {
+            status ="hasObservations";
+        }
+    }
+    return status;
+}
+
+
+function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downward, maplocal, user, projectName) {
     if (hexagonInsideProject(neighbourHexagon)) {
-        var points = getMixedPoints(currentHexagon, neighbourHexagon);
-
-        var latLonPoints = getCalculatedCenter(points);
-        var latLon = new L.LatLng(latLonPoints[0], latLonPoints[1]);
-
-        addNavigationMarker(latLon, offset, downward, neighbourHexagon.code, maplocal);
-
-//        drawHexagon(maplocal, neighbourHexagon.code, 2);
+        loadJSON("/api/observations/" + projectName + "/" + neighbourHexagon.code + "/" + user, function (observations) {
+            var status = getStatusHexagon(observations);
+            var points = getMixedPoints(currentHexagon, neighbourHexagon);
+    
+            var latLonPoints = getCalculatedCenter(points);
+            var latLon = new L.LatLng(latLonPoints[0], latLonPoints[1]);
+    
+            addNavigationMarker(latLon, offset, downward, neighbourHexagon.code, maplocal,status);
+        });
     }
 }
 
