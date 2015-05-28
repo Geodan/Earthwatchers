@@ -113,7 +113,6 @@ router.get('/observations/:project/:username', nocache, function (req, res) {
     var hexagons = [];
 
     dbObservations.all(function (observation) {
-        console.log('foudn something?');
         if (observation.project === project && observation.user === username) {
             //search for unique hexagons
             if (arraySearch(hexagons, observation.geohex) === -1) {
