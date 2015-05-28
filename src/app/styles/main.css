@@ -144,15 +144,15 @@ html {
     display: inline-block;
     width: 100%;
 }
-.timerange label.value0 {
-    text-align: left;
-}
-.timerange label.value1 {
-    text-align: center;
-}
-.timerange label.value2 {
-    text-align: right;
-}
+/*.timerange label.value0 {*/
+    /*text-align: left;*/
+/*}*/
+/*.timerange label.value1 {*/
+    /*text-align: center;*/
+/*}*/
+/*.timerange label.value2 {*/
+    /*text-align: right;*/
+/*}*/
 input[type=range] {
     -webkit-appearance: none;
     margin: 13px 0;

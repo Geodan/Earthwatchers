@@ -83,22 +83,24 @@ function addSatelliteImage(map, satelliteDate, type) {
 function opacitySliderChanged(control) {
     if (satelliteImages.features.length > 0) {
 
-        var day = satelliteImages.features[satelliteImages.features.length - 1 - [2 - control.value]].properties.Published;
-        var label = document.getElementById("satelliteDateLabel");
-        label.innerHTML = day;
-        label.className = "value" + control.value;
-
         var recentImage = findLayerByType("earthWatchersNow");
         var previousImage = findLayerByType("earthWatchersPrevious");
 
-        if (control.value === "2") {
-            recentImage.setOpacity(1);
-        } else if (control.value === "1") {
-            recentImage.setOpacity(0);
+        if (control.value > 100) {
+            recentImage.setOpacity( (control.value -100) / 100);
             previousImage.setOpacity(1);
-        } else if (control.value === "0") {
+        } else {
             recentImage.setOpacity(0);
-            previousImage.setOpacity(0);
+            previousImage.setOpacity( control.value / 100);
         }
+
+        setDateName(control.value);
     }
+}
+
+function setDateName(sliderValue) {
+    var dayNumber = sliderValue > 175 ? 2 : sliderValue > 75 ? 1 : 0;
+    var day = satelliteImages.features[satelliteImages.features.length - 1 - [2 - dayNumber]].properties.Published;
+    var label = document.getElementById("satelliteDateLabel");
+    label.innerHTML = day;
 }

@@ -61,10 +61,10 @@
     <!--</div>-->
     <div class="timerange">
         <label id="satelliteDateLabel">&nbsp;</label>
-        <input type="range" max="2" min="0" id="opacitySlider"
+        <input type="range" max="200" min="0" id="opacitySlider"
                data-popup-enabled="false"
-               onchange="opacitySliderChanged(this);"
-               step="1" name="rangeVal" value="2"/>
+               oninput="opacitySliderChanged(this); "
+               step="1" name="rangeVal" value="200"/>
     </div>
 </div>
 <div class="map-application">
