@@ -63,7 +63,7 @@ function drawSatelliteImages(map, satelliteType) {
             addSatelliteImage(map, satelliteDate, satelliteAgesId[count]);
             count++;
         }
-        opacitySliderChanged({value: "2"});
+        opacitySliderChanged({value: "200"});
     });
 }
 
