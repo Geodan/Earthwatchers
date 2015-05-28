@@ -168,6 +168,10 @@ function initializeRouting() {
                     zoomControl: false,
                     attributionControl: false
                 });
+                L.control.zoom({
+                    position:'topright'
+                }).addTo(map);
+                
                 map.on("click", onMapClick);
 
                 drawSatelliteImages(map, defaultSatelliteType);

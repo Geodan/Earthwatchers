@@ -11,8 +11,8 @@ L.Control.ZoomMin = L.Control.Zoom.extend({
         zoomInTitle: 'Zoom in',
         zoomOutText: '-',
         zoomOutTitle: 'Zoom out',
-        zoomMinText: 'Zoom min',
-        zoomMinTitle: 'Zoom min',
+        zoomMinText: 'Zoom to hexagon',
+        zoomMinTitle: 'Zoom to hexagon',
         startCenter: '',
         startLevel: ''
     },

@@ -11,3 +11,4 @@ dist
 *.changelog
 *.meta
 *.nosql
+*.ts
