@@ -8,19 +8,15 @@ function getSatelliteImageByDate(satelliteImages, date) {
 }
 
 
-function toggleSatelliteType(opacitySlider) {
-    var labels = {
-        Landsat: "Landsat 8",
-        Sentinel: "Sentinel 1"
-    };
-    var type = opacitySlider.value === "Landsat" ? "Sentinel" : "Landsat";
+function toggleSatelliteType(satelliteType) {
+    var type = satelliteType.value === "Landsat" ? "Sentinel" : "Landsat";
 
     satelliteTypeSelectionChanged({value: type});
 
     removeAllSatelliteImages();
     drawSatelliteImages(map, type);
 
-    updateSatelliteType(opacitySlider, type);
+    updateSatelliteType(satelliteType, type);
 }
 
 function updateSatelliteType(opacitySlider, satelliteType) {
@@ -37,9 +33,8 @@ function satelliteTypeSelectionChanged(sel) {
     var bbox = polygon.getBounds().toBBoxString();
     getSatelliteImageData(bbox, currentImageType, function (resp) {
         satelliteImages = resp;
-        var sel = document.getElementById("timeSlider");
         satelliteImages.features.sort(compare);
-//        sel.onchange();
+        setInitialOpacityValues();
     });
 }
 
@@ -63,7 +58,7 @@ function drawSatelliteImages(map, satelliteType) {
             addSatelliteImage(map, satelliteDate, satelliteAgesId[count]);
             count++;
         }
-        opacitySliderChanged({value: "200"});
+        setInitialOpacityValues();
     });
 }
 
@@ -78,6 +73,10 @@ function addSatelliteImage(map, satelliteDate, type) {
         type: type
     });
     map.addLayer(newLayer);
+}
+
+function setInitialOpacityValues() {
+    document.getElementById("opacitySlider").onchange();
 }
 
 function opacitySliderChanged(control) {
