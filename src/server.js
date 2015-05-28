@@ -181,6 +181,33 @@ router.get('/satelliteimages', function (req, res) {
     }
 });
 
+// post an clear observation
+router.post('/clear', jsonParser, function (req, res) {
+    var id = uuid.v4();
+    req.checkBody('user', 'User is required').notEmpty();
+    req.checkBody('lat', 'lat is required').notEmpty();
+    req.checkBody('lon', 'lon is required').notEmpty();
+    req.checkBody('geohex', 'geohex is required').notEmpty();
+    req.checkBody('project', 'project is required').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors === null) {
+        dbObservations.remove(function (doc) {
+                if(doc!==null){
+                    return (doc.observation === "clear" && doc.project === req.body.project && doc.user===req.body.user && doc.geohex === req.body.geohex);
+                };
+            }, function (error, count) {
+                res.status(HttpStatus.CREATED).send(req.body);
+            }
+        );          
+        
+    } else {
+        res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
+    }
+});
+
+
 // post an observation
 router.post('/observations', jsonParser, function (req, res) {
     var id = uuid.v4();
@@ -195,15 +222,6 @@ router.post('/observations', jsonParser, function (req, res) {
 
     if (errors === null) {
         // delete previous clear observtions
-        if(req.body.observation === "clear"){
-            dbObservations.remove(function (doc) {
-                    if(doc!==null){
-                        return (doc.observation === "clear" && doc.project === req.body.project && doc.user===req.body.user && doc.geohex === req.body.geohex);
-                    };
-                }, function (error, count) {
-                }
-            );          
-        }
         req.body.date = new Date().toISOString();
         req.body.id = id;
 

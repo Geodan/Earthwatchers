@@ -63,10 +63,12 @@ function clearhexagon() {
     var observations = getObservationsCount();
     if (observations === 0) {
         //post/save there are no observations for this hexagon
-        postObservation("clear", user, geohexCode, 0, 0, project.properties.Name, function (resp) {
-            setHexagonColor("clear");
-            var total = document.getElementById("hexagonstotal").innerHTML;
-            loadUserStatistics(project.properties.Name,user,total);
+        postclearHexagon(user, geohexCode, 0, 0, project.properties.Name, function (resp1) {
+            postObservation("clear", user, geohexCode, 0, 0, project.properties.Name, function (resp) {
+                setHexagonColor("clear");
+                var total = document.getElementById("hexagonstotal").innerHTML;
+                loadUserStatistics(project.properties.Name,user,total);
+            });
         });
     }
     else {

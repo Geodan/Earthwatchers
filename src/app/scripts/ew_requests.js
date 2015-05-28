@@ -39,6 +39,31 @@ function loadJSON(file, callback) {
     request.send(null);
 }
 
+function postclearHexagon(user, geohexcode, longitude, latitude, project, callback) {
+    var zone = GEOHEX.getZoneByCode(geohexcode);
+    var obs = JSON.stringify({
+        "user": user,
+        "lat": latitude,
+        "lon": longitude,
+        "level": zone.getLevel(),
+        "geohex": geohexcode,
+        "project": project
+    });
+    var url = 'api/clear';
+    var request = new XMLHttpRequest();
+    request.open('POST', url, true);
+    request.setRequestHeader("Content-type", "application/json");
+
+    request.onload = function () {
+        if (request.status == 201) {
+            var res = JSON.parse(request.responseText);
+            callback(res);
+        }
+    };
+    request.send(obs);
+}
+
+
 function postObservation(observation, user, geohexcode, longitude, latitude, project, callback) {
     var zone = GEOHEX.getZoneByCode(geohexcode);
     var obs = JSON.stringify({
