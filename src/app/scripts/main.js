@@ -187,9 +187,9 @@ function initializeRouting() {
 
                 showObservations(observations);
 
-                map.addControl(new L.Control.ZoomMin({
-                    position: "topright", startLevel: startZoomLevel, startCenter: centerHex
-                }));
+                //map.addControl(new L.Control.ZoomMin({
+                //    position: "topright", startLevel: startZoomLevel, startCenter: centerHex
+                //}));
 
                 L.control.scale({imperial: false, position: "topleft"}).addTo(map);
 
