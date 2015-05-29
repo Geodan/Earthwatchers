@@ -46,6 +46,8 @@ function goToHexagon(event) {
 
     var polygon = findLayerByName("hexagon" + newGeohexCode);
     centerOnPolygon(polygon);
+
+    drawSatelliteImages(map, document.getElementById("satTypeLabel").innerText);
 }
 
 function showObservations(observations) {
@@ -163,8 +165,6 @@ function initializeRouting() {
 
                 loadUserStatistics(projectName, user, hexagons.length);
 
-                satelliteTypeSelectionChanged({value: defaultSatelliteType});
-
                 map = L.map("map", {
                     zoomControl: false,
                     attributionControl: false
@@ -187,10 +187,6 @@ function initializeRouting() {
                 var centerHex = centerOnPolygon(polygon);
 
                 showObservations(observations);
-
-                //map.addControl(new L.Control.ZoomMin({
-                //    position: "topright", startLevel: startZoomLevel, startCenter: centerHex
-                //}));
 
                 L.control.scale({imperial: false, position: "topleft"}).addTo(map);
 
