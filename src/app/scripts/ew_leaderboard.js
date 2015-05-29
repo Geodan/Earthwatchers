@@ -14,7 +14,7 @@ function loadLeaderBoard() {
 }
 
 function createLeaderBoardTable(leaderBoardStatistics) {
-    var leaderBoardTable = document.getElementById('leaderBoard');
+    var leaderBoardTable = document.getElementById('leaderBoardTable');
 
     for (var i = 0; i < leaderBoardStatistics.length; i++) {
         var userRow = leaderBoardTable.insertRow();

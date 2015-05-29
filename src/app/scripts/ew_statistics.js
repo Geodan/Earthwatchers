@@ -1,6 +1,6 @@
 function loadProjects() {
     loadJSON("data/projects.geojson", function (projects) {
-        var projectsTable = document.getElementById("projects");
+        var projectsTable = document.getElementById("projectsTable");
 
         for (var i = 0; i < projects.features.length; i++) {
             var project = projects.features[i];
@@ -12,6 +12,7 @@ function loadProjects() {
 
                 if (j === 1) {
                     var link = createProjectLink(project.properties.Name);
+                    link.className = "btn btn-lg btn-success";
                     td.appendChild(link);
                 }
             }
