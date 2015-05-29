@@ -4,11 +4,9 @@
 
 function loadLeaderBoard() {
     loadJSON('/api/leaderboard/', function (leaderBoardStatistics) {
-
         leaderBoardStatistics = leaderBoardStatistics.sort(function (a, b) {
             return (b["hexagons"] > a["hexagons"]) ? 1 : ((b["hexagons"] < a["hexagons"]) ? -1 : 0);
         });
-
         createLeaderBoardTable(leaderBoardStatistics);
     });
 }
@@ -18,7 +16,6 @@ function createLeaderBoardTable(leaderBoardStatistics) {
 
     for (var i = 0; i < leaderBoardStatistics.length; i++) {
         var userRow = leaderBoardTable.insertRow();
-
         var td = userRow.insertCell(0);
         td.innerText = i + 1; //Rank
         td = userRow.insertCell(1);
