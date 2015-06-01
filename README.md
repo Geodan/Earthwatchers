@@ -16,7 +16,7 @@ Issues: https://huboard.com/Geodan/Earthwatchers/
 
 Server side: Node.js with Express, Dotenv, Turf, NoSql
 
-Client side: Leaflet, Leaflet-omnivore, Turf
+Client side: Leaflet, Turf, Bootstrap
 
 Data: GeoJSON files
 
