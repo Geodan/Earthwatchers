@@ -16,7 +16,6 @@ function updateUserInfo() {
         '<span class="username"> Hi, ' + user + '!</span> ' +
             '<a class="userhint" onclick="showUserForm();">Change?</a>';
 
-    // loadUserStatistics(projectName, user, getTotalHexagonsFromStatistics());
 }
 
 function getTotalHexagonsFromStatistics() {

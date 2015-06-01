@@ -25,29 +25,33 @@ function gotoNextHexagon() {
 
 function goToHexagon(event) {
     event.originalEvent.preventDefault();
-
     var newGeohexCode = event.originalEvent.srcElement.id;
-    var url = location.href.replace(location.hash, "#/" + projectName + "/" + newGeohexCode);
+    goToGeohexCode(newGeohexCode);
+}
+
+function goToGeohexCode(code){
+    var url = location.href.replace(location.hash, "#/" + projectName + "/" + code);
     location.href = url;
 
     var previousSelectedHexagon = geohexCode;
-    geohexCode = newGeohexCode;
+    geohexCode = code;
 
     removeMakersByType("navigation");
     removeMakersByType("observation");
     removeStyles(previousSelectedHexagon);
 
-    addCurrentHexagonStyle(newGeohexCode);
+    addCurrentHexagonStyle(code);
     loadJSON("/api/observations/" + projectName + "/" + geohexCode + "/" + user, function (observations) {
         showObservations(observations);
     });
 
     getHexagonNavigation(geohexCode, map, user, projectName);
 
-    var polygon = findLayerByName("hexagon" + newGeohexCode);
+    var polygon = findLayerByName("hexagon" + code);
     centerOnPolygon(polygon);
 
     drawSatelliteImages(map, document.getElementById("satTypeLabel").innerText);
+    
 }
 
 function showObservations(observations) {

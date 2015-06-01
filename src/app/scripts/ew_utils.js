@@ -28,5 +28,9 @@ function changeName(event) {
     form.children[0].value = '';
 
     updateUserInfo();
+    
+    loadUserStatistics(projectName, user, getTotalHexagonsFromStatistics());
+    goToGeohexCode(geohexCode);
+
     return false;
 }
