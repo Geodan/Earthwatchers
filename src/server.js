@@ -60,6 +60,16 @@ router.get('/', function (req, res) {
     });
 });
 
+// returns all observations from project in geojson format
+router.get('/observations/:project', function (req, res) {
+    console.log('return observations of project:' + req.params.project);
+    dbObservations.all(function (doc) {
+        return (doc.project === req.params.project);
+    }, function (error, selected) {
+        res.status(HttpStatus.OK).send(selected);
+    });
+});
+
 // get the version
 router.get('/version', function (req, res) {
     res.json({
