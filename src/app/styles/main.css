@@ -134,8 +134,8 @@ html {
     position: absolute;
     left: 80px;
     bottom: 0px;
-    width: 150px;
-    height: 73px;
+    width: 400px;
+    height: 100px;
     padding: 10px 5px;
     background: rgba(0,0,0,0.5);
 }
@@ -277,8 +277,8 @@ input[type=range]::-ms-tooltip {
 .minimap {
     position: absolute;
     display: inline-block;
-    width: 74px;
-    height: 74px;
+    width: 100px;
+    height: 100px;
     background: rgba(0,0,0,0.5);
     border: 1px solid #fff;
     bottom: 0;
