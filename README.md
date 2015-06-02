@@ -54,9 +54,15 @@ The hexagons can have the following status:
 
 . clear: User has seen the hexagon and made no observations and pressed clear button. Color green.
 
-. hasObservations: User has put observations on the hexagon
+. hasObservations: User has put observations on the hexagon. Color red.
 
-. initial: User has not inspected the hexagon (yet).
+. initial: User has not inspected the hexagon (yet). Color black.
+
+# API
+
+HTTP GET http://earthwatchers.azurewebsites.net/api/observations/:project
+
+returns all observations for given project 
 
 # Communication
 
