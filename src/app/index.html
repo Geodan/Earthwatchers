@@ -60,7 +60,10 @@
                <!--step="1" name="rangeVal" value="2"/>-->
     <!--</div>-->
     <div class="timerange">
-        <label id="satelliteDateLabel">&nbsp;</label>
+        <div id="satelliteDateLabelFirst" style="width:38%;float:left;font-size:22px;color:red"></div>
+        <div id="satelliteDateLabelPrevious"" style="float:left;;font-size:22px;color:red"></div>
+        <div id="satelliteDateLabelNow" style="float:right;font-size:22px;color:red"></div>
+            
         <input type="range" max="200" min="0" id="opacitySlider"
                data-popup-enabled="false"
                oninput="opacitySliderChanged(this);"

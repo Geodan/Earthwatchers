@@ -10,10 +10,9 @@ function getSatelliteImageByDate(satelliteImages, date) {
 
 function toggleSatelliteType(satelliteType) {
     var type = satelliteType.value === "Landsat" ? "Sentinel" : "Landsat";
-
     drawSatelliteImages(map, type);
-
     updateSatelliteType(satelliteType, type);
+    setDateName();
 }
 
 function updateSatelliteType(opacitySlider, satelliteType) {
@@ -70,6 +69,7 @@ function addSatelliteImage(map, satelliteImages, satelliteDate, type) {
 
 function setInitialOpacityValues() {
     document.getElementById("opacitySlider").onchange();
+    setDateName();
 }
 
 function opacitySliderChanged(control) {
@@ -83,13 +83,22 @@ function opacitySliderChanged(control) {
         recentImage.setOpacity(0);
         previousImage.setOpacity(control.value / 100);
     }
-
-    setDateName(control.value);
 }
 
-function setDateName(sliderValue) {
-    var dayNumber = sliderValue > 175 ? 2 : sliderValue > 75 ? 1 : 0;
-    var day = satelliteImages.features[satelliteImages.features.length - 1 - [2 - dayNumber]].properties.Published;
-    var label = document.getElementById("satelliteDateLabel");
-    label.innerHTML = day;
+function setDateName() {
+    setLabel("satelliteDateLabelNow",satelliteImages.features[satelliteImages.features.length-1]);
+    setLabel("satelliteDateLabelPrevious",satelliteImages.features[satelliteImages.features.length-2]);
+    setLabel("satelliteDateLabelFirst",satelliteImages.features[satelliteImages.features.length-3]);  
 }
+function setLabel(divLabelName,satelliteImage){
+    var labelDiv = document.getElementById(divLabelName);
+
+    if(satelliteImage!=null){
+        var date = satelliteImage.properties.Published;
+        labelDiv.innerHTML = date;
+    }
+    else{
+        labelDiv.innerHTML = "";
+    }
+}
+
