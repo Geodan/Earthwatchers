@@ -62,7 +62,7 @@ The hexagons can have the following status:
 
 HTTP GET http://earthwatchers.azurewebsites.net/api/observations/:project
 
-returns all observations for given project 
+returns all observations for given project in GeoJSON format
 
 # Communication
 

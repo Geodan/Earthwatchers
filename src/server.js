@@ -10,6 +10,7 @@ var HttpStatus = require('http-status-codes');
 var lineReader = require('line-reader');
 var uuid = require('node-uuid');
 var nosql = require('nosql');
+var geoJSON = require('geojson');
 
 var imageTypes = {
     'Landsat': 2,
@@ -66,7 +67,8 @@ router.get('/observations/:project', function (req, res) {
     dbObservations.all(function (doc) {
         return (doc.project === req.params.project);
     }, function (error, selected) {
-        res.status(HttpStatus.OK).send(selected);
+        var geojson1 = geoJSON.parse(selected, {Point: ['lat','lon']});
+        res.status(HttpStatus.OK).send(geojson1);
     });
 });
 
