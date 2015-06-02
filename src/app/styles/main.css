@@ -139,14 +139,14 @@ html {
     padding: 10px 5px;
     background: rgba(0,0,0,0.7);
 }
-.timerange label {
-    color: #eee;
-    display: inline-block;
-    width: 100%;
+.timerange div {
+    font-size:20px;
+    color:red
 }
-/*.timerange label.value0 {*/
-    /*text-align: left;*/
-/*}*/
+.timerange div.satelliteDateLabelFirst {
+    width:38%;
+    float:left;
+}
 /*.timerange label.value1 {*/
     /*text-align: center;*/
 /*}*/
@@ -155,7 +155,7 @@ html {
 /*}*/
 input[type=range] {
     -webkit-appearance: none;
-    margin: 13px 0;
+    margin: 23px 0;
     width: 100%;
 }
 
