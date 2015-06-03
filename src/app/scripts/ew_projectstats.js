@@ -1,10 +1,14 @@
 /*global L */
 var map=null;
 
-
-function mapPolygon(poly){
-      return poly.map(function(line){return mapLineString(line)})
-    }
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    var html = "user: " + feature.properties.user +"<br/>";
+    html += "observation: " + feature.properties.observation +"<br/>";
+    html += "date: " + feature.properties.date +"<br/>";
+    html += "hexagon: " + feature.properties.geohex +"<br/>";
+    layer.bindPopup(html);
+}
 
 (function (window, document, L) {
     "use strict";
@@ -25,7 +29,7 @@ function mapPolygon(poly){
         
         loadJSON('api/observations/'+projectName, function(observations){
             document.getElementById('numberOfObservations').innerHTML = observations.features.length;
-            var observationsLayer = L.geoJson(observations, {fill: false}).addTo(map);
+            var observationsLayer = L.geoJson(observations, {fill: false, onEachFeature: onEachFeature}).addTo(map);
         });
     });
 }(window, document, L));
