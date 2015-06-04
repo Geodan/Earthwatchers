@@ -138,10 +138,11 @@ html {
     height: 100px;
     padding: 10px 5px;
     background: rgba(0,0,0,0.7);
+    border-radius: 10px;
 }
 .timerange div {
     font-size:20px;
-    color:red
+    color:white;
 }
 .timerange div.satelliteDateLabelFirst {
     width:38%;
@@ -176,7 +177,7 @@ input[type=range]::-webkit-slider-runnable-track {
     cursor: pointer;
     animate: 0.2s;
     box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
-    background: #281aa9;
+    background: white;
     border-radius: 1px;
     border: 1px solid #010101;
 }
@@ -194,7 +195,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
-    background: #281aa9;
+    background: white;
 }
 
 input[type=range]::-moz-range-track {
@@ -203,7 +204,7 @@ input[type=range]::-moz-range-track {
     cursor: pointer;
     animate: 0.2s;
     box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
-    background: #281aa9;
+    background: white;
     border-radius: 1px;
     border: 1px solid #010101;
 }
@@ -230,14 +231,14 @@ input[type=range]::-ms-track {
 }
 
 input[type=range]::-ms-fill-lower {
-    background: #281aa9;
+    background: white;
     border: 1px solid #010101;
     border-radius: 3px;
     box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
 }
 
 input[type=range]::-ms-fill-upper {
-    background: #281aa9;
+    background: white;
     border: 1px solid #010101;
     border-radius: 3px;
     box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
@@ -254,11 +255,11 @@ input[type=range]::-ms-thumb {
 }
 
 input[type=range]:focus::-ms-fill-lower {
-    background: #281aa9;
+    background: white;
 }
 
 input[type=range]:focus::-ms-fill-upper {
-    background: #281aa9;
+    background: white;
 }
 
 input[type=range]::-ms-tooltip {
@@ -325,6 +326,7 @@ input[type=range]::-ms-tooltip {
     background: rgba(255,255,255,0.8);
     z-index: 1;
     padding: 10px;
+    border-radius: 10px;
 }
 .userhint{
     font-size: 80%;
