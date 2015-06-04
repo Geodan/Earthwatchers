@@ -1,6 +1,16 @@
 function showUserForm() {
     var userForm = document.getElementById('userform');
-    userForm.classList.remove('hide');
+    if(userForm.classList.length==2){
+        userForm.classList.remove('hide');
+        var userLink = document.getElementById('userhint');
+        userLink.innerHTML = "Close";
+    }
+    else{
+        userForm.classList.add('hide');
+        var userLink = document.getElementById('userhint');
+        userLink.innerHTML = "Change?";
+    }
+    
 }
 
 function initUserPanel() {
@@ -14,7 +24,7 @@ function updateUserInfo() {
 
     userInfo.innerHTML =
         '<span class="username"> Hi, ' + user + '!</span> ' +
-            '<a class="userhint" onclick="showUserForm();">Change?</a>';
+            '<a class="userhint" id="userhint" onclick="showUserForm();">Change?</a>';
 
 }
 
