@@ -48,6 +48,7 @@ function setTableCell(tableCell, value) {
 
 function loadUserStatistics(projectName, user, hexagons) {
     loadJSON("/api/observations/" + projectName + "/" + user, function (statistics) {
+        document.getElementById("project").innerHTML = projectName;
         document.getElementById("hexagonstotal").innerHTML = hexagons;
         document.getElementById("hexagonstatistics").innerHTML = statistics.hexagons;
         document.getElementById("observationstatistics").innerHTML = statistics.observations;
