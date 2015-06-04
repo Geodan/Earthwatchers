@@ -25,7 +25,7 @@ function loadProjects() {
 }
 
 function createProjectLink(projectName) {
-    var url = location.origin + "/#/" + projectName;
+    var url = location.origin + "/projects.html?" + projectName;
     var a = document.createElement("a");
     var linkText = document.createTextNode(projectName);
     a.appendChild(linkText);
