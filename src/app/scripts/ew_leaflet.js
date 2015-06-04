@@ -36,7 +36,11 @@ function findLayerByName(name) {
 
 function centerOnPolygon(polygon) {
     var centerHex = polygon.getBounds().getCenter();
-    map.setView(centerHex, startZoomLevel, {
+    var currentZoomLevel = map.getZoom();
+    if (!currentZoomLevel ) {
+        currentZoomLevel = startZoomLevel;
+    }
+    map.setView(centerHex, currentZoomLevel, {
         animation: true,
         pan: {
             duration: 0.4,
