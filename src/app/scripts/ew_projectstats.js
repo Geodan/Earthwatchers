@@ -17,7 +17,7 @@ function onEachFeature(feature, layer) {
 	var projectName = url.replace('?', ''); 
 	document.getElementById('projectName').innerHTML = projectName;
     //"#/" + projectName + "/"
-    document.getElementById('editorLink').href = 'index.html#/' + projectName + "/";
+    document.getElementById('editorLink').href = '/#/' + projectName;
     document.getElementById('editorLink').innerHTML = 'editor project ' + projectName;
     
     

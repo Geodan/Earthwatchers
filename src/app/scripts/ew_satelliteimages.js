@@ -28,14 +28,16 @@ function getSatelliteImageDataCallback(satelliteData) {
 
     var satelliteAgesId = ["earthWatchersOld", "earthWatchersPrevious", "earthWatchersNow"];
     var count = 0;
-    for (var i = satelliteData.features.length - 3; i < satelliteData.features.length; i++) {
-
-        if (satelliteImages && satelliteImages.features[i] !== satelliteData.features[i]) {
-            removeSatelliteImage(satelliteAgesId[count]);
+    if(satelliteData.features.length>0){
+        for (var i = satelliteData.features.length - 3; i < satelliteData.features.length; i++) {
+    
+            if (satelliteImages && satelliteImages.features[i] !== satelliteData.features[i]) {
+                removeSatelliteImage(satelliteAgesId[count]);
+            }
+            var satelliteDate = satelliteData.features[i].properties.Published;
+            addSatelliteImage(map, satelliteData, satelliteDate, satelliteAgesId[count]);
+            count++;
         }
-        var satelliteDate = satelliteData.features[i].properties.Published;
-        addSatelliteImage(map, satelliteData, satelliteDate, satelliteAgesId[count]);
-        count++;
     }
 
     satelliteImages = satelliteData;
@@ -76,12 +78,14 @@ function opacitySliderChanged(control) {
     var recentImage = findLayerByType("earthWatchersNow");
     var previousImage = findLayerByType("earthWatchersPrevious");
 
-    if (control.value > 100) {
-        recentImage.setOpacity((control.value - 100) / 100);
-        previousImage.setOpacity(1);
-    } else {
-        recentImage.setOpacity(0);
-        previousImage.setOpacity(control.value / 100);
+    if(recentImage!=null && previousImage!=null){
+        if (control.value > 100) {
+            recentImage.setOpacity((control.value - 100) / 100);
+            previousImage.setOpacity(1);
+        } else {
+            recentImage.setOpacity(0);
+            previousImage.setOpacity(control.value / 100);
+        }
     }
 }
 
