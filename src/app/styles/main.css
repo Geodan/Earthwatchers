@@ -65,7 +65,9 @@
     font-weight: bold;
     display: block;
     margin-top: 1px;
-     cursor: pointer;
+    cursor: pointer;
+    background-color:white;
+
 }
 .button:first-child {
     margin-top: 0;
@@ -74,21 +76,8 @@
     margin-top: 10px;
 }
 
-#btnNo {
-    background-color: #32cd32;
-}
-
-#btnYes {
-    background-color: #b23618;
-    color: #ffffff;
-}
-
-#btnMaybe {
-    background-color: #ffd900;
-}
-
 #btnNext {
-    background-color: #20aeff;
+    background-color: #32cd32;
 }
 
 .group {
