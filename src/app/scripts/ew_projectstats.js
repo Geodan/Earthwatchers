@@ -18,6 +18,8 @@ function onEachFeature(feature, layer) {
 	document.getElementById('projectName').innerHTML = projectName;
     //"#/" + projectName + "/"
     document.getElementById('editorLink').href = 'index.html#/' + projectName + "/";
+    document.getElementById('editorLink').innerHTML = 'editor project ' + projectName;
+    
     
     loadJSON("data/projects.geojson", function (projects) {
         map = L.map('map');
