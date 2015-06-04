@@ -49,6 +49,14 @@
     padding: 0;
 }
 
+.legend{
+    z-index:12;
+    position:absolute;
+    bottom:100px;
+    right:10px;
+    border-radius: 10px;
+}
+
 .buttons {
     z-index: 11;
     position: absolute;
