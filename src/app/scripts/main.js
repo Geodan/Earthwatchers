@@ -83,9 +83,9 @@ function clearhexagon() {
     else {
         var messageDiv = document.getElementById("messageDiv");
         messageDiv.style.display = 'block';
-        messageDiv.innerHTML = "To clear the hexagon remove observations first!";
+        messageDiv.innerHTML = "Remove observations first!";
         messageDiv.className = "message messagesShown";
-        window.setTimeout(function(){messageDiv.style.display = 'none'},750);
+        window.setTimeout(function(){messageDiv.style.display = 'none';},1500);
     }
 }
 
