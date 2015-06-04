@@ -16,6 +16,8 @@ function onEachFeature(feature, layer) {
 	var url = window.location.search;
 	var projectName = url.replace('?', ''); 
 	document.getElementById('projectName').innerHTML = projectName;
+    //"#/" + projectName + "/"
+    document.getElementById('editorLink').href = 'index.html#/' + projectName + "/";
     
     loadJSON("data/projects.geojson", function (projects) {
         map = L.map('map');

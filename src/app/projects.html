@@ -4,11 +4,14 @@
 		<title>Earthwatchers Statistics Page</title>
 		<link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css">
     	<link rel="stylesheet" href="styles/project.css">
+    	<link rel="stylesheet" href="styles/statistics.css">
+		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 	</head>
-	<body>
+	<body class="col-lg-8 col-lg-offset-2">
 		
-		<h2>Project: <div id = "projectName"></div></h2>
-		<h2>Number of observations: <div id = "numberOfObservations"></div></h2>
+		<h2>Project: <span id = "projectName"></span></h2>
+		<h2>Number of observations: <span id = "numberOfObservations"></span></h2>
+		<a href= "stats.html">Statistics all projects</a> | <a href= "" id = "editorLink">Editor</a>
 		
 		<div class="map-application">
 		    <div id="map" class="map">
@@ -16,9 +19,9 @@
 		</div>
 
 		<script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script>
-		<script src="../../bower_components/leaflet/dist/leaflet.js"></script>
-		<script src="../../bower_components/leaflet-plugins/layer/tile/Google.js"></script>
-		<script src="../../bower_components/leaflet-omnivore/leaflet-omnivore.js"></script>
+		<script src="bower_components/leaflet/dist/leaflet.js"></script>
+		<script src="bower_components/leaflet-plugins/layer/tile/Google.js"></script>
+		<script src="bower_components/leaflet-omnivore/leaflet-omnivore.js"></script>
 		<script src="scripts/ew_requests.js"></script>
 		<script src="scripts/ew_projects.js"></script>
 		<script src="scripts/ew_leaflet.js"></script>
