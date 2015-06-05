@@ -16,12 +16,10 @@ function getRandomHexagon(project, geohexlevel) {
     return GEOHEX.getZoneByLocation(lat_rnd, lon_rnd, geohexlevel).code;
 }
 
-
 function getGeohexPolygon(geohexCode, style) {
     var zone = GEOHEX.getZoneByCode(geohexCode);
     return L.polygon(zone.getHexCoords(), style);
 }
-
 
 function isPointInHexagon(geohexcode, latlng) {
     var pt = turf.point([latlng.lng, latlng.lat]);
@@ -44,9 +42,7 @@ function drawHexagons(map, hexagons) {
     });
 }
 
-
 function drawHexagon(map, geohex, styleNumber) {
-
     var polygonName = "hexagon" + geohex;
     //Current Hexagon
     var style = {
@@ -139,11 +135,9 @@ function getHexagonUpLeft(zone) {
     return getHexagonNeighbour(zone.x, zone.y + 1);
 }
 
-
 function getHexagonNeighbour(x, y) {
     return GEOHEX.getZoneByXY(x, y, defaultGeohexLevel);
 }
-
 
 function hexagonInsideProject(hexagon) {
     var coordinates = hexagon.getHexCoords();
@@ -157,7 +151,6 @@ function hexagonInsideProject(hexagon) {
 }
 
 function getHexagonNavigation(geohexCode, maplocal, user, projectName) {
-
     var currentHexagon = GEOHEX.getZoneByCode(geohexCode);
 
     showNavigationTriangle(currentHexagon, getHexagonUp(currentHexagon), [0, 15], false, maplocal, user, projectName);
@@ -169,18 +162,24 @@ function getHexagonNavigation(geohexCode, maplocal, user, projectName) {
 }
 
 function getStatusHexagon(observations) {
-    var status = "initial";
-    if (observations.length > 0) {
-        if (observations.length === 1 && observations[0].observation === "clear") {
-            status = "clear";
-        }
-        else {
-            status = "hasObservations";
+    if (observations.length === 0) { return "initial"; }
+    for (var i = 0; i < observations.length ; i++) {
+        if (observations[0].observation !== "clear") {
+            return "hasObservations";
         }
     }
-    return status;
+    return "clear";
 }
 
+function addNavigationStyle(geohex) {
+    var layer = findLayerByName("hexagon" + geohex);
+    if (layer) {
+        layer.setStyle({
+            weight: 3,
+            fillOpacity: 0.2
+        });
+    }
+}
 
 function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downward, maplocal, user, projectName) {
     if (hexagonInsideProject(neighbourHexagon)) {
@@ -197,7 +196,6 @@ function showNavigationTriangle(currentHexagon, neighbourHexagon, offset, downwa
 }
 
 function getMixedPoints(hexagonA, hexagonB) {
-
     var precision = 4;
     var coordinatesHexagonA = hexagonA.getHexCoords();
     var coordinatesHexagonB = hexagonB.getHexCoords();
