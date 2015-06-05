@@ -56,12 +56,9 @@ function goToGeohexCode(code){
 
 function showObservations(observations) {
     var status = getStatusHexagon(observations);
-    if(status==="clear"){
-       setHexagonColor("clear");
-    }
-    else if (status==="hasObservations"){
+    if (status === "hasObservations") {
         drawObservations(observations, observationTypesObject);
-        setHexagonColor("hasObservations");
+        //setHexagonColor("hasObservations");
     }
 }
 

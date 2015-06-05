@@ -55,3 +55,10 @@ function loadUserStatistics(projectName, user, hexagons) {
     });
 }
 
+function getHexagonStatus(projectName, user, callback) {
+    loadJSON("/api/hexagonstatus/" + projectName + "/" + user, function (statistics) {
+        console.log(statistics);
+        callback(statistics);
+    });
+}
+

@@ -144,6 +144,36 @@ router.get('/observations/:project/:username', nocache, function (req, res) {
     });
 });
 
+
+// get observations for a project and user
+router.get('/hexagonstatus/:project/:username', nocache, function (req, res) {
+    // sampleurl : hexagonstatus/Borneo/bert
+    var project = req.params.project;
+    var username = req.params.username;
+    console.log('Request hexagonstatus for project: ' + project + ', username: ' + username);
+
+    var clearHexagons = [];
+    var observationHexagons = [];
+
+    dbObservations.all(function (observation) {
+        if (observation.project === project && observation.user === username) {
+            //search for unique hexagons
+            var isClear = observation.observation === 'clear';
+            var arrayToUse = isClear ? clearHexagons : observationHexagons;
+            if (arraySearch(arrayToUse, observation.geohex) === -1) {
+                arrayToUse.push(observation.geohex);
+            }
+        }
+    }, function (err) {
+//        console.log('observations:' + observations + ', hexagons:' + hexagons.length);
+        var returnObject = {
+            "clearHexagons": clearHexagons,
+            "observationHexagons": observationHexagons
+        };
+        res.status(HttpStatus.OK).send(returnObject);
+    });
+});
+
 // get observations for a project, hexagon and user
 router.get('/observations/:project/:geohexcode/:username', nocache, function (req, res) {
     // sampleurl : observations/Borneo/PO2632/bert
