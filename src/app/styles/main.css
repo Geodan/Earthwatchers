@@ -52,9 +52,17 @@
 .legend{
     z-index:12;
     position:absolute;
-    bottom:100px;
+    bottom:10px;
     right:10px;
     border-radius: 10px;
+    color:white;
+    background: rgba(0,0,0,0.7);
+    padding: 10px 5px;    
+}
+.legenditem{
+    width:50px;
+    height:10px;
+    display: inline-block;
 }
 
 .buttons {
@@ -68,14 +76,13 @@
     width: 75px;
     height: 60px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     color: #000000;
     font-weight: bold;
     display: block;
     margin-top: 1px;
     cursor: pointer;
     background-color:white;
-
 }
 .button:first-child {
     margin-top: 0;
