@@ -52,7 +52,7 @@
 .legend{
     z-index:12;
     position:absolute;
-    bottom:10px;
+    bottom:5px;
     right:10px;
     border-radius: 10px;
     color:white;
