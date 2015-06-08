@@ -57,7 +57,8 @@
     border-radius: 10px;
     color:white;
     background: rgba(0,0,0,0.7);
-    padding: 10px 5px;    
+    padding: 10px 5px;
+    border: 1px solid black;
 }
 .legenditem{
     width:50px;
@@ -73,16 +74,17 @@
 }
 
 .button {
-    width: 75px;
-    height: 60px;
+    width: 90px;
+    height: 70px;
     border: none;
     border-radius: 10px;
-    color: #000000;
-    font-weight: bold;
+    color:white;
     display: block;
     margin-top: 1px;
     cursor: pointer;
-    background-color:white;
+    background-color:#484848;
+    opacity:0.9;
+    border: 1px solid black;
 }
 .button:first-child {
     margin-top: 0;
@@ -143,6 +145,7 @@ html {
     padding: 10px 5px;
     background: rgba(0,0,0,0.7);
     border-radius: 10px;
+    border: 1px solid black;
 }
 .timerange div {
     font-size:16px;
@@ -285,8 +288,9 @@ input[type=range]::-ms-tooltip {
     width: 100px;
     height: 100px;
     background: rgba(0,0,0,0.5);
-    border: 1px solid #fff;
+    border: 1px solid black;
     bottom: 0;
+    border-radius: 10px;
 }
 .minimap .toggleSatelliteType {
     border: 0;
@@ -327,12 +331,13 @@ input[type=range]::-ms-tooltip {
     color:white;
     position: absolute;
     top: 10px;
-    right: 60px;
+    right: 10px;
     background: rgba(0,0,0,0.7);
     /** background: rgba(255,255,255,0.8); */
     z-index: 1;
     padding: 10px;
     border-radius: 10px;
+    border: 1px solid black;
 }
 .userhint{
     font-size: 80%;

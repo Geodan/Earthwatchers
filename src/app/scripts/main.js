@@ -174,7 +174,7 @@ function initializeRouting() {
                     attributionControl: false
                 });
                 L.control.zoom({
-                    position:'topright'
+                    position:'topleft'
                 }).addTo(map);
                 
                 map.on("click", onMapClick);

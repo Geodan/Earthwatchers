@@ -14,8 +14,8 @@ function addObservationTypeButton(buttonsDiv, type){
     btn.className = 'button';
     btn.style.backgroundImage = "url('images/" + type.icon +"')";
     btn.style.backgroundRepeat =  "no-repeat";
-    btn.style.backgroundSize = "20px";
-    btn.style.color = "#0000ff";
+    btn.style.backgroundSize = "30px";
+    btn.style.color = "white";
     btn.addEventListener("click", function(){setObservationType(type)},false);
     var btnNext = document.getElementById('btnNext');
     buttonsDiv.insertBefore(btn,btnNext);
