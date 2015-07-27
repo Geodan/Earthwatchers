@@ -9,7 +9,6 @@ var satelliteImages = null;
 var map = null;
 var defaultGeohexLevel = null;
 var defaultSatelliteType = "Landsat";
-var defaultProject = "Borneo";
 var selectedObservationType = null;
 var project = null;
 var projectObservationTypes = null;
@@ -147,7 +146,8 @@ function initializeRouting() {
     loadJSON("data/observationTypes.json", function (observationTypes) {
         loadJSON("data/projects.geojson", function (projects) {
             if (projectName === null) {
-                projectName = defaultProject;
+                // first project is the default project...
+                projectName = projects.features[0].properties.Name;
             }
             project = getProjectByName(projects, projectName);
             projectObservationTypes = project.properties.ObservationCategories.split(",");
