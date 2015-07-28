@@ -233,7 +233,7 @@ router.post('/clear', jsonParser, function (req, res) {
 
     var errors = req.validationErrors();
 
-    if (errors === null) {
+    if (!errors) {
         dbObservations.remove(function (doc) {
                 if(doc!==null){
                     return (doc.observation === "clear" && doc.project === req.body.project && doc.user===req.body.user && doc.geohex === req.body.geohex);
@@ -295,7 +295,7 @@ router.put('/observations', jsonParser, function (req, res) {
 
     var errors = req.validationErrors();
 
-    if (errors === null) {
+    if (!errors) {
         var id = req.body.id;
         console.log('update observation: ' + id);
 
