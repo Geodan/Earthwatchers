@@ -261,7 +261,7 @@ router.post('/observations', jsonParser, function (req, res) {
 
     var errors = req.validationErrors();
 
-    if (errors === null) {
+    if (!errors) {
         // delete previous clear observtions
         req.body.date = new Date().toISOString();
         req.body.id = id;
