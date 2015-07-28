@@ -265,6 +265,10 @@ router.post('/observations', jsonParser, function (req, res) {
         // delete previous clear observtions
         req.body.date = new Date().toISOString();
         req.body.id = id;
+        dbObservations.remove(function (doc) {
+            if(doc!==null){
+                return (doc.observation === "clear" && doc.project === req.body.project && doc.user===req.body.user && doc.geohex === req.body.geohex);
+            }});
 
         dbObservations.insert(req.body, function (err, count) {
             console.log(req.body.date + ': added user: ' + req.body.user + ', hexagon: ' + req.body.geohex + ', project: ' + req.body.project + ', observation: ' + req.body.observation);
