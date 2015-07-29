@@ -8,13 +8,24 @@ var user = localStorage.getItem(localStoragePrefix + "user") || "anonymous";
 var satelliteImages = null;
 var map = null;
 var defaultGeohexLevel = null;
-var defaultSatelliteType = "Landsat";
+var defaultSatelliteType = "Sentinel";
 var selectedObservationType = null;
 var project = null;
 var projectObservationTypes = null;
 var observationTypesObject = null;
 var dragMarkerPosition = null;
 var projectName = null;
+
+function cbVisibilityClicked(isVisible){
+    if(!isVisible){
+        map.removeLayer(findLayerByType("earthWatchersNow"));
+        map.removeLayer(findLayerByType("earthWatchersPrevious"));
+        map.removeLayer(findLayerByType("earthWatchersOld"));
+    }
+    else{
+        drawSatelliteImages(map, defaultSatelliteType);
+    }
+}
 
 function gotoNextHexagon() {
     var url = location.href.replace(location.hash, "#/" + projectName);

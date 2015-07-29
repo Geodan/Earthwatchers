@@ -50,31 +50,25 @@
     <div class="legenditem" style="background-color:red;"></div>&nbsp;Has observations<br/>
     <div class="legenditem" style="background-color:black;"></div>&nbsp;Not yet observed<br/>
 </div>
-<div class="group">
-    <div class="minimap landsat">
-        <button type="button" class="toggleSatelliteType" value='Landsat'
-                onclick="toggleSatelliteType(this);"></button>
-        <div class="satelliteTypeLabel">
-            <label id="satTypeLabel">Landsat</label>
-        </div>
-    </div>
-    <div class="timerange">
-        <div id="satelliteDateLabelFirst" style="width:38%;float:left;"></div>
-        <div id="satelliteDateLabelPrevious" style="float:left;"></div>
-        <div id="satelliteDateLabelNow" style="float:right;"></div>
-            
-        <input type="range" max="200" min="0" id="opacitySlider"
-               data-popup-enabled="false"
-               oninput="opacitySliderChanged(this);"
-               onchange="opacitySliderChanged(this);"
-               step="1" name="rangeVal" value="200"/>
-    </div>
-</div>
 <div class="map-application">
     <div id="map" class="map">
     </div>
 </div>
 <div class="message messagesNotShown" id="messageDiv">This is a message</div>
+<div class="timerange">
+     <div id="checkBoxVisible" style="color:white;padding:5px"> 
+        <input type=checkbox name="sentinel" onclick="cbVisibilityClicked(this.checked)"  checked>Sentinel</input>
+     </div>
+    <div id="satelliteDateLabelFirst" style="width:38%;float:left;"></div>
+    <div id="satelliteDateLabelPrevious" style="float:left;"></div>
+    <div id="satelliteDateLabelNow" style="float:right;"></div>
+        
+    <input type="range" max="200" min="0" id="opacitySlider"
+           data-popup-enabled="false"
+           oninput="opacitySliderChanged(this);"
+           onchange="opacitySliderChanged(this);"
+           step="1" name="rangeVal" value="200"/>
+</div>
 
 <script src="scripts/hex_v3.2_core.js"></script>
 <!-- build:js scripts/vendor.js -->

@@ -7,7 +7,6 @@ function getSatelliteImageByDate(satelliteImages, date) {
     return null;
 }
 
-
 function toggleSatelliteType(satelliteType) {
     var type = satelliteType.value === "Landsat" ? "Sentinel" : "Landsat";
     drawSatelliteImages(map, type);
@@ -39,7 +38,6 @@ function getSatelliteImageDataCallback(satelliteData) {
             count++;
         }
     }
-
     satelliteImages = satelliteData;
     setInitialOpacityValues();
 }
@@ -64,7 +62,8 @@ function addSatelliteImage(map, satelliteImages, satelliteDate, type) {
     var newLayer = L.tileLayer(url, {
         tms: true,
         maxZoom: maxLevel,
-        type: type
+        type: type,
+        attribution: type
     });
     map.addLayer(newLayer);
 }
