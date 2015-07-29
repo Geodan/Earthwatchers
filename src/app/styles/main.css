@@ -52,7 +52,7 @@
 .legend{
     z-index:12;
     position:absolute;
-    bottom:5px;
+    bottom:20px;
     right:10px;
     border-radius: 10px;
     color:white;
@@ -100,7 +100,7 @@
 .group {
     z-index: 10;
     position: absolute;
-    bottom: 5px;
+    bottom: 20px;
     left: 5px;
 }
 

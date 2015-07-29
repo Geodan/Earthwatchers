@@ -194,7 +194,7 @@ function initializeRouting() {
 
                 L.control.scale({imperial: false, position: "topleft"}).addTo(map);
 
-                var ggl2 = new L.Google("satellite");
+                var ggl2 = new L.Google("HYBRID");
                 map.addLayer(ggl2);
 
                 L.geoJson(projects, {fill: false}).addTo(map);
