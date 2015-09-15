@@ -8,7 +8,7 @@ function getSatelliteImageByDate(satelliteImages, date) {
 }
 
 function toggleSatelliteType(satelliteType) {
-    var type = satelliteType.value === "Landsat" ? "Sentinel" : "Landsat";
+    var type = satelliteType.value === "Landsat" ? "Landsat 8" : "Landsat";
     drawSatelliteImages(map, type);
     updateSatelliteType(satelliteType, type);
     setDateName();
