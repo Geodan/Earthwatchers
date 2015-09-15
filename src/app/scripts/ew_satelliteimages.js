@@ -28,7 +28,7 @@ function getSatelliteImageDataCallback(satelliteData) {
     var satelliteAgesId = ["earthWatchersOld", "earthWatchersPrevious", "earthWatchersNow"];
     var count = 0;
     if(satelliteData.features.length>0){
-        for (var i = satelliteData.features.length - 3; i < satelliteData.features.length; i++) {
+        for (var i = satelliteData.features.length - 2; i < satelliteData.features.length; i++) {
     
             if (satelliteImages && satelliteImages.features[i] !== satelliteData.features[i]) {
                 removeSatelliteImage(satelliteAgesId[count]);
