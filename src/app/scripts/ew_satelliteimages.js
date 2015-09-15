@@ -25,7 +25,8 @@ function updateSatelliteType(opacitySlider, satelliteType) {
 function getSatelliteImageDataCallback(satelliteData) {
     satelliteData.features.sort(compare);
 
-    var satelliteAgesId = ["earthWatchersOld", "earthWatchersPrevious", "earthWatchersNow"];
+    //var satelliteAgesId = ["earthWatchersOld", "earthWatchersPrevious", "earthWatchersNow"];
+    var satelliteAgesId = ["earthWatchersPrevious", "earthWatchersNow"];
     var count = 0;
     if(satelliteData.features.length>0){
         for (var i = satelliteData.features.length - 2; i < satelliteData.features.length; i++) {
@@ -76,15 +77,15 @@ function setInitialOpacityValues() {
 function opacitySliderChanged(control) {
     var recentImage = findLayerByType("earthWatchersNow");
     var previousImage = findLayerByType("earthWatchersPrevious");
-
     if(recentImage!=null && previousImage!=null){
-        if (control.value > 100) {
-            recentImage.setOpacity((control.value - 100) / 100);
+
+        //if (control.value > 100) {
+            recentImage.setOpacity(control.value / 100);
             previousImage.setOpacity(1);
-        } else {
-            recentImage.setOpacity(0);
-            previousImage.setOpacity(control.value / 100);
-        }
+        //} else {
+        //    recentImage.setOpacity(0);
+        //    previousImage.setOpacity(control.value / 100);
+        //}
     }
 }
 
