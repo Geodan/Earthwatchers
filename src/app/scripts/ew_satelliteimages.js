@@ -91,7 +91,7 @@ function opacitySliderChanged(control) {
 function setDateName() {
     setLabel("satelliteDateLabelNow",satelliteImages.features[satelliteImages.features.length-1]);
     setLabel("satelliteDateLabelPrevious",satelliteImages.features[satelliteImages.features.length-2]);
-    setLabel("satelliteDateLabelFirst",satelliteImages.features[satelliteImages.features.length-3]);  
+    //setLabel("satelliteDateLabelFirst",satelliteImages.features[satelliteImages.features.length-3]);
 }
 function setLabel(divLabelName,satelliteImage){
     var labelDiv = document.getElementById(divLabelName);
