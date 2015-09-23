@@ -181,7 +181,7 @@ function initializeRouting() {
                 loadUserStatistics(projectName, user, hexagons.length);
 
                 map = L.map("map", {
-                    maxZoom: 13,
+                    maxZoom: 18, //used to be 13, but add maxNativeZoom to allow bloating deeper levels
                     zoomControl: false,
                     attributionControl: false
                 });
