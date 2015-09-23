@@ -62,8 +62,8 @@ function addSatelliteImage(map, satelliteImages, satelliteDate, type) {
 
     var newLayer = L.tileLayer(url, {
         tms: true,
-        maxZoom: 18,
-        maxNativeZoom: maxLevel, //hardcoded for chaco (should be the last zoomlevel with imagery)
+        maxZoom: 16, //hardcoded for now, should depend on hexagon size later.
+        maxNativeZoom: maxLevel, 
         type: type,
         attribution: type
     });
