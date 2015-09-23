@@ -2,7 +2,7 @@
 /*global L */
 /*global GEOHEX */
 var geohexCode = null;
-var startZoomLevel = 18;
+var startZoomLevel = 13;
 var localStoragePrefix = "EW_"; // earthWatchers
 var user = localStorage.getItem(localStoragePrefix + "user") || "anonymous";
 var satelliteImages = null;
