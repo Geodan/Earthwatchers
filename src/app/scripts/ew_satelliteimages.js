@@ -63,6 +63,7 @@ function addSatelliteImage(map, satelliteImages, satelliteDate, type) {
     var newLayer = L.tileLayer(url, {
         tms: true,
         maxZoom: maxLevel,
+        maxNativeZoom: 14,
         type: type,
         attribution: type
     });
