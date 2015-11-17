@@ -15,11 +15,11 @@ http.get(baseUrl, function (res) {
 });
 
 // test satteliteimages
-http.get(baseUrl + 'satelliteimages?bbox=111.68,0.14,111.69,0.15&imagetype=Landsat', function (res) {
+http.get(baseUrl + 'satelliteimages?bbox=-61.33516232281665,-24.641493541968853,-61.298582533150444,-24.61269606648879', function (res) {
     res.on('data', function (data) {
         var json = JSON.parse(data);
         var f = json.features;
-        assert.ok(f.length > 0);
+        assert.ok(f.length >= 0);
         earthwatchersserver.close();
     });
 });
