@@ -32,10 +32,9 @@ function removeSatelliteImage(satelliteAgeId) {
     if (layer) map.removeLayer(layer);
 }
 
-function drawSatelliteImages(map, satelliteType) {
+function drawSatelliteImages(map) {
     var polygon = getGeohexPolygon(geohexCode);
     var bbox = polygon.getBounds().toBBoxString();
-
     getSatelliteImageData(bbox, getSatelliteImageDataCallback);
 }
 
