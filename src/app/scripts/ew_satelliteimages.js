@@ -36,7 +36,7 @@ function drawSatelliteImages(map, satelliteType) {
     var polygon = getGeohexPolygon(geohexCode);
     var bbox = polygon.getBounds().toBBoxString();
 
-    getSatelliteImageData(bbox, satelliteType, getSatelliteImageDataCallback);
+    getSatelliteImageData(bbox, getSatelliteImageDataCallback);
 }
 
 function addSatelliteImage(map, satelliteImages, satelliteDate, type) {

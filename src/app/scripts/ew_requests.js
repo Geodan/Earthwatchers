@@ -1,5 +1,5 @@
-function getSatelliteImageData(bbox, imagetype, callback) {
-    var url = 'api/satelliteimages?bbox=' + bbox + '&imagetype=' + imagetype;
+function getSatelliteImageData(bbox, callback) {
+    var url = 'api/satelliteimages?bbox=' + bbox;
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
 

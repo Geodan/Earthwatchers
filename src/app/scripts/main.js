@@ -8,7 +8,6 @@ var user = localStorage.getItem(localStoragePrefix + "user") || "anonymous";
 var satelliteImages = null;
 var map = null;
 var defaultGeohexLevel = null;
-var defaultSatelliteType = "Sentinel";
 var selectedObservationType = null;
 var project = null;
 var projectObservationTypes = null;
@@ -22,7 +21,7 @@ function cbVisibilityClicked(isVisible){
         map.removeLayer(findLayerByType("earthWatchersPrevious"));
     }
     else{
-        drawSatelliteImages(map, defaultSatelliteType);
+        drawSatelliteImages(map);
     }
 }
 
@@ -190,7 +189,7 @@ function initializeRouting() {
                 
                 map.on("click", onMapClick);
 
-                drawSatelliteImages(map, defaultSatelliteType);
+                drawSatelliteImages(map);
 
                 drawHexagons(map, hexagons);
 
