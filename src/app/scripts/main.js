@@ -20,7 +20,6 @@ function cbVisibilityClicked(isVisible){
     if(!isVisible){
         map.removeLayer(findLayerByType("earthWatchersNow"));
         map.removeLayer(findLayerByType("earthWatchersPrevious"));
-        map.removeLayer(findLayerByType("earthWatchersOld"));
     }
     else{
         drawSatelliteImages(map, defaultSatelliteType);

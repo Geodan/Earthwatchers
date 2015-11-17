@@ -7,30 +7,14 @@ function getSatelliteImageByDate(satelliteImages, date) {
     return null;
 }
 
-function toggleSatelliteType(satelliteType) {
-    var type = satelliteType.value === "Landsat" ? "Landsat 8" : "Landsat";
-    drawSatelliteImages(map, type);
-    updateSatelliteType(satelliteType, type);
-    setDateName();
-}
-
-function updateSatelliteType(opacitySlider, satelliteType) {
-    opacitySlider.parentNode.classList.remove(opacitySlider.value.toLowerCase());
-    opacitySlider.setAttribute("value", satelliteType);
-    opacitySlider.parentNode.classList.add(opacitySlider.value.toLowerCase());
-
-    document.getElementById("satTypeLabel").innerText = satelliteType;
-}
-
 function getSatelliteImageDataCallback(satelliteData) {
     satelliteData.features.sort(compare);
 
-    //var satelliteAgesId = ["earthWatchersOld", "earthWatchersPrevious", "earthWatchersNow"];
     var satelliteAgesId = ["earthWatchersPrevious", "earthWatchersNow"];
     var count = 0;
     if(satelliteData.features.length>0){
         for (var i = satelliteData.features.length - 2; i < satelliteData.features.length; i++) {
-    
+
             if (satelliteImages && satelliteImages.features[i] !== satelliteData.features[i]) {
                 removeSatelliteImage(satelliteAgesId[count]);
             }
@@ -63,7 +47,7 @@ function addSatelliteImage(map, satelliteImages, satelliteDate, type) {
     var newLayer = L.tileLayer(url, {
         tms: true,
         maxZoom: 16, //hardcoded for now, should depend on hexagon size later.
-        maxNativeZoom: maxLevel, 
+        maxNativeZoom: maxLevel,
         type: type,
         attribution: type
     });
@@ -79,21 +63,14 @@ function opacitySliderChanged(control) {
     var recentImage = findLayerByType("earthWatchersNow");
     var previousImage = findLayerByType("earthWatchersPrevious");
     if(recentImage!=null && previousImage!=null){
-
-        //if (control.value > 100) {
-            recentImage.setOpacity(control.value / 100);
-            previousImage.setOpacity(1);
-        //} else {
-        //    recentImage.setOpacity(0);
-        //    previousImage.setOpacity(control.value / 100);
-        //}
+        recentImage.setOpacity(control.value / 100);
+        previousImage.setOpacity(1);
     }
 }
 
 function setDateName() {
     setLabel("satelliteDateLabelNow",satelliteImages.features[satelliteImages.features.length-1]);
     setLabel("satelliteDateLabelPrevious",satelliteImages.features[satelliteImages.features.length-2]);
-    //setLabel("satelliteDateLabelFirst",satelliteImages.features[satelliteImages.features.length-3]);
 }
 function setLabel(divLabelName,satelliteImage){
     var labelDiv = document.getElementById(divLabelName);
@@ -106,4 +83,3 @@ function setLabel(divLabelName,satelliteImage){
         labelDiv.innerHTML = "";
     }
 }
-
