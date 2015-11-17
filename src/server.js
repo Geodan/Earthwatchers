@@ -12,11 +12,6 @@ var uuid = require('node-uuid');
 var nosql = require('nosql');
 var geoJSON = require('geojson');
 
-var imageTypes = {
-    'Landsat': 2,
-    'Sentinel': 4
-};
-
 var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {
     flags: 'a'
 });
@@ -194,10 +189,7 @@ router.get('/observations/:project/:geohexcode/:username', nocache, function (re
 // /satelliteimages?bbox=111.68,0.14,111.69,0.15&imagetype=Landsat
 router.get('/satelliteimages', function (req, res) {
     var bboxPar = req.query.bbox;
-    var imageType = req.query.imagetype;
-    if (bboxPar !== null || imageType !== null) {
-        var imageTypeNr = imageTypes[imageType];
-
+    if (bboxPar !== null) {
         var bbox = bboxPar.split(',');
         for (var i = 0, len = bbox.length; i < len; i++) {
             bbox[i] = parseFloat(bbox[i]);
@@ -210,9 +202,7 @@ router.get('/satelliteimages', function (req, res) {
         for (var f in jsonSatelliteImages.features) {
             var intersection = turf.intersect(jsonSatelliteImages.features[f], poly);
             if (intersection != null) {
-                if (jsonSatelliteImages.features[f].properties.ImageType === imageTypeNr) {
-                    selectedSatelliteImages.push(jsonSatelliteImages.features[f]);
-                }
+                selectedSatelliteImages.push(jsonSatelliteImages.features[f]);
             }
         }
         res.json(turf.featurecollection(selectedSatelliteImages));
