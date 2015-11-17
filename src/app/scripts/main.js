@@ -159,6 +159,8 @@ function initializeRouting() {
                 projectName = projects.features[0].properties.Name;
             }
             project = getProjectByName(projects, projectName);
+
+            document.getElementById("test").innerHTML = project.properties.ImageType;
             projectObservationTypes = project.properties.ObservationCategories.split(",");
 
             observationTypesObject = observationTypes;
