@@ -12,3 +12,4 @@ dist
 *.meta
 *.nosql
 *.ts
+src/app/images/hexagon7.svg
