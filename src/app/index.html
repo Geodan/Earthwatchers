@@ -38,17 +38,24 @@
         Hexagons total: <span id="hexagonstotal"></span><br>
         Hexagons observed: <span id="hexagonstatistics"></span><br>
         Observations: <span id="observationstatistics"></span><br/>
-        <a href="stats.html" target="_blank">statistics</a> | <a href="help.html" target="_blank">help</a>
+        <a href="stats.html" style="color:#000000" target="_blank">statistics</a> | <a href="help.html" style="color:#000000" target="_blank">help</a>
     </div>
 </div>
 <div class="buttons" id="buttons">
-    <button type="button" class="button" onclick="clearhexagon();" id="btnNext">All OK!</button>
+	<button id="road" class="button" style="color: black; border: 1px solid black; background-image: url(http://earthwatchers.azurewebsites.net/images/road.png); background-size: 25px; background-repeat: no-repeat;background-position:left center;">Road</button>
+	<button type="button" class="button" onclick="clearhexagon();" id="btnNext">No Deforestation!</button>
 </div>
+
+<div class="buttons_left" id="buttons_left">
+	<button id="mining" class="button" style="color: black; border: 1px solid black; background-image: url(http://earthwatchers.azurewebsites.net/images/mining.png); background-size: 25px; background-repeat: no-repeat;background-position:left center;">Mining</button>
+	<button id="deforestation" class="button" style="color: black; border: 1px solid black; background-image: url(http://earthwatchers.azurewebsites.net/images/deforestation.png); background-size: 25px; background-repeat: no-repeat;background-position:left center;">Deforestation</button>
+</div>
+	
 <div class = "legend" id="legend">
     Legend<br/>
-    <div class="legenditem" style="background-color:green;"></div>&nbsp;All OK<br/>
-    <div class="legenditem" style="background-color:red;"></div>&nbsp;Has observations<br/>
-    <div class="legenditem" style="background-color:black;"></div>&nbsp;Not yet observed<br/>
+    <div class="legenditem" style="background-color:green;"></div>&nbsp;No Deforestation!<br/>
+    <div class="legenditem" style="background-color:red;"></div>&nbsp;Possible deforestation<br/>
+    <div class="legenditem" style="background-color:black;"></div>&nbsp;No observations<br/>
 </div>
 <div class="map-application">
     <div id="map" class="map">
@@ -56,11 +63,11 @@
 </div>
 <div class="message messagesNotShown" id="messageDiv">This is a message</div>
 <div class="timerange">
-     <div id="checkBoxVisible" style="color:white;padding:5px"> 
+     <div id="checkBoxVisible" style="color:black;padding:5px"> 
         <input type="checkbox" name="sentinel" onclick="cbVisibilityClicked(this.checked)" checked>
-            <span id="test">hallo  hallo</span>
+            <span id="test">Landsat 8</span>
         </input>  &nbsp; &nbsp; | &nbsp;
-&nbsp; &nbsp;<a href="https://guardianes.typeform.com/to/By4axg" target="_blank">Feedback: Help us improve!</a> 
+&nbsp; &nbsp;<a href="https://guardianes.typeform.com/to/By4axg" style="color:#000000" target="_blank">Feedback: Help us improve!</a> 
      </div>
     <div id="satelliteDateLabelFirst" style="width:38%;float:left;"></div>
     <div id="satelliteDateLabelPrevious" style="float:left;"></div>

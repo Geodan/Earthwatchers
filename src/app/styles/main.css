@@ -53,50 +53,75 @@ a { color: yellow; }
 
 .legend{
     z-index:12;
+	height:100px;
+	width: 250px;
     position:absolute;
     bottom:30px;
     right:10px;
-    border-radius: 10px;
-    color:white;
-    background: rgba(0,0,0,0.7);
-    padding: 10px 5px;
+    border-radius: 1px;
+    color:black;
+    background: #e6e6e6;
+    padding: 10px 10px;
     border: 1px solid black;
 }
 .legenditem{
     width:50px;
     height:10px;
     display: inline-block;
+	border: 1px solid black;
+	
 }
 
 .buttons {
     z-index: 11;
     position: absolute;
-    top: 150px;
+    top: 127px;
     right: 10px;
+	width: 120px;
+
+	
 }
 
+.buttons_left {
+    z-index: 11;
+    position: absolute;
+    top: 127px;
+    right: 140px;
+	width: 120px;
+	
+	
+}
+
+
+
 .button {
-    width: 90px;
+    width: 120px;
     height: 70px;
     border: none;
-    border-radius: 10px;
-    color:white;
+	top: 20px;
+    border-radius: 5px;
+    color:black;
+	position: center-left;
     display: block;
-    margin-top: 1px;
+    margin-top: 5px;
     cursor: pointer;
-    background-color:#484848;
+    background-color: #e6e6e6;
     opacity:0.9;
     border: 1px solid black;
 }
+
+
+
 .button:first-child {
-    margin-top: 0;
+    margin-top: 10;
 }
 .button:last-child {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 #btnNext {
     background-color: #32cd32;
+	margin-top: 5px;
 }
 
 .group {
@@ -139,14 +164,15 @@ html {
 
 /* timeSlider css */
 .timerange {
+	color: black;
     position: absolute;
     left: 10px;
     bottom: 30px;
     width: 400px;
     height: 100px;
     padding: 10px 5px;
-    background: rgba(0,0,0,0.7);
-    border-radius: 10px;
+    background: #e6e6e6;
+    border-radius: 1px;
     border: 1px solid black;
 }
 .timerange div {
@@ -196,7 +222,7 @@ input[type=range]::-webkit-slider-thumb {
     border: 1px solid #000000;
     height: 36px;
     width: 20px;
-    border-radius: 3px;
+    border-radius: 1px;
     background: #eee; /* same as .timerange label*/
     cursor: pointer;
     -webkit-appearance: none;
@@ -288,16 +314,18 @@ input[type=range]::-ms-tooltip {
     display: none;
 }
 .userpanel {
-    color:white;
+    color:black;
     position: absolute;
+	width: 250px;
     top: 10px;
     right: 10px;
-    background: rgba(0,0,0,0.7);
+    background: #e6e6e6;
     /** background: rgba(255,255,255,0.8); */
     z-index: 1;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 1px;
     border: 1px solid black;
+	margin-bottom: 15px;
 }
 .userhint{
     font-size: 80%;
