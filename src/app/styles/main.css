@@ -53,50 +53,69 @@ a { color: yellow; }
 
 .legend{
     z-index:12;
+	height:125px;
+	width: 250px;
     position:absolute;
     bottom:30px;
     right:10px;
-    border-radius: 10px;
-    color:white;
-    background: rgba(0,0,0,0.7);
-    padding: 10px 5px;
-    border: 1px solid black;
+    border-radius: 3px;
+    color:#333333;
+    background: white;
+    opacity: 0.95;
+    padding: 10px 10px;
+    border: 0px solid black;
+    box-shadow: 1px 1px 1px 1px #0d0d0d;
+
 }
 .legenditem{
     width:50px;
     height:10px;
     display: inline-block;
+	border: 1px solid black;
+    margin-top: 15px;
+
+	
 }
 
 .buttons {
     z-index: 11;
     position: absolute;
-    top: 150px;
+    top: 140px;
     right: 10px;
+	width: 250px;
+
+	
 }
 
+
 .button {
-    width: 90px;
+    width: 250px;
     height: 70px;
     border: none;
-    border-radius: 10px;
-    color:white;
+	top: 20px;
+    border-radius: 3px;
+    color:#333333;
+	position: center-left;
     display: block;
-    margin-top: 1px;
+    margin-top: 5px;
     cursor: pointer;
-    background-color:#484848;
-    opacity:0.9;
+    background-color: white;
+    opacity:0.95;
     border: 1px solid black;
 }
+
+
+
 .button:first-child {
-    margin-top: 0;
+    margin-top: 10;
 }
 .button:last-child {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 #btnNext {
     background-color: #32cd32;
+	margin-top: 5px;
 }
 
 .group {
@@ -139,15 +158,18 @@ html {
 
 /* timeSlider css */
 .timerange {
+	color: #333333;
+    opacity: 0.95;
     position: absolute;
     left: 10px;
     bottom: 30px;
     width: 400px;
-    height: 100px;
+    height: 125px;
     padding: 10px 5px;
-    background: rgba(0,0,0,0.7);
-    border-radius: 10px;
+    background: white;
+    border-radius: 3px;
     border: 1px solid black;
+    box-shadow: 1px 1px 1px #0d0d0d;
 }
 .timerange div {
     font-size:16px;
@@ -194,9 +216,9 @@ input[type=range]::-webkit-slider-runnable-track {
 input[type=range]::-webkit-slider-thumb {
     box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
     border: 1px solid #000000;
-    height: 36px;
+    height: 30px;
     width: 20px;
-    border-radius: 3px;
+    border-radius: 1px;
     background: #eee; /* same as .timerange label*/
     cursor: pointer;
     -webkit-appearance: none;
@@ -288,16 +310,23 @@ input[type=range]::-ms-tooltip {
     display: none;
 }
 .userpanel {
-    color:white;
+    color:#333333;
+    opacity: 0.95;
     position: absolute;
+	width: 250px;
     top: 10px;
     right: 10px;
-    background: rgba(0,0,0,0.7);
+    background: white;
     /** background: rgba(255,255,255,0.8); */
-    z-index: 1;
+    z-index: 15;
     padding: 10px;
-    border-radius: 10px;
-    border: 1px solid black;
+    border-radius: 3px;
+    border: 0px solid black;
+	margin-bottom: 15px;
+    padding-bottom: 5px;
+    box-shadow: 1px 1px 1px 1px #0d0d0d;
+
+     
 }
 .userhint{
     font-size: 80%;
@@ -305,12 +334,14 @@ input[type=range]::-ms-tooltip {
     text-decoration:underline;
     float: right;
     padding-left: 5px;
+    color:#333333;
 }
 .userform input[type=text],
 .userform button[type=submit]{
     line-height: 30px !important;
     font-size: 18px;
     padding: 2px 4px;
+    color: black;
 }
 
 .marker-delete-button {
@@ -332,7 +363,7 @@ input[type=range]::-ms-tooltip {
 }
 
 .messagesShown {
-    transition: opacity 500ms;
+    transition: opacity 30000ms;
     opacity: 1;
 }
 

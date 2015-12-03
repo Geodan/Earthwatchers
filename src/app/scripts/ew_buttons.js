@@ -1,6 +1,6 @@
 function styleButton(button,checked){
     if(checked){
-        button.style.border='5px solid black';
+        button.style.border='2px solid blue';
     }
     else{
         button.style.border='1px solid black';
@@ -14,8 +14,9 @@ function addObservationTypeButton(buttonsDiv, type){
     btn.className = 'button';
     btn.style.backgroundImage = "url('images/" + type.icon +"')";
     btn.style.backgroundRepeat =  "no-repeat";
-    btn.style.backgroundSize = "30px";
-    btn.style.color = "white";
+    btn.style.backgroundSize = "50px";
+    btn.style.backgroundPosition = "left center"
+    btn.style.color = "#333333";
     btn.addEventListener("click", function(){setObservationType(type)},false);
     var btnNext = document.getElementById('btnNext');
     buttonsDiv.insertBefore(btn,btnNext);
