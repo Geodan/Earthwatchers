@@ -9,8 +9,8 @@ var expressValidator = require('express-validator');
 var HttpStatus = require('http-status-codes');
 var lineReader = require('line-reader');
 var uuid = require('node-uuid');
-var nosql = require('nosql');
 var geoJSON = require('geojson');
+var mongodb = require('mongodb'); 
 
 var expressLogFile = fs.createWriteStream(__dirname + '/express.log', {
     flags: 'a'
@@ -25,9 +25,14 @@ app.use(expressValidator());
 app.disable('x-powered-by');
 dotenv.load();
 
+var dbObservations;
 var port = process.env.PORT || 3000;
-var dbObservations = nosql.load('./db/ew_observations.nosql');
-dbObservations.description('Earthwatchers observations.');
+var mongoDbUrl = 'mongodb://localhost:27017/earthwatchers';
+var mongoClient = mongodb.MongoClient;
+mongoClient.connect(mongoDbUrl, function(err, db) {
+    console.log("Connected correctly to server");
+    dbObservations = db.collection('earthwatchers');
+});    
 
 var router = express.Router();
 
@@ -58,10 +63,9 @@ router.get('/', function (req, res) {
 // returns all observations from project in geojson format
 router.get('/observations/:project', function (req, res) {
     console.log('return observations of project:' + req.params.project);
-    dbObservations.all(function (doc) {
-        return (doc.project === req.params.project);
-    }, function (error, selected) {
-        var geojson1 = geoJSON.parse(selected, {Point: ['lat','lon']});
+    var cursor= dbObservations.find({"project": req.params.project });
+    cursor.toArray(function(err, observations){
+        var geojson1 = geoJSON.parse(observations, {Point: ['lat','lon']});
         res.status(HttpStatus.OK).send(geojson1);
     });
 });
@@ -75,32 +79,30 @@ router.get('/version', function (req, res) {
 
 // get statistics for a project
 router.get('/statistics/:project', nocache, function (req, res) {
-    // sampleurl : observations/Borneo
+    // sampleurl : statistics/Borneo
     var projectName = req.params.project;
     console.log('request observations for project: ' + projectName);
 
-    var observations = 0;
     var users = [];
     var hexagons = [];
 
-    dbObservations.each(function (observation) {
-        if (observation.project === projectName) {
-            //search for unique users
+    var cursor= dbObservations.find({"project": req.params.project });
+    cursor.toArray(function(err, observations){
+        for (var i = 0; i < observations.length; i++) {
+            var observation=observations[i];
+
             if (arraySearch(users, observation.user) === -1) {
                 users.push(observation.user);
             }
-
             //search for unique hexagons
             if (arraySearch(hexagons, observation.geohex) === -1) {
                 hexagons.push(observation.geohex);
             }
-            observations++;
-        }
-    }, function (err) {
-        console.log('observations:' + observations + ', hexagons:' + hexagons.length + ', users: ' + users.length);
+       }
+        console.log('observations:' + observations.length + ', hexagons:' + hexagons.length + ', users: ' + users.length);
         var returnObject = {
             "project": projectName,
-            "observations": observations,
+            "observations": observations.length,
             "hexagons": hexagons,
             "users": users
         };
@@ -115,29 +117,25 @@ router.get('/observations/:project/:username', nocache, function (req, res) {
     var username = req.params.username;
     console.log('Request observations for project: ' + project + ', username: ' + username);
 
-    var observations = 0;
     var hexagons = [];
 
-    dbObservations.all(function (observation) {
-        if (observation.project === project && observation.user === username) {
-            //search for unique hexagons
+    var cursor= dbObservations.find({"project": req.params.project, "user":username });
+    cursor.toArray(function(err, observations) {
+        for (var i = 0; i < observations.length; i++) {
+            var observation=observations[i];
             if (arraySearch(hexagons, observation.geohex) === -1) {
                 hexagons.push(observation.geohex);
             }
-            observations++;
         }
-    }, function (err) {
-        console.log('observations:' + observations + ', hexagons:' + hexagons.length);
         var returnObject = {
             "project": project,
-            "observations": observations,
+            "observations": observations.length,
             "hexagons": hexagons.length,
             "user": username
         };
         res.status(HttpStatus.OK).send(returnObject);
     });
 });
-
 
 // get observations for a project and user
 router.get('/hexagonstatus/:project/:username', nocache, function (req, res) {
@@ -149,17 +147,16 @@ router.get('/hexagonstatus/:project/:username', nocache, function (req, res) {
     var clearHexagons = [];
     var observationHexagons = [];
 
-    dbObservations.all(function (observation) {
-        if (observation.project === project && observation.user === username) {
-            //search for unique hexagons
+    var cursor= dbObservations.find({"project": req.params.project, "user":username });
+    cursor.toArray(function(err, observations) {
+        for (var i = 0; i < observations.length; i++) {
+            var observation=observations[i];
             var isClear = observation.observation === 'clear';
             var arrayToUse = isClear ? clearHexagons : observationHexagons;
             if (arraySearch(arrayToUse, observation.geohex) === -1) {
                 arrayToUse.push(observation.geohex);
             }
         }
-    }, function (err) {
-//        console.log('observations:' + observations + ', hexagons:' + hexagons.length);
         var returnObject = {
             "clearHexagons": clearHexagons,
             "observationHexagons": observationHexagons
@@ -176,10 +173,9 @@ router.get('/observations/:project/:geohexcode/:username', nocache, function (re
     var username = req.params.username;
     console.log('request observations for project: ' + project + ', geohexcode:' + geohexcode + ', username: ' + username);
 
-    dbObservations.all(function (doc) {
-        return (doc.project === project && doc.geohex === geohexcode && doc.user === username);
-    }, function (error, selected) {
-        res.status(HttpStatus.OK).send(selected);
+    var cursor= dbObservations.find({"project": req.params.project, "geohex":geohexcode, "user":username });
+    cursor.toArray(function(err, observations){
+        res.status(HttpStatus.OK).send(observations);
     });
 });
 
@@ -223,16 +219,11 @@ router.post('/clear', jsonParser, function (req, res) {
     var errors = req.validationErrors();
 
     if (!errors) {
-        dbObservations.remove(function (doc) {
-                if(doc!==null){
-                    return (doc.observation === "clear" && doc.project === req.body.project && doc.user===req.body.user && doc.geohex === req.body.geohex);
-                };
-            }, function (error, count) {
-                res.status(HttpStatus.CREATED).send(req.body);
-            }
-        );          
-        
-    } else {
+        dbObservations.deleteMany({"observation":"clear","project":req.body.project,"user":req.body.user,"geohex":req.body.geohex}, function(err,results){
+            res.status(HttpStatus.CREATED).send(req.body);
+        });
+    } 
+    else {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }
 });
@@ -254,10 +245,8 @@ router.post('/observations', jsonParser, function (req, res) {
         // delete previous clear observtions
         req.body.date = new Date().toISOString();
         req.body.id = id;
-        dbObservations.remove(function (doc) {
-            if(doc!==null){
-                return (doc.observation === "clear" && doc.project === req.body.project && doc.user===req.body.user && doc.geohex === req.body.geohex);
-            }});
+        dbObservations.deleteMany({"observation":"clear","project":req.body.project,"user":req.body.user,"geohex":req.body.geohex}, function(err,results){
+        });
 
         dbObservations.insert(req.body, function (err, count) {
             console.log(req.body.date + ': added user: ' + req.body.user + ', hexagon: ' + req.body.geohex + ', project: ' + req.body.project + ', observation: ' + req.body.observation);
@@ -272,12 +261,10 @@ router.post('/observations', jsonParser, function (req, res) {
 router.delete('/observations/:id', function (req, res) {
     var id = req.params.id;
     console.log('delete observation id: ' + id);
-    dbObservations.remove(function (doc) {
-            return (doc.id === id);
-        }, function (error, count) {
-            res.status(HttpStatus.OK).send(req.body);
-        }
-    );
+    dbObservations.deleteMany({"id":id}, function(err,results){
+        console.log("record id=" + id + " removed");
+        res.status(HttpStatus.OK).send(req.body);
+    });
 });
 
 // change an observation
@@ -292,21 +279,14 @@ router.put('/observations', jsonParser, function (req, res) {
         var id = req.body.id;
         console.log('update observation: ' + id);
 
-        dbObservations.update(function (doc) {
-                if (doc.id === id) {
-                    doc.date = new Date().toISOString();
-                    doc.lat = req.body.lat;
-                    doc.lon = req.body.lon;
-                }
-
-                return doc;
-            }, function (error, count) {
+        dbObservations.updateMany(
+            {"id":id},
+            {"$set": {"date":new Date().toISOString(),"lat":req.body.lat,"lon":req.body.lon}},
+            function(err, results){
                 res.status(HttpStatus.OK).send(req.body);
-            }
-        );
-
-
-    } else {
+            });
+    } 
+    else {
         res.status(HttpStatus.NOT_FOUND).send("request validation error:" + errors);
     }
 });
@@ -321,9 +301,11 @@ router.get('/leaderboard', nocache, function (req, res) {
     var users = [];
     var hexagons = [];
     var projects = [];
-
-    dbObservations.each(function (observation) {
-            //search for unique users
+    
+    var cursor= dbObservations.find();
+    cursor.toArray(function(err, observations) {
+        for (var i = 0; i < observations.length; i++) {
+            var observation=observations[i];
             var userNumber = arraySearch(users, observation.user);
 
             if (userNumber === -1) {
@@ -347,7 +329,7 @@ router.get('/leaderboard', nocache, function (req, res) {
                     observations[userNumber]++;
                 }
             }
-    }, function (err) {
+        }
         var returnObject = [];
         for (var i = 0; i < users.length; i++) {
             var userObject = {
@@ -361,7 +343,6 @@ router.get('/leaderboard', nocache, function (req, res) {
         res.status(HttpStatus.OK).send(returnObject);
     });
 });
-
 
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, 'app')));
