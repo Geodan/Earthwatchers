@@ -30,8 +30,13 @@ var port = process.env.PORT || 3000;
 var mongoDbUrl = 'mongodb://localhost:27017/earthwatchers';
 var mongoClient = mongodb.MongoClient;
 mongoClient.connect(mongoDbUrl, function(err, db) {
-    console.log("Connected correctly to server");
-    dbObservations = db.collection('earthwatchers');
+    if(err){
+        console.log("error connection to database. Is database started?");
+    }
+    else{
+        console.log("Connected correctly to server");
+        dbObservations = db.collection('earthwatchers');
+    }
 });    
 
 var router = express.Router();
